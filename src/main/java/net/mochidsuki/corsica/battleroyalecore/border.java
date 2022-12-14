@@ -53,7 +53,7 @@ public class border extends BukkitRunnable {
 
 
         }else{
-            if(v.gameround > 6){
+            if(v.gameround < 6){
                 Roundsystemc r = new Roundsystemc();
                 v.gameround = v.gameround + 1;
                 r.Roundsystem();

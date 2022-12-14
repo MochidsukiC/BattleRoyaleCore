@@ -1,0 +1,26 @@
+#バトロワマップの中心座標とマップ半径
+MAP:
+  Center:
+    x: 0
+    z: 0
+  Radius: 1000
+#変性ボーダーの待機時間(stime)と収縮時間(vtime)の指定。
+Ring:
+  Round1:
+    stime: 90
+    vtime: 180
+  Round2:
+    stime: 120
+    vtime: 45
+  Round3:
+    stime: 165
+    vtime: 45
+  Round4:
+    stime: 135
+    vtime: 40
+  Round5:
+    stime: 90
+    vtime: 40
+  Round6:
+    stime: 60
+    vtime: 120

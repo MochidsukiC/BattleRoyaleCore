@@ -1,0 +1,25 @@
+name: BattleRoyaleCore
+version: '${project.version}'
+main: net.mochidsuki.corsica.battleroyalecore.BattleRoyaleCore
+api-version: 1.19
+authors: [ Mochidsuki ]
+description: Corsica's Battle Royale Core System
+
+commands:
+  gameround:
+    aliases: [gr]
+    description: ゲームのラウンド進行状況
+    permission: battleroyale2.command.gamelound
+    permission-message: Permission denied
+    usage:
+  brgame:
+    aliases: [brg,battleroyalegame]
+    description: ゲームのラウンド進行状況
+    permission: battleroyale2.command.brg
+    permission-message: Permission denied
+    usage:
+  debugerb:
+    description: debug用
+    permission: battleroyale2.command.debuger
+    permission-message: Permission denied
+    usage: Command usage

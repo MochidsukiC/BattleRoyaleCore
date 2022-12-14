@@ -7,6 +7,9 @@ import org.bukkit.block.data.BlockData;
 
 import java.util.Random;
 
+import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
+import static net.mochidsuki.corsica.battleroyalecore.v.stime;
+
 
 public class Roundsystemc {
     //ラウンドシステム
@@ -14,8 +17,6 @@ public class Roundsystemc {
         int[] center = new int[3];
         double[] speed = new double[4];
         int radius=0;
-        int rtime=0;
-        long stime=0;
         double radiusk=0;
         center[1] = (int)(v.now[1] + (v.now[0]-v.now[1])/2);
         center[2] = (int)(v.now[3] + (v.now[2]-v.now[3])/2);
@@ -103,7 +104,7 @@ public class Roundsystemc {
         target[2] = (int)(center[2] + radius*radiusk);
         target[3] = (int)(center[2] - radius*radiusk);
 
-        speed[0] = (target[0] - v.now[0])/rtime/20;
+        speed[0] = (target[0] - v.now[0])/ rtime/20;
         speed[1] = (target[1] - v.now[1])/rtime/20;
         speed[2] = (target[2] - v.now[2])/rtime/20;
         speed[3] = (target[3] - v.now[3])/rtime/20;

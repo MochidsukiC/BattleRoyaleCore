@@ -4,16 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
+
 public class border extends BukkitRunnable {
     double[] speed;
     int radius;
-    int rtime;
 
 
     public border(double[] speed, int radius, int rtime) {
         this.speed = speed;
         this.radius = radius;
-        this.rtime = rtime*20;
+        v.rtime = rtime*20;
     }
 
 
@@ -52,9 +53,11 @@ public class border extends BukkitRunnable {
 
 
         }else{
-            Roundsystemc r = new Roundsystemc();
-            v.gameround = v.gameround + 1;
-            r.Roundsystem();
+            if(v.gameround > 6){
+                Roundsystemc r = new Roundsystemc();
+                v.gameround = v.gameround + 1;
+                r.Roundsystem();
+            }
             cancel();
         }
 

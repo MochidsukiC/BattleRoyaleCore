@@ -25,3 +25,8 @@ commands:
     permission: battleroyale2.command.debuger
     permission-message: Permission denied
     usage: Command usage
+  forceloadchanks:
+    description: 読み込み
+    permission: battleroyale2.command.debuger
+    permission-message: Permission denied
+    usage: Command usage

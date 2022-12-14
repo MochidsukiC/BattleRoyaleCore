@@ -14,6 +14,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         getCommand("gameround").setExecutor(new CommandClass()); //gameround
         getCommand("debugerb").setExecutor(new CommandClass()); //debugerb
         getCommand("brgame").setExecutor(new CommandClass()); //brgame
+        getCommand("forceloadchanks").setExecutor(new CommandClass()); //brgame
         v.rtime = 0;
         v.stime =0;
         plugin = this;
@@ -26,6 +27,8 @@ public final class BattleRoyaleCore extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new SomeExpansion(this).register();
         }
+        //every ticks
+        new everyticks().runTask(this);
         // Plugin startup logic
 
     }
@@ -53,5 +56,4 @@ class v{
     static int rtime;
 
 }
-
 

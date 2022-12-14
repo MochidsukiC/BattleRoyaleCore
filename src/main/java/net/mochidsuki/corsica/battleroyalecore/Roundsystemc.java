@@ -109,7 +109,6 @@ public class Roundsystemc {
         speed[2] = (target[2] - v.now[2])/rtime/20;
         speed[3] = (target[3] - v.now[3])/rtime/20;
 
-        new fillborder(target).runTaskAsynchronously(BattleRoyaleCore.getPlugin());
 
         new border(speed,radius,rtime).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
 

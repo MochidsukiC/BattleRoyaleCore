@@ -14,9 +14,9 @@ import static net.mochidsuki.corsica.battleroyalecore.v.stime;
 public class Roundsystemc {
     //ラウンドシステム
     public void Roundsystem(){
-        int[] center = new int[3];
+        double[] center = new double[3];
         double[] speed = new double[4];
-        int radius=0;
+        double radius=0;
         double radiusk=0;
         center[1] = (int)(v.now[1] + (v.now[0]-v.now[1])/2);
         center[2] = (int)(v.now[3] + (v.now[2]-v.now[3])/2);

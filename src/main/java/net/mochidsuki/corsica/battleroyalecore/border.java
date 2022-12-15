@@ -8,10 +8,10 @@ import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
 
 public class border extends BukkitRunnable {
     double[] speed;
-    int radius;
+    double radius;
 
 
-    public border(double[] speed, int radius, int rtime) {
+    public border(double[] speed, double radius, int rtime) {
         this.speed = speed;
         this.radius = radius;
         v.rtime = rtime*20;

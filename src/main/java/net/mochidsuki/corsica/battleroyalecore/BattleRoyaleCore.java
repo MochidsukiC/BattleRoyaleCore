@@ -54,6 +54,11 @@ class v{
     static int roundrtime[] = new int[7];
     static long stime;
     static int rtime;
-
+}
+class b{
+    static int nx;
+    static int nmx;
+    static int nz;
+    static int nmz;
 }
 

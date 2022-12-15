@@ -66,7 +66,7 @@ public class Roundsystemc {
         }
         Random rnd = new Random();
         center[0] = rnd.nextInt(9);
-        switch (center[0]){
+        switch ((int)center[0]){
             case 0:
                 center[1] = (int)(center[1] - radius*(1-radiusk));
                 center[2] = (int)(center[2] + radius*(1-radiusk));
@@ -111,51 +111,46 @@ public class Roundsystemc {
 
         try {
             //元枠クリア
-            int x = (int) v.now[0] + 1;
-            int mx = (int) v.now[1] - 1;
-            int z = (int) v.now[2] + 1;
-            int mz = (int) v.now[3] - 1;
+            int x = b.nx;
+            int mx = b.nmx;
+            int z = b.nz;
+            int mz = b.nmz;
             for (; mx < x; mx = mx + 1) {
                 World world = Bukkit.getWorld("world");
                 BlockData block = Material.getMaterial("AIR").createBlockData();
-                world.getBlockAt(mx, 20, z + 1).setBlockData(block);
-                world.getBlockAt(mx, 20, mz + 1).setBlockData(block);
                 world.getBlockAt(mx, 20, z).setBlockData(block);
                 world.getBlockAt(mx, 20, mz).setBlockData(block);
-                world.getBlockAt(mx, 20, z - 1).setBlockData(block);
-                world.getBlockAt(mx, 20, mz - 1).setBlockData(block);
             }
-            mx = (int) v.now[1] - 1;
+            mx = b.nmx;
             for (; mz < z; mz = mz + 1) {
                 World world = Bukkit.getWorld("world");
                 BlockData block = Material.getMaterial("AIR").createBlockData();
                 world.getBlockAt(x, 20, mz).setBlockData(block);
                 world.getBlockAt(mx, 20, mz).setBlockData(block);
-                world.getBlockAt(x + 1, 20, mz).setBlockData(block);
-                world.getBlockAt(mx + 1, 20, mz).setBlockData(block);
-                world.getBlockAt(x - 1, 20, mz).setBlockData(block);
-                world.getBlockAt(mx - 1, 20, mz).setBlockData(block);
             }
-            mz = (int) v.now[3] - 1;
             //新規枠
-            int nx = target[0] + 1;
-            int nmx = target[1] - 1;
-            int nz = target[2] + 1;
-            int nmz = target[3] - 1;
+            int nx = target[0];
+            int nmx = target[1];
+            int nz = target[2];
+            int nmz = target[3];
             for (; nmx < nx; nmx = nmx + 1) {
                 World world = Bukkit.getWorld("world");
                 BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
                 world.getBlockAt(nmx, 20, nz).setBlockData(block);
                 world.getBlockAt(nmx, 20, nmz).setBlockData(block);
             }
-            nmx = target[1] - 1;
+            nmx = target[1];
             for (; nmz < nz; nmz = nmz + 1) {
                 World world = Bukkit.getWorld("world");
                 BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
                 world.getBlockAt(nx, 20, nmz).setBlockData(block);
                 world.getBlockAt(nmx, 20, nmz).setBlockData(block);
             }
-            nmz = target[3] - 1;
+            nmz = target[3];
+            b.nx = nx;
+            b.nmx = nmx;
+            b.nz = nz;
+            b.nmz = nmz;
         }catch (Exception e){
 
         }

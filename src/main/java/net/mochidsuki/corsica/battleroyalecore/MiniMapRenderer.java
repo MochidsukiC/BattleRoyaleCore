@@ -13,6 +13,14 @@ public class MiniMapRenderer extends MapRenderer {
     public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
         map.setCenterX(player.getLocation().getBlockX());
         map.setCenterZ(player.getLocation().getBlockZ());
+
+        for(int x = 0;x <= 128;x++){
+            for(int z = 0;z <= 128;z++){
+                canvas.setPixelColor(x, z, canvas.getBasePixelColor(x,z));
+            }
+        }
+
+        //border予測線
         int[] distance = new int[4];
         distance[0] = b.target[0] - player.getLocation().getBlockX() - 64;
         distance[1] = b.target[1] - player.getLocation().getBlockX() - 64;

@@ -63,3 +63,6 @@ class b{
     static int[] target = new int[4];
 }
 
+class m{
+    static int[] distance = new int[4];
+}

@@ -28,7 +28,6 @@ public class event implements Listener{
                 }
                 for (int i = 0; i < teamplayer.length; i++){
                     teamplayer[i].addScoreboardTag("live");
-                    event.getPlayer().sendMessage(teamplayer[i]+"a");
                 }
             }catch (Exception e){}
         }

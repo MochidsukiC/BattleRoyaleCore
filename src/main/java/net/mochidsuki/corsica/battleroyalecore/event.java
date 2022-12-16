@@ -40,7 +40,7 @@ public class event implements Listener{
 
                 MapView view = player.getServer().createMap(player.getWorld());
 
-                view.addRenderer(new);
+                view.addRenderer(new MiniMapRenderer());
                 mapMeta.setMapView(view);
                 mapItem.setItemMeta(mapMeta);
 

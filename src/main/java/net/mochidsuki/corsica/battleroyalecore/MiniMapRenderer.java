@@ -10,5 +10,6 @@ public class MiniMapRenderer extends MapRenderer {
     @Override
     public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
 
+
     }
 }

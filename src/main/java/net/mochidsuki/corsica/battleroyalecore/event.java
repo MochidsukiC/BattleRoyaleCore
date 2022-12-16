@@ -1,27 +1,42 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDropItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.scoreboard.Team;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
 
 public class event implements Listener{
     @EventHandler
-    public void EntityDropItemEvent(EntityDropItemEvent event){
+    public void PlayerDropItemEvent(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
-        if(item.getType().equals(Material.FIREWORK_ROCKET)){
-
+        if(item.getItemStack().getType() == Material.FIREWORK_ROCKET){//ドロップシップからの降下
+            try {
+                Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                String[] tp = new String[playerteam.getEntries().size()];
+                playerteam.getEntries().toArray(tp);
+                Player[] teamplayer = new Player[tp.length];
+                for (int i = 0;i < tp.length;i++) {
+                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                }
+                for (int i = 0; i < teamplayer.length; i++){
+                    teamplayer[i].addScoreboardTag("live");
+                    event.getPlayer().sendMessage(teamplayer[i]+"a");
+                }
+            }catch (Exception e){}
         }
     }
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
         EntityDamageEvent.DamageCause cause = event.getCause();
-        if(cause.equals(SUFFOCATION)){
+        if(cause.equals(SUFFOCATION)){//ボーダー外ダメージ
             switch (v.gameround) {
                 case 1:
                 case 2:

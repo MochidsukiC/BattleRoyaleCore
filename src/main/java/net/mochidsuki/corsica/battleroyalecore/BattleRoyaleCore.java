@@ -28,7 +28,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
             new SomeExpansion(this).register();
         }
         //every ticks
-        new everyticks().runTask(this);
+        new everyticks().runTaskTimer(this,0L,1);
         // Plugin startup logic
 
     }

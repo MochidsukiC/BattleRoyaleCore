@@ -60,5 +60,6 @@ class b{
     static int nmx;
     static int nz;
     static int nmz;
+    static int[] target = new int[4];
 }
 

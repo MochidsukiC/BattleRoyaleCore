@@ -98,17 +98,16 @@ public class Roundsystemc {
                 center[2] = (int)(center[2] - radius*(1-radiusk));
                 break;
         }
-        int[] target = new int[4];
-        target[0] = (int)(center[1] + radius*radiusk);
-        target[1] = (int)(center[1] - radius*radiusk);
-        target[2] = (int)(center[2] + radius*radiusk);
-        target[3] = (int)(center[2] - radius*radiusk);
+        b.target[0] = (int)(center[1] + radius*radiusk);
+        b.target[1] = (int)(center[1] - radius*radiusk);
+        b.target[2] = (int)(center[2] + radius*radiusk);
+        b.target[3] = (int)(center[2] - radius*radiusk);
 
-        speed[0] = (target[0] - v.now[0])/ rtime/20;
-        speed[1] = (target[1] - v.now[1])/rtime/20;
-        speed[2] = (target[2] - v.now[2])/rtime/20;
-        speed[3] = (target[3] - v.now[3])/rtime/20;
-
+        speed[0] = (b.target[0] - v.now[0])/ rtime/20;
+        speed[1] = (b.target[1] - v.now[1])/rtime/20;
+        speed[2] = (b.target[2] - v.now[2])/rtime/20;
+        speed[3] = (b.target[3] - v.now[3])/rtime/20;
+        /*
         try {
             //元枠クリア
             int x = b.nx;
@@ -154,7 +153,7 @@ public class Roundsystemc {
         }catch (Exception e){
 
         }
-
+        */
 
 
         new border(speed,radius,rtime).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);

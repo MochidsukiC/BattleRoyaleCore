@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
@@ -41,8 +42,12 @@ public class event implements Listener{
                 MapView view = player.getServer().createMap(player.getWorld());
 
                 view.addRenderer(new MiniMapRenderer());
+
                 mapMeta.setMapView(view);
                 mapItem.setItemMeta(mapMeta);
+                view.setScale(MapView.Scale.CLOSEST);
+                view.setTrackingPosition(true);
+                player.getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);
 
             }catch (Exception e){}
 

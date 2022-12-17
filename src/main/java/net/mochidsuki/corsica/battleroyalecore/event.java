@@ -35,19 +35,23 @@ public class event implements Listener{
                 for (int i = 0; i < teamplayer.length; i++){//teamplayer全員に実行
                     teamplayer[i].addScoreboardTag("live");
                     teamplayer[i].setGameMode(GameMode.SURVIVAL);
+
+                    //ミニマップ付与
+                    ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
+                    MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
+                    MapView view = teamplayer[i].getServer().createMap(player.getWorld());
+                    view.addRenderer(new MiniMapRenderer());
+                    mapMeta.setMapView(view);
+                    mapItem.setItemMeta(mapMeta);
+                    view.setScale(MapView.Scale.CLOSEST);
+                    view.setTrackingPosition(true);
+                    teamplayer[i].getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);
+                    for (int ii=0;ii < teamplayer.length;ii++){
+                        if(!(ii == i)){
+                            teamplayer[ii].getInventory().setItem(9+ii,mapItem);
+                        }
+                    }
                 }
-                ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
-                MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
-
-                MapView view = player.getServer().createMap(player.getWorld());
-
-                view.addRenderer(new MiniMapRenderer());
-
-                mapMeta.setMapView(view);
-                mapItem.setItemMeta(mapMeta);
-                view.setScale(MapView.Scale.CLOSEST);
-                view.setTrackingPosition(true);
-                player.getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);
 
             }catch (Exception e){}
 

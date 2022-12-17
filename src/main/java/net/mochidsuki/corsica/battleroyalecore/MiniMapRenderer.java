@@ -22,25 +22,49 @@ public class MiniMapRenderer extends MapRenderer {
 
         //border予測線
         int[] distance = new int[4];
-        distance[0] = b.target[0] - player.getLocation().getBlockX() - 64;
-        distance[1] = b.target[1] - player.getLocation().getBlockX() - 64;
-        distance[2] = -1 * (b.target[3] - player.getLocation().getBlockZ() - 64);
-        distance[3] = -1 * (b.target[2] - player.getLocation().getBlockZ() - 64);
-        for (; distance[1] < distance[0]; distance[1] = distance[1] + 1) {
-            if(distance[1] >= 0 && distance[1] <= 128 && distance[2] >= 0 && distance[2] <= 128 ) {
-                canvas.setPixelColor(distance[1], distance[2], Color.red);
+        distance[0] = (b.target[0] - player.getLocation().getBlockX()) ;
+        distance[1] = (b.target[1] - player.getLocation().getBlockX());
+        distance[2] = (b.target[3] - player.getLocation().getBlockZ());
+        distance[3] = (b.target[2] - player.getLocation().getBlockZ());
+        for (; distance[1] <= distance[0]; distance[1]++) {
+            if(distance[1] >= -64 && distance[1] <= 64 && distance[2] >= -64 && distance[2] <= 64 ) {
+                canvas.setPixelColor(distance[1]+64, distance[2]+64, Color.gray);
             }
-            if(distance[1] >= 0 && distance[1] <= 128 && distance[3] >= 0 && distance[3] <= 128 ) {
-                canvas.setPixelColor(distance[1], distance[3], Color.red);
+            if(distance[1] >= -64 && distance[1] <= 64 && distance[3] >= -64 && distance[3] <= 64 ) {
+                canvas.setPixelColor(distance[1]+64, distance[3]+64, Color.gray);
             }
         }
-        distance[1] = b.target[1] - player.getLocation().getBlockX() - 64;
-        for (; distance[3] < distance[2]; distance[3] = distance[3] + 1) {
-            if(distance[0] >= 0 && distance[0] <= 128 && distance[3] >= 0 && distance[3] <= 128 ) {
-                canvas.setPixelColor(distance[0], distance[3], Color.red);
+        distance[1] = b.target[1] - player.getLocation().getBlockX();
+        for (; distance[2] <= distance[3]; distance[2]++) {
+            if(distance[0] >= -64 && distance[0] <= 64 && distance[2] >= -64 && distance[2] <= 64 ) {
+                canvas.setPixelColor(distance[0]+64, distance[2]+64, Color.gray);
             }
-            if(distance[1] >= 0 && distance[1] <= 128 && distance[3] >= 0 && distance[3] <= 128 ) {
-                canvas.setPixelColor(distance[1], distance[3], Color.red);
+            if(distance[1] >= -64 && distance[1] <= 64 && distance[2] >= -64 && distance[2] <= 64 ) {
+                canvas.setPixelColor(distance[1]+64, distance[2]+64, Color.gray);
+            }
+        }
+
+        //border現在位置
+        int[] distanceNow = new int[4];
+        distanceNow[0] = (int)(v.now[0] - player.getLocation().getBlockX()) ;
+        distanceNow[1] = (int)(v.now[1] - player.getLocation().getBlockX());
+        distanceNow[2] = (int)(v.now[3] - player.getLocation().getBlockZ());
+        distanceNow[3] = (int)(v.now[2] - player.getLocation().getBlockZ());
+        for (; distanceNow[1] <= distanceNow[0]; distanceNow[1]++) {
+            if(distanceNow[1] >= -64 && distanceNow[1] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
+                canvas.setPixelColor(distanceNow[1]+64, distanceNow[2]+64, Color.red);
+            }
+            if(distanceNow[1] >= -64 && distanceNow[1] <= 64 && distanceNow[3] >= -64 && distanceNow[3] <= 64 ) {
+                canvas.setPixelColor(distanceNow[1]+64, distanceNow[3]+64, Color.red);
+            }
+        }
+        distanceNow[1] = b.target[1] - player.getLocation().getBlockX();
+        for (; distanceNow[2] <= distanceNow[3]; distanceNow[2]++) {
+            if(distanceNow[0] >= -64 && distanceNow[0] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
+                canvas.setPixelColor(distanceNow[0]+64, distanceNow[2]+64, Color.red);
+            }
+            if(distanceNow[1] >= -64 && distanceNow[1] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
+                canvas.setPixelColor(distanceNow[1]+64, distanceNow[2]+64, Color.red);
             }
         }
     }

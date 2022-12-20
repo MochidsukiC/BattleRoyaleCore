@@ -31,7 +31,7 @@ public class BigMapRenderer extends MapRenderer {
                     canvas.setPixelColor(distance[1]+64, distance[3]+64, Color.gray);
                 }
             }
-            distance[1] = b.target[1] - player.getLocation().getBlockX();
+            distance[1] = (b.target[1] - v.mcx)/8;
             for (; distance[2] <= distance[3]; distance[2]++) {
                 if(distance[0] >= -64 && distance[0] <= 64 && distance[2] >= -64 && distance[2] <= 64 ) {
                     canvas.setPixelColor(distance[0]+64, distance[2]+64, Color.gray);
@@ -55,7 +55,7 @@ public class BigMapRenderer extends MapRenderer {
                     canvas.setPixelColor(distanceNow[1]+64, distanceNow[3]+64, Color.red);
                 }
             }
-            distanceNow[1] = (int)(v.now[1] - player.getLocation().getBlockX());
+            distanceNow[1] = (int)(v.now[1] - v.mcx)/8;
             for (; distanceNow[2] <= distanceNow[3]; distanceNow[2]++) {
                 if(distanceNow[0] >= -64 && distanceNow[0] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
                     canvas.setPixelColor(distanceNow[0]+64, distanceNow[2]+64, Color.red);

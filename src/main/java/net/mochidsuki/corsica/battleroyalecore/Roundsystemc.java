@@ -20,6 +20,7 @@ public class Roundsystemc {
         double radiusk=0;
         center[1] = (int)(v.now[1] + (v.now[0]-v.now[1])/2);
         center[2] = (int)(v.now[3] + (v.now[2]-v.now[3])/2);
+        int rnd = 9;
         switch (v.gameround){
             case 1:
                 radius = v.mr;
@@ -44,57 +45,63 @@ public class Roundsystemc {
                 radiusk = 0.6;
                 rtime = v.roundrtime[3];
                 stime = v.roundstime[3];
+                rnd = 5;
                 break;
             case 4:
                 radius = (int)(v.mr * 0.5*0.65*0.6);
                 radiusk = 0.5;
                 rtime = v.roundrtime[4];
                 stime = v.roundstime[4];
+                rnd = 5;
                 break;
             case 5:
                 radius = (int)(v.mr * 0.5*0.65*0.6*0.5);
                 radiusk = 0.5;
                 rtime = v.roundrtime[5];
                 stime = v.roundstime[5];
+                rnd = 5;
                 break;
             case 6:
                 radius = (int)(v.mr * 0.5*0.65*0.6*0.5*0.5);
                 radiusk = 0;
                 rtime = v.roundrtime[6];
                 stime = v.roundstime[6];
+                rnd = 5;
                 break;
         }
-        Random rnd = new Random();
-        center[0] = rnd.nextInt(9);
+        Random random = new Random();
+        center[0] = random.nextInt(rnd);
         switch ((int)center[0]){
             case 0:
-                center[1] = (int)(center[1] - radius*(1-radiusk));
-                center[2] = (int)(center[2] + radius*(1-radiusk));
                 break;
             case 1:
-                center[2] = (int)(center[2] + radius*(1-radiusk));
+                center[1] = (int)(center[1] - radius*(1-radiusk));
                 break;
             case 2:
-                center[1] = (int)(center[1] + radius*(1-radiusk));
+
                 center[2] = (int)(center[2] + radius*(1-radiusk));
                 break;
             case 3:
-                center[1] = (int)(center[1] - radius*(1-radiusk));
-                break;
-            case 4:
-                break;
-            case 5:
                 center[1] = (int)(center[1] + radius*(1-radiusk));
                 break;
-            case 6:
-                center[1] = (int)(center[1] - radius*(1-radiusk));
+            case 4:
                 center[2] = (int)(center[2] - radius*(1-radiusk));
                 break;
+            case 5:
+                center[1] = (int)(center[1] - radius*(1-radiusk));
+                center[2] = (int)(center[2] + radius*(1-radiusk));
+                break;
+            case 6:
+                center[1] = (int)(center[1] + radius*(1-radiusk));
+                center[2] = (int)(center[2] + radius*(1-radiusk));
+
+                break;
             case 7:
+                center[1] = (int)(center[1] + radius*(1-radiusk));
                 center[2] = (int)(center[2] - radius*(1-radiusk));
                 break;
             case 8:
-                center[1] = (int)(center[1] + radius*(1-radiusk));
+                center[1] = (int)(center[1] - radius*(1-radiusk));
                 center[2] = (int)(center[2] - radius*(1-radiusk));
                 break;
         }

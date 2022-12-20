@@ -19,8 +19,11 @@ public class MiniMapRenderer extends MapRenderer {
                 canvas.setPixelColor(x, z, canvas.getBasePixelColor(x,z));
             }
         }
-        for(int i= 0; i <= canvas.getCursors().size();i++){
-            canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
+        //カーソルクリア
+        for(int i = 0; i <= canvas.getCursors().size();i++){
+            try {
+                canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
+            }catch (Exception e){}
         }
         //チームメイト表示
         Team playerteam = player.getScoreboard().getPlayerTeam(player);
@@ -30,18 +33,21 @@ public class MiniMapRenderer extends MapRenderer {
         MapCursorCollection cursor = new MapCursorCollection();
         for (int i = 0;i < tp.length;i++) {
             teamplayer[i] = Bukkit.getPlayer(tp[i]);
-            int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
-            if(x>64){
-                x = 64;
+            if(!(teamplayer[i] == player)) {
+                int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
+                if (x > 64) {
+                    x = 64;
+                }
+                int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
+                if (z > 64) {
+                    z = 64;
+                }
+                try {
+                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
+                }catch (Exception e){}
             }
-            int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
-            if(z>64){
-                z = 64;
-            }
-            cursor.addCursor(new MapCursor((byte)x,(byte)z, (byte)(teamplayer[i].getLocation().getYaw()/8),MapCursor.Type.BLUE_POINTER,true));
         }
         canvas.setCursors(cursor);
-
 
         //border予測線
         int[] distance = new int[4];

@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 import org.bukkit.scoreboard.Team;
 
+import static org.bukkit.Bukkit.getMap;
 import static org.bukkit.Bukkit.getServer;
 
 public class GameStart {
@@ -25,14 +26,9 @@ public class GameStart {
             //ビッグマップ処理
             ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
             MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
-            MapView viewB = player.getServer().createMap(player.getWorld());
-            viewB.addRenderer(new BigMapRenderer());
-            mapMetaB.setMapView(viewB);
+            getMap(v.bigmapdata).addRenderer(new BigMapRenderer());
+            mapMetaB.setMapId(v.bigmapdata);
             mapItemB.setItemMeta(mapMetaB);
-            viewB.setScale(MapView.Scale.FAR);
-            viewB.setTrackingPosition(true);
-            viewB.setCenterX(v.mcx);
-            viewB.setCenterZ(v.mcz);
             for (int i = 0; i < teamplayer.length; i++){//teamplayer全員に実行
                 //ビッグマップ付与
                 teamplayer[i].getInventory().setItem(8,mapItemB);
@@ -50,11 +46,6 @@ public class GameStart {
                 view.setScale(MapView.Scale.CLOSEST);
                 view.setTrackingPosition(true);
                 teamplayer[i].getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);
-                for (int ii=0;ii < teamplayer.length;ii++){
-                    if(!(ii == i)){
-                        teamplayer[ii].getInventory().setItem(9+ii,mapItem);
-                    }
-                }
 
             }
 

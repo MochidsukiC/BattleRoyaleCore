@@ -6,7 +6,11 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class BigMapRenderer extends MapRenderer {
 
@@ -16,6 +20,15 @@ public class BigMapRenderer extends MapRenderer {
             for(int z = 0;z <= 128;z++){
                 canvas.setPixelColor(x, z, canvas.getBasePixelColor(x,z));
             }
+            /*
+            try {
+                BufferedImage image = ImageIO.read(new File("a.png"));
+                canvas.drawImage(0,0, image);
+                image.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            */
 
             //border予測線
             int[] distance = new int[4];

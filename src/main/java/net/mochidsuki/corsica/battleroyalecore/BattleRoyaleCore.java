@@ -20,6 +20,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         getCommand("debugerb").setExecutor(new CommandClass()); //debugerb
         getCommand("brgame").setExecutor(new CommandClass()); //brgame
         getCommand("forceloadchanks").setExecutor(new CommandClass()); //brgame
+        getCommand("mapgenerator").setExecutor(new CommandClass()); //mapgenerator
         v.rtime = 0;
         v.stime =0;
         plugin = this;
@@ -59,6 +60,7 @@ class v{
     static int roundrtime[] = new int[7];
     static long stime;
     static int rtime;
+    static int bigmapdata;
 }
 class b{
     static int nx;

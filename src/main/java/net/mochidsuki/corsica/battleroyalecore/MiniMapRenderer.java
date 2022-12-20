@@ -1,9 +1,9 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
+import org.bukkit.map.*;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -13,12 +13,35 @@ public class MiniMapRenderer extends MapRenderer {
     public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
         map.setCenterX(player.getLocation().getBlockX());
         map.setCenterZ(player.getLocation().getBlockZ());
-
+        //ピクセルクリア
         for(int x = 0;x <= 128;x++){
             for(int z = 0;z <= 128;z++){
                 canvas.setPixelColor(x, z, canvas.getBasePixelColor(x,z));
             }
         }
+        for(int i= 0; i <= canvas.getCursors().size();i++){
+            canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
+        }
+        //チームメイト表示
+        Team playerteam = player.getScoreboard().getPlayerTeam(player);
+        String[] tp = new String[playerteam.getEntries().size()];
+        playerteam.getEntries().toArray(tp);
+        Player[] teamplayer = new Player[tp.length];
+        MapCursorCollection cursor = new MapCursorCollection();
+        for (int i = 0;i < tp.length;i++) {
+            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+            int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
+            if(x>64){
+                x = 64;
+            }
+            int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
+            if(z>64){
+                z = 64;
+            }
+            cursor.addCursor(new MapCursor((byte)x,(byte)z, (byte)(teamplayer[i].getLocation().getYaw()/8),MapCursor.Type.BLUE_POINTER,true));
+        }
+        canvas.setCursors(cursor);
+
 
         //border予測線
         int[] distance = new int[4];

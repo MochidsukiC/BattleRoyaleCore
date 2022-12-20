@@ -30,3 +30,8 @@ commands:
     permission: battleroyale2.command.debuger
     permission-message: Permission denied
     usage: Command usage
+  mapgenerator:
+    description: 全体マップ生成
+    permission: battleroyale2.command.mapgenerator
+    permission-message: Permission denied
+    usage: Command usage

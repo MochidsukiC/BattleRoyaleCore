@@ -34,5 +34,6 @@ public class Config {
         v.roundrtime[5] = config.getInt("Ring.Round5.vtime");
         v.roundstime[6] = config.getInt("Ring.Round6.stime");
         v.roundrtime[6] = config.getInt("Ring.Round6.vtime");
+        v.bigmapdata = config.getInt("MAP.MapData");
     }
 }

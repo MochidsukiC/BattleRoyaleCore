@@ -8,9 +8,12 @@ public class everyticks extends BukkitRunnable {
     @Override
     public void run() {
         s = s + 1;
-        if(s == 20){
+        if(s >= 20){
             //毎秒処理
-            v.stime = v.stime - 1;
+            if(v.stime >0) {
+                v.stime = v.stime - 1;
+            }
+            s = 0;
         }
     }
 }

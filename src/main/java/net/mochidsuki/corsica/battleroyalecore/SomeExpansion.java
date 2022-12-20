@@ -33,7 +33,7 @@ public class SomeExpansion extends PlaceholderExpansion {
             return String.valueOf(v.stime);
         }
 
-        if(params.equalsIgnoreCase("placeholder2")) {
+        if(params.equalsIgnoreCase("rtime")) {
             return String.valueOf(v.rtime);
         }
 

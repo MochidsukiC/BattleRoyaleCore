@@ -13,6 +13,9 @@ public class CommandClass implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("gameround")){
+            if(args[0].equalsIgnoreCase("0")){
+
+            }
             v.gameround = Integer.parseInt(args[0]);
             Roundsystemc r = new Roundsystemc();
             r.Roundsystem();

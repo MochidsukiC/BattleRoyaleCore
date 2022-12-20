@@ -58,7 +58,7 @@ public class MiniMapRenderer extends MapRenderer {
                 canvas.setPixelColor(distanceNow[1]+64, distanceNow[3]+64, Color.red);
             }
         }
-        distanceNow[1] = b.target[1] - player.getLocation().getBlockX();
+        distanceNow[1] = (int)(v.now[1] - player.getLocation().getBlockX());
         for (; distanceNow[2] <= distanceNow[3]; distanceNow[2]++) {
             if(distanceNow[0] >= -64 && distanceNow[0] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
                 canvas.setPixelColor(distanceNow[0]+64, distanceNow[2]+64, Color.red);

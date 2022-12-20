@@ -31,6 +31,8 @@ public class GameStart {
             mapItemB.setItemMeta(mapMetaB);
             viewB.setScale(MapView.Scale.FAR);
             viewB.setTrackingPosition(true);
+            viewB.setCenterX(v.mcx);
+            viewB.setCenterZ(v.mcz);
             for (int i = 0; i < teamplayer.length; i++){//teamplayer全員に実行
                 //ビッグマップ付与
                 teamplayer[i].getInventory().setItem(8,mapItemB);

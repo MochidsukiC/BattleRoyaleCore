@@ -30,11 +30,12 @@ public class SomeExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         if(params.equalsIgnoreCase("stime")){
-            return String.valueOf(v.stime);
+            return (v.stime-v.stime % 60)/60+":"+v.stime % 60;
         }
 
         if(params.equalsIgnoreCase("rtime")) {
-            return String.valueOf(v.rtime);
+            int r = v.rtime/20;
+            return (r-r % 60)/60+":"+r % 60;
         }
 
         return null; // Placeholder is unknown by the Expansion

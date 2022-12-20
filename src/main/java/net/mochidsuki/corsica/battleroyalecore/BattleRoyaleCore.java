@@ -1,9 +1,14 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public final class BattleRoyaleCore extends JavaPlugin {
     private static Plugin plugin;
@@ -66,3 +71,4 @@ class b{
 class m{
     static int[] distance = new int[4];
 }
+

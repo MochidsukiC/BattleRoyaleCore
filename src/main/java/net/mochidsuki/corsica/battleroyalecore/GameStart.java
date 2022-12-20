@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 import org.bukkit.scoreboard.Team;
 
+import static org.bukkit.Bukkit.getServer;
+
 public class GameStart {
     public void player(Player player){
         try {
@@ -20,11 +22,23 @@ public class GameStart {
             for (int i = 0;i < tp.length;i++) {
                 teamplayer[i] = Bukkit.getPlayer(tp[i]);
             }
+            //ビッグマップ処理
+            ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
+            MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
+            MapView viewB = player.getServer().createMap(player.getWorld());
+            viewB.addRenderer(new BigMapRenderer());
+            mapMetaB.setMapView(viewB);
+            mapItemB.setItemMeta(mapMetaB);
+            viewB.setScale(MapView.Scale.FAR);
+            viewB.setTrackingPosition(true);
             for (int i = 0; i < teamplayer.length; i++){//teamplayer全員に実行
+                //ビッグマップ付与
+                teamplayer[i].getInventory().setItem(8,mapItemB);
+
                 teamplayer[i].addScoreboardTag("live");
                 teamplayer[i].setGameMode(GameMode.SURVIVAL);
 
-                //ミニマップ付与
+                //ミニマップ処理・付与
                 ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
                 MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
                 MapView view = teamplayer[i].getServer().createMap(player.getWorld());
@@ -39,6 +53,7 @@ public class GameStart {
                         teamplayer[ii].getInventory().setItem(9+ii,mapItem);
                     }
                 }
+
             }
 
         }catch (Exception e){}

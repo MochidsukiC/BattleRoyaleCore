@@ -7,6 +7,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class MiniMapRenderer extends MapRenderer {
     @Override
@@ -28,14 +29,14 @@ public class MiniMapRenderer extends MapRenderer {
         try {
             //チームメイト表示
             Team playerteam = player.getScoreboard().getPlayerTeam(player);
-            String[] tp = new String[playerteam.getEntries().size()];
+            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
             playerteam.getEntries().toArray(tp);
             Player[] teamplayer = new Player[tp.length];
             MapCursorCollection cursor = new MapCursorCollection();
             for (int i = 0; i < tp.length; i++) {
                 teamplayer[i] = Bukkit.getPlayer(tp[i]);
                 if (!(teamplayer[i] == player)) {
-                    int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
+                    int x = Objects.requireNonNull(teamplayer[i]).getLocation().getBlockX() - player.getLocation().getBlockX();
                     if (x > 64) {
                         x = 64;
                     }

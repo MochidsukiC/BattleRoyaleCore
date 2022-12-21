@@ -26,25 +26,17 @@ public class CommandClass implements CommandExecutor {
             r.Roundsystem();
             return true;
         }
-        if(command.getName().equalsIgnoreCase("brgame")){
+        if(command.getName().equalsIgnoreCase("brc")){
             if(args[0].equalsIgnoreCase("reload")){
                 Config config = new Config(BattleRoyaleCore.getPlugin());
                 config.load();
                 return true;
             }
-        }
-        if(command.getName().equalsIgnoreCase("forceloadchanks")){
-            int distance = Integer.parseInt(args[0]);
-            try {
-                int x = v.mcx / 16 - distance;
-                int z = v.mcz / 16 - distance;
-                for (; x < x + distance * 2; x = x + 1) {
-                    z = z + 1;
-                    sender.getServer().getWorld("world").setChunkForceLoaded(x, z, true);
-                }
-            }catch (Exception e){}
-
-            return true;
+            if(args[0].equalsIgnoreCase("setstart")){
+                GameStart g = new GameStart();
+                g.player(sender.getServer().getPlayer(sender.getName()));
+                return true;
+            }
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){
             Player player = (Player) sender;

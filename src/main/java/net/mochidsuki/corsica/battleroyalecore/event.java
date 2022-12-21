@@ -1,13 +1,15 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-
+import org.bukkit.scoreboard.Team;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
 
 public class event implements Listener{
@@ -15,8 +17,19 @@ public class event implements Listener{
     public void PlayerDropItemEvent(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
         if(item.getItemStack().getType() == Material.FIREWORK_ROCKET){//ドロップシップからの降下
-            GameStart g = new GameStart();
-            g.player(event.getPlayer());
+            Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+            String[] tp = new String[playerteam.getEntries().size()];
+            playerteam.getEntries().toArray(tp);
+            Player[] teamplayer = new Player[tp.length];
+            for (int i = 0;i < tp.length;i++) {
+                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+            }
+
+            for (int i = 0; i < teamplayer.length; i++) {//teamplayer全員に実行
+                GameStart g = new GameStart();
+                g.player(teamplayer[i]);
+            }
+
 
 
         }

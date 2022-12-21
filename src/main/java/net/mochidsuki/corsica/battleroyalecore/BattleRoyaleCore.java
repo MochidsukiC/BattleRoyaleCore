@@ -18,8 +18,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new event(), this);
         getCommand("gameround").setExecutor(new CommandClass()); //gameround
         getCommand("debugerb").setExecutor(new CommandClass()); //debugerb
-        getCommand("brgame").setExecutor(new CommandClass()); //brgame
-        getCommand("forceloadchanks").setExecutor(new CommandClass()); //brgame
+        getCommand("brc").setExecutor(new CommandClass()); //brgame
         getCommand("mapgenerator").setExecutor(new CommandClass()); //mapgenerator
         v.rtime = 0;
         v.stime =0;

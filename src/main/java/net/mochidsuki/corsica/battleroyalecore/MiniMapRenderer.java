@@ -25,29 +25,31 @@ public class MiniMapRenderer extends MapRenderer {
                 canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
             }catch (Exception e){}
         }
-        //チームメイト表示
-        Team playerteam = player.getScoreboard().getPlayerTeam(player);
-        String[] tp = new String[playerteam.getEntries().size()];
-        playerteam.getEntries().toArray(tp);
-        Player[] teamplayer = new Player[tp.length];
-        MapCursorCollection cursor = new MapCursorCollection();
-        for (int i = 0;i < tp.length;i++) {
-            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-            if(!(teamplayer[i] == player)) {
-                int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
-                if (x > 64) {
-                    x = 64;
-                }
-                int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
-                if (z > 64) {
-                    z = 64;
-                }
-                try {
+        try {
+            //チームメイト表示
+            Team playerteam = player.getScoreboard().getPlayerTeam(player);
+            String[] tp = new String[playerteam.getEntries().size()];
+            playerteam.getEntries().toArray(tp);
+            Player[] teamplayer = new Player[tp.length];
+            MapCursorCollection cursor = new MapCursorCollection();
+            for (int i = 0; i < tp.length; i++) {
+                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                if (!(teamplayer[i] == player)) {
+                    int x = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockX();
+                    if (x > 64) {
+                        x = 64;
+                    }
+                    int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
+                    if (z > 64) {
+                        z = 64;
+                    }
+
                     cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
-                }catch (Exception e){}
+
+                }
             }
-        }
-        canvas.setCursors(cursor);
+            canvas.setCursors(cursor);
+        }catch (Exception e){}
 
         //border予測線
         int[] distance = new int[4];

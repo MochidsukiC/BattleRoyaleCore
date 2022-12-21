@@ -14,19 +14,14 @@ commands:
     permission: battleroyale2.command.gamelound
     permission-message: Permission denied
     usage: gr [int]
-  brgame:
-    aliases: [brg,battleroyalegame]
-    description: ゲームのラウンド進行状況
+  brc:
+    aliases: [battleroyalecore]
+    description: BRC管理コマンド
     permission: battleroyale2.command.brg
     permission-message: Permission denied
     usage: gr reload
   debugerb:
     description: debug用
-    permission: battleroyale2.command.debuger
-    permission-message: Permission denied
-    usage: Command usage
-  forceloadchanks:
-    description: 読み込み
     permission: battleroyale2.command.debuger
     permission-message: Permission denied
     usage: Command usage

@@ -24,6 +24,7 @@ public class GameStart {
         player.addScoreboardTag("live");
         player.setGameMode(GameMode.SURVIVAL);
 
+
         //ミニマップ処理・付与
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
         MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();

@@ -51,7 +51,7 @@ public class SomeExpansion extends PlaceholderExpansion {
         ChatColor feet =ChatColor.STRIKETHROUGH;
         for (int i = 0;i < tp.length;i++) {
             teamplayer[i] = Bukkit.getPlayer(tp[i]);
-            if(params.equalsIgnoreCase(player+"_teammate"+i+"_name")){
+            if(params.equalsIgnoreCase("_teammate"+i+"_name")){
                 if(!(teamplayer[i] == player.getPlayer())){
                     //頭
                     ItemStack headitem = teamplayer[i].getInventory().getItem(EquipmentSlot.HEAD);

@@ -10,13 +10,20 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.Objects;
 
+import static org.bukkit.Bukkit.getMap;
+
 public class BigMapRenderer extends MapRenderer {
 
     @Override
     public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
+        MapView origin = getMap(v.bigmapdata);
+
+        int mi = 0;
         for(int x = 0;x <= 128;x++) {
             for (int z = 0; z <= 128; z++) {
-                canvas.setPixelColor(x, z, canvas.getBasePixelColor(x, z));
+
+                canvas.setPixelColor(x, z, v.colors[mi]);
+                mi = mi + 1;
             }
         }
             //カーソルクリア

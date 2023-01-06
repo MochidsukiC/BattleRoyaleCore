@@ -30,6 +30,9 @@ public class GameStart {
         viewB.addRenderer(new BigMapRenderer());
         mapMetaB.setMapView(viewB);
         mapItemB.setItemMeta(mapMetaB);
+        viewB.setTrackingPosition(true);
+        viewB.setCenterX(v.mcx);
+        viewB.setCenterZ(v.mcz);
         //ビッグマップ付与
         player.getInventory().setItem(8,mapItemB);
         player.addScoreboardTag("live");

@@ -1,7 +1,12 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
@@ -38,6 +43,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         //every ticks
         new everyticks().runTaskTimer(this,0L,1);
         //Big Map Data
+        /*
         MapView origin = getMap(v.bigmapdata);
         origin.addRenderer(new MapRenderer() {
             @Override
@@ -52,6 +58,18 @@ public final class BattleRoyaleCore extends JavaPlugin {
                 }
             }
         });
+
+         */
+        ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
+        MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
+        getMap(v.bigmapdata).addRenderer(new OriginMapRender());
+        mapMetaB.setMapId(v.bigmapdata);
+/*
+        MapView viewB = Bukkit.getServer().;
+        mapMetaB.setMapView(viewB);
+
+ */
+        mapItemB.setItemMeta(mapMetaB);
         // Plugin startup logic
 
     }
@@ -91,4 +109,3 @@ class b{
 class m{
     static int[] distance = new int[4];
 }
-

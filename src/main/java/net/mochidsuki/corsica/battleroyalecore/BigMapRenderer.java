@@ -16,7 +16,6 @@ public class BigMapRenderer extends MapRenderer {
 
     @Override
     public void render(@NotNull MapView map, @NotNull MapCanvas canvas, @NotNull Player player) {
-        MapView origin = getMap(v.bigmapdata);
 
         int mi = 0;
         for(int x = 0;x <= 127;x++) {

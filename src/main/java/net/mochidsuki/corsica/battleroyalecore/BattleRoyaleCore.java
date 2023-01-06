@@ -2,17 +2,10 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -104,6 +97,8 @@ class b{
     static int nz;
     static int nmz;
     static int[] target = new int[4];
+
+    static double[] center = new double[3];
 }
 
 class m{

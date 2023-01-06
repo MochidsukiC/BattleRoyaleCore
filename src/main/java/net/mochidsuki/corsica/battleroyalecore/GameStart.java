@@ -6,12 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.jetbrains.annotations.NotNull;
-
-import static org.bukkit.Bukkit.getMap;
 
 public class GameStart {
     public void player(Player player){

@@ -3,7 +3,9 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 public class everyticks extends BukkitRunnable {
     int s = 19;
@@ -25,7 +27,9 @@ public class everyticks extends BukkitRunnable {
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for(int i = 0;i < players.length;i++){
             Player player = players[i];
-            if(player.)
+            if(player.hasPotionEffect(PotionEffectType.SLOW_FALLING)){
+                player.setVelocity(player.getLocation().getDirection().normalize().multiply(5));
+            }
         }
     }
 }

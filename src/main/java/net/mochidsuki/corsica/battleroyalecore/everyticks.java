@@ -1,5 +1,8 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class everyticks extends BukkitRunnable {
@@ -14,6 +17,15 @@ public class everyticks extends BukkitRunnable {
                 v.stime = v.stime - 1;
             }
             s = 0;
+        }
+
+
+
+        //everyticks
+        Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
+        for(int i = 0;i < players.length;i++){
+            Player player = players[i];
+            if(player.)
         }
     }
 }

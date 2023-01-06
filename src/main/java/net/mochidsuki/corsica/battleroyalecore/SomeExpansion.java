@@ -40,7 +40,7 @@ public class SomeExpansion extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("rtime")) {
             int r = v.rtime/20;
             return (r-r % 60)/60+":"+r % 60;
-        }
+        }/*
         Team playerteam = player.getPlayer().getScoreboard().getPlayerTeam(player);
         String[] tp = new String[playerteam.getEntries().size()];
         playerteam.getEntries().toArray(tp);
@@ -124,7 +124,7 @@ public class SomeExpansion extends PlaceholderExpansion {
                     return teamplayer[i]+" - "+head+"H"+ ChatColor.RESET +chest+"C"+ ChatColor.RESET+legs+"L"+ ChatColor.RESET+feet+"B";
                 }
             }
-        }
+        }*/
 
 
         return null; // Placeholder is unknown by the Expansion

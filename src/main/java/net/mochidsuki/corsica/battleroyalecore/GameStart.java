@@ -26,11 +26,10 @@ public class GameStart {
 
 
 
-
-        mapItemB.setItemMeta(mapMetaB);
         MapView viewB = player.getServer().createMap(player.getWorld());
         viewB.addRenderer(new BigMapRenderer());
         mapMetaB.setMapView(viewB);
+        mapItemB.setItemMeta(mapMetaB);
         //ビッグマップ付与
         player.getInventory().setItem(8,mapItemB);
         player.addScoreboardTag("live");
@@ -38,12 +37,12 @@ public class GameStart {
 
 
         //ミニマップ処理・付与
-        ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
-        MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
-        MapView view = player.getServer().createMap(player.getWorld());
-        view.addRenderer(new MiniMapRenderer());
-        mapMeta.setMapView(view);
-        mapItem.setItemMeta(mapMeta);
+        ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);//
+        MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();//
+        MapView view = player.getServer().createMap(player.getWorld());//
+        view.addRenderer(new MiniMapRenderer());//
+        mapMeta.setMapView(view);//
+        mapItem.setItemMeta(mapMeta);//
         view.setScale(MapView.Scale.CLOSEST);
         view.setTrackingPosition(true);
         player.getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);

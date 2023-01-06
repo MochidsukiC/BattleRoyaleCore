@@ -19,8 +19,8 @@ public class BigMapRenderer extends MapRenderer {
         MapView origin = getMap(v.bigmapdata);
 
         int mi = 0;
-        for(int x = 0;x <= 128;x++) {
-            for (int z = 0; z <= 128; z++) {
+        for(int x = 0;x <= 127;x++) {
+            for (int z = 0; z <= 127; z++) {
 
                 canvas.setPixelColor(x, z, v.colors[mi]);
                 mi = mi + 1;

@@ -5,6 +5,7 @@ MAP:
     z: 0
   Radius: 1000
   MapData: 6
+:
 #変性ボーダーの待機時間(stime)と収縮時間(vtime)の指定。
 Ring:
   Round1:
@@ -25,3 +26,5 @@ Ring:
   Round6:
     stime: 60
     vtime: 120
+ADVANCED_SETTING:
+  elytra_minus_vector: -0.1

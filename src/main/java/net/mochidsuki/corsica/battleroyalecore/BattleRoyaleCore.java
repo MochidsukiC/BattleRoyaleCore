@@ -90,6 +90,7 @@ class v{
     static int rtime;
     static int bigmapdata;
     static Color[] colors = new Color[16384];
+    static double emVector;
 }
 class b{
     static int nx;

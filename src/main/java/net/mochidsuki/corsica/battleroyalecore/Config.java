@@ -35,6 +35,7 @@ public class Config {
         v.roundstime[6] = config.getInt("Ring.Round6.stime");
         v.roundrtime[6] = config.getInt("Ring.Round6.vtime");
         v.bigmapdata = config.getInt("MAP.MapData");
-        v.emVector = config.getDouble("ADVANCED_SETTING.elytra_minus_vector");
+        v.exVector = config.getDouble("ADVANCED_SETTING.elytra_x_vector");
+        v.eyVector = config.getDouble("ADVANCED_SETTING.elytra_y_vector");
     }
 }

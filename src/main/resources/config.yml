@@ -27,4 +27,5 @@ Ring:
     stime: 60
     vtime: 120
 ADVANCED_SETTING:
-  elytra_minus_vector: -0.1
+  elytra_x_vector: -0.1
+  elytra_y_vector: 1

@@ -28,7 +28,7 @@ public class everyticks extends BukkitRunnable {
         for(int i = 0;i < players.length;i++){
             Player player = players[i];
             if(player.hasPotionEffect(PotionEffectType.SLOW_FALLING)){
-                player.setVelocity(player.getLocation().getDirection().normalize().multiply(5));
+                player.setVelocity(player.getLocation().getDirection().normalize().multiply(1));
             }
         }
     }

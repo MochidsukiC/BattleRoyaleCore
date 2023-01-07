@@ -52,9 +52,19 @@ public class MiniMapRenderer extends MapRenderer {
             canvas.setCursors(cursor);
         }catch (Exception e){}
 
+        //中心に対する線
+        double[] cDistance = new double[4];
+        cDistance[0] = b.center[0] - player.getLocation().getBlockX();
+        cDistance[1] = b.center[1] - player.getLocation().getBlockZ();
+        for(int x = 0;x <= cDistance[0];x++){
+
+        }
+
+
+
         //border予測線
         int[] distance = new int[4];
-        distance[0] = (b.target[0] - player.getLocation().getBlockX()) ;
+        distance[0] = (b.target[0] - player.getLocation().getBlockX());
         distance[1] = (b.target[1] - player.getLocation().getBlockX());
         distance[2] = (b.target[3] - player.getLocation().getBlockZ());
         distance[3] = (b.target[2] - player.getLocation().getBlockZ());

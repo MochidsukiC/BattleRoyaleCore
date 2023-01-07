@@ -7,6 +7,7 @@ import org.bukkit.block.data.BlockData;
 
 import java.util.Random;
 
+import static net.mochidsuki.corsica.battleroyalecore.b.center;
 import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
 import static net.mochidsuki.corsica.battleroyalecore.v.stime;
 
@@ -14,7 +15,6 @@ import static net.mochidsuki.corsica.battleroyalecore.v.stime;
 public class Roundsystemc {
     //ラウンドシステム
     public void Roundsystem(){
-        double[] center = new double[3];
         double[] speed = new double[4];
         double radius=0;
         double radiusk=0;

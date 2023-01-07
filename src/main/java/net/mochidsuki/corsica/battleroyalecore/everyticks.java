@@ -27,9 +27,12 @@ public class everyticks extends BukkitRunnable {
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {
             if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector));
+                //player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector));
                 Vector v = player.getVelocity();
                 v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector,0));
+                if(player.getLocation().getDirection().equals(player.getLocation().getDirection().normalize().multiply(net.mochidsuki.corsica.battleroyalecore.v.esLimit))) {
+                    v.add(player.getLocation().getDirection().normalize().multiply(net.mochidsuki.corsica.battleroyalecore.v.exVector));
+                }
                 player.setVelocity(v);
             }
         }

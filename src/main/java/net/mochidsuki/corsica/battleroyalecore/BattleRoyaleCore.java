@@ -92,6 +92,7 @@ class v{
     static Color[] colors = new Color[16384];
     static double exVector;
     static double eyVector;
+    static double esLimit;
 }
 class b{
     static int nx;

@@ -37,5 +37,6 @@ public class Config {
         v.bigmapdata = config.getInt("MAP.MapData");
         v.exVector = config.getDouble("ADVANCED_SETTING.elytra_x_vector");
         v.eyVector = config.getDouble("ADVANCED_SETTING.elytra_y_vector");
+        v.eyVector = config.getDouble("ADVANCED_SETTING.elytra_speed_limit");
     }
 }

@@ -8,7 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
 
@@ -55,6 +59,14 @@ public class event implements Listener{
                     break;
 
             }
+        }
+    }
+
+    @EventHandler
+    public void EntityToggleGlideEvent(EntityToggleGlideEvent event){
+        if(event.isGliding()){
+            Player player = (Player) event.getEntity();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,1000000,0,true,true));
         }
     }
 

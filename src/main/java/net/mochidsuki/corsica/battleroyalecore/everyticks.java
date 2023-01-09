@@ -9,6 +9,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.awt.*;
+
 public class everyticks extends BukkitRunnable {
     int s = 19;
 
@@ -36,15 +38,26 @@ public class everyticks extends BukkitRunnable {
                     Vector v = player.getVelocity();
                     v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector,0));
                     player.setVelocity(v);
-                    player.spawnParticle(Particle.SPIT,l,100,0.1,0.1,0.1);
                 }else {
                     player.getLocation().setPitch(-1f);
                     player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector/4));
                     Vector v = player.getVelocity();
-                    v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector/4,0));
+                    v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector,0));
                     player.setVelocity(v);
-                    player.spawnParticle(Particle.SPIT,l,100,0.1,0.1,0.1,0);
                 }
+                player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL,l,50,0.1,0.1,0.1,0.2);
+                player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
+                player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
+                player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
+
+            }
+            if(player.hasPotionEffect(PotionEffectType.LEVITATION)){
+                Location l = player.getLocation();
+                l.setY(player.getLocation().getBlockY() + 1);
+                player.getWorld().spawnParticle(Particle.SPIT,l,50,0.1,0.1,0.1,0.2);
+                player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
+                player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
+                player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
 
             }
         }

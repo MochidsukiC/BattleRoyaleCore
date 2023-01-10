@@ -1,19 +1,27 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
+import jdk.tools.jlink.internal.plugins.VendorVersionPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scoreboard.Team;
+
+
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
 
 public class event implements Listener{
@@ -71,7 +79,22 @@ public class event implements Listener{
     }
 
     @EventHandler
-    public void
+    public void PlayerInteractEvent(PlayerInteractEvent event){
+        if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
+            if(event.getItem().getType() == Material.FIRE_CHARGE){
+                Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
+                fireball.setShooter(event.getPlayer());
+                fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
+                event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() -1 );
+            }
+        }
+    }
 
-
+    @EventHandler
+    public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        if(event.getEntityType() == EntityType.PLAYER){
+            Player player = (Player) event.getEntity();
+            player.setLevel((int) event.getDamage());
+        }
+    }
 }

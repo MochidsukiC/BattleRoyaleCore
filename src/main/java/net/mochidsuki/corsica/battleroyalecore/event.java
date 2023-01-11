@@ -1,7 +1,6 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
-import jdk.tools.jlink.internal.plugins.VendorVersionPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -16,7 +15,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -92,8 +90,8 @@ public class event implements Listener{
 
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-        if(event.getEntityType() == EntityType.PLAYER){
-            Player player = (Player) event.getEntity();
+        if(event.getEntityType() == EntityType.PLAYER) {
+            Player player = (Player) event.getDamager();
             player.setLevel((int) event.getDamage());
         }
     }

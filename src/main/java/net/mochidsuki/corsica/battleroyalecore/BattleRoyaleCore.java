@@ -107,3 +107,49 @@ class b{
 class m{
     static int[] distance = new int[4];
 }
+
+/*
+_________.__-__-__~__~~_____--(((-++J+&u&&&+a&++J(__~____~~_____~__~_~__~_~
+~_____._~.__.____~~__(JgXHWWHHXWWXWHWpHHHHWWkbWkHWqHmma,__~_:~~:___~__~__~_
+____~_._---_-____(+dHHH@HHmWH@HHkHMHHqHHWHHqkqWHmqHgH@@HHm-:~<~<<~:~~~~_~_~
+_<__~-.____~___(uKWWqHHWmHHmM@HHHHHHMMHgHmHHHggHHkHHHHHHYT>:~:_-_:::__<~~~~
+_~____.__.-__(dQkHHHHMHHHHMMMMMMH@gHHHggHgHMHHH@gHY71<(_<______((________~_
+_~--_.-~-___jdHHNMHHMNHMMMMMM@HHMMMH@MHgHggHHgWY<_~((<__<(_jggH@Ne-~~~~__~_
+___-_.-__(<(<THHMMMMMMM@HHMHMMH@HHMM@HH@HH@#YC<<_<((<<((+gWmHHgHMMHm-______
+-_(_((:((;<(<<<7WMMM@MMHMMHHM@MM@HHH@HM@HYC(___(_<((jQWMHHgHHHHHHMHkHx___-_
+<<(<<(<<><<;<<(<<<?TWHHMMM@MMHMMHMMHMgHY<_((:(<+JgHHHHHM@HHHHNMMMMMHHHe-___
+_<(<<(;<(<(~~<(<<(<_<?YUHHMMM@HgHMHHHB<_<_-<((d@MHMMMMHHHMNMHMMMMMMMMMH2<(_
+<;;<<<<<<<(<<;<<;jWMN+/~<<?THHHMHMHKC<_<~_+&MMMHMMHMMMgHMMMMMMMMMMHMMMHk<_(
+<<<<<<<<<<<~~(<<dHMHMMm+<_~<~?7UWHY(<<_-<jdMHMMMMMH@M@HM@MMMMMMHMMMMHMHHR:(
+<<<<<:<~_~<<_<~:<TH@MMMNa+________(__~_(XgHHMMMHHM@HMM@MM@HMHM@HMMMMHMHHH<(
+<(<<~<~<<~_<__<___~dHHHHHNJ-~____~__(<(THHHM@HMMHMMMMMMMMHHMHMMMHMMMMMMHH2_
+<(<~~~:~~_~~_~~__~__?WHM@MMb__-___<(-___<?TMHHHHMMMMMMMMM@HM@MMHMMMHHMMMMb~
+<<<__(_~~__~____-~_(+HHMHMH8_______(_~(_<__<<??THH@MMMMHMMHMMMMMMMHMMMHHMH<
+_~~_<~_~_____-~._(JW@@HMTY<~~(_(__<(__<-<__-<(_<((OWHHM@MMMH@MMH@MHM@HM@MHc
+~___~__~____.-_(gMHM@M#=~-_~__(:__:(_~__-__~<__<_____<THMHHHMMMMMMMM@@HMMMb
+______________(MMHMMHY_____~(&+g+aaJJ&g+J--<~_-~___~_~___?YW@HH@MMMMHH@@MHR
+_~__~__~______~(?YY:<___~_<<dHMMMMMMMMHHM@HNx__<_((~_<<_-___~?TWMMM@@MMHMMR
+~______~__~~__~_~~__<__-___~?WHMHHHHHHMMHMMH3_-___-___<_-___~__~(~7TWWHHHHS
+___~___~__(___~_<<__~((-~__<_~<~_(+++<<?>~_~_.-_-_______-______~__<__~?7UWC
+(WHH@MMNHWXNHMHHkHHHHHHWNH<~_(dHHMMMMMMHkWWkXQkQAgHHmgmggMMMNkQea&ag++&j+&+
+JHMMMMM@MHMMMMMMMMMMM@HMM#:~?WMMMMMMHH@@HHHWHHHHH@MMMMMHMMMM@HHHWHHWkHKHWW$
+(MMHHMH@MHMMMM@MMMMHMMHM@P_:?HMMHHMMMMMHMH@HM@H@M@MMHHHMMHHN@M@MHHMHHHHHqkC
+?MHHHMHMMHHMMMMMHHMHMMHMH$<~?@@MM@HMHMMMMMHMMMMM@@MHMMMMHMMMHMMMMHMHHHHHHK<
+(WMMMMHMHHMHMMHHHMMHMMMMk$<_~dMMMMMMMMM@HHHH@HgM@@MMMMHMMMMMHMMHMMMHHgHHWr(
+(jMHMM@MMHMHHH@MHMHHHHMHNR<~<<MMM@@M@MH@MH@M@@HHMMMHH@M@M@MMMHM@HHMHHHHHS<<
+~(W@@MMMMHMHMMHH@HHH@HH@HN+(<<dHH@MMMMHHHMHM@@HMHMMMMMM@HHHHgHMMHHH@HHHWC<~
+~_?MHM@MM@M@MHM@HHMHMMHMMMs(<<(WMH@MMMM@MM@MHH@@MMMMMHMMMMM@M@MMMM@HHHH3:<<
+~__?MMMMM@HHHHHMHMMHMHHMHM#~~<<qHHMM@MM@MMHMHMMMMMHMMHM@MMHH@HHMHMM@HHf<:<~
+_--(?MMMMHHMMHMMHMHHHHHMMM#<~<(<WHMMHMMHMMHMMMMMMM@MMH@MHHN@MHHM@HMHHf<~~~~
+__-_(?MM@HHMMHMMH@HMHHMHMMMx~:_~?H@@HMHMMHMMMMMMMMHMMHMMHMMMHMMH@HHH9<~~~~~
+:(:<(~<WMMMMNHHHMMHHHH@@MMHb~~_~_XM@@M@MM@MMMMMMMMHMMHM@MM@MHMHHHkKV<~__~_~
+((_<((<<(UMMMHMHHMH@H@HMMMHMr____(WMMMMMMM@MMHM@MMMMMHMM@HMHMHHHWUC_____~~_
+<(_<(_<(<<?WMMMMMMMHMHMH@MHMMr___~(HM@MMMMMMHHMgMHMMMM@HHHHkWHHW=~_____.___
+<<<<((<<<<((?HMMMMMHM@@HMMHMMN_____dMMMMMHNMHMMMMMgHMMgHHWHWX6=_____._ .__-
+<<;<((<<-<((+_?WMMMMH@M@MM@HMMh_____WMMMMMHMMHMMHM@HMHHHWWWV<_.___`__` .__
+<<(<((<<(-(((_(_<?WMMMMMHM@MMHMm____(HHMMMMMHMMMMHHMHMHWUY>_____-__- _--__.
+;;<><((:(<_(<<(<<((<?UHHqH@MMHMNs<~___WMMMMMMMMHH@HMMB9!~____`_  __ ___.__
+<+<<<<<;<<<(<<(<<(<<<<<??TYHHHHHHh<__~_?MmHHMHHWWHY=~_-__.~~-___.__--__._..
+<+><(<<((<:(<<(<<(<<_<<<~~~~~?1YTHw__~__(WHWH9T<__~~___.__._.__   __._-.-..
+<<(((<<<(<<(<;(<<(<:(+<<(<:~~:~~_-:_<____(_~___._~____._____-  _.._  _.-._-
+*/

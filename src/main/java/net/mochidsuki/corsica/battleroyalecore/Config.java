@@ -22,6 +22,7 @@ public class Config {
         v.mr = config.getInt("MAP.Radius");
         v.mcx = config.getInt("MAP.Center.x");
         v.mcz = config.getInt("MAP.Center.z");
+        v.mapScale = config.getInt("MAP.MapScale");
         v.roundstime[1] = config.getInt("Ring.Round1.stime");
         v.roundrtime[1] = config.getInt("Ring.Round1.vtime");
         v.roundstime[2] = config.getInt("Ring.Round2.stime");

@@ -25,6 +25,23 @@ public class GameStart {
         viewB.addRenderer(new BigMapRenderer());
         mapMetaB.setMapView(viewB);
         mapItemB.setItemMeta(mapMetaB);
+        switch (v.mapScale) {
+            case 0:
+                viewB.setScale(MapView.Scale.CLOSEST);
+                break;
+            case 1:
+                viewB.setScale(MapView.Scale.CLOSE);
+                break;
+            case 2:
+                viewB.setScale(MapView.Scale.NORMAL);
+                break;
+            case 3:
+                viewB.setScale(MapView.Scale.FAR);
+                break;
+            case 4:
+                viewB.setScale(MapView.Scale.FARTHEST);
+                break;
+        }
         viewB.setTrackingPosition(true);
         viewB.setCenterX(v.mcx);
         viewB.setCenterZ(v.mcz);

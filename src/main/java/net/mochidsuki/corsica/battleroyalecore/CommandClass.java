@@ -44,10 +44,25 @@ public class CommandClass implements CommandExecutor {
             ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
             MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
             MapView view = player.getServer().createMap(player.getWorld());
-            view.addRenderer(new BigMapRenderer());
             mapMeta.setMapView(view);
             mapItem.setItemMeta(mapMeta);
-            view.setScale(MapView.Scale.FAR);
+            switch (args[0]) {
+                case "0":
+                    view.setScale(MapView.Scale.CLOSEST);
+                    break;
+                case "1":
+                    view.setScale(MapView.Scale.CLOSE);
+                    break;
+                case "2":
+                    view.setScale(MapView.Scale.NORMAL);
+                    break;
+                case "3":
+                    view.setScale(MapView.Scale.FAR);
+                    break;
+                case "4":
+                    view.setScale(MapView.Scale.FARTHEST);
+                    break;
+            }
             view.setTrackingPosition(true);
             view.setCenterX(v.mcx);
             view.setCenterZ(v.mcz);

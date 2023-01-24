@@ -36,32 +36,11 @@ public final class BattleRoyaleCore extends JavaPlugin {
         //every ticks
         new everyticks().runTaskTimer(this,0L,1);
         //Big Map Data
-        /*
-        MapView origin = getMap(v.bigmapdata);
-        origin.addRenderer(new MapRenderer() {
-            @Override
-            public void render(@NotNull MapView mapView, @NotNull MapCanvas mapCanvas, @NotNull Player player) {
-                int colorsi = 0;
-                for(int x = 0;x <= 127;x++){
-                    for(int y = 0;y <= 127;y++){
-                        v.colors[colorsi] = mapCanvas.getBasePixelColor(x,y);
-                        colorsi = colorsi +1;
 
-                    }
-                }
-            }
-        });
-
-         */
         ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
         MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
         getMap(v.bigmapdata).addRenderer(new OriginMapRender());
         mapMetaB.setMapId(v.bigmapdata);
-/*
-        MapView viewB = Bukkit.getServer().;
-        mapMetaB.setMapView(viewB);
-
- */
         mapItemB.setItemMeta(mapMetaB);
         // Plugin startup logic
 
@@ -79,33 +58,33 @@ public final class BattleRoyaleCore extends JavaPlugin {
 }
 
 class v{
-    static double[] now = new double[4];
-    static int gameround;
-    static int mr;
-    static int mcx;
-    static int mcz;
-    static long[] roundstime = new long[7];
-    static int[] roundrtime = new int[7];
-    static long stime;
-    static int rtime;
-    static int bigmapdata;
-    static Color[] colors = new Color[16384];
-    static double exVector;
-    static double eyVector;
-    static double esLimit;
+    static double[] now = new double[4];//ボーダーの現在位置0=x,1=y,2=-x,3=-y
+    static int gameround;//現在のゲームラウンド
+    static int mr;//マップ半径
+    static int mcx;//マップの中心座標x
+    static int mcz;//マップの中心座標y
+    static long[] roundstime = new long[7];//各ラウンドの収縮待機時間
+    static int[] roundrtime = new int[7];//各ラウンドの収縮時間
+    static long stime;//現ラウンドの収縮待機残り時間
+    static int rtime;//現ラウンドの収縮残り時間
+    static int bigmapdata;//Bigmapの大元mapID
+    static Color[] colors = new Color[16384];//マップデータをコピーするための一時保管場所
+    static double exVector;//エリトラの推進力
+    static double eyVector;//エリトラにかかる重力
+    static double esLimit;//エリトラのスピード制限
 }
 class b{
     static int nx;
     static int nmx;
     static int nz;
     static int nmz;
-    static int[] target = new int[4];
+    static int[] target = new int[4];//ボーダーの収縮目標座標0=x,1=y,2=-x,3=-y
 
-    static double[] center = new double[3];
+    static double[] center = new double[3];//ボーダーの中心座標0=忘れた,1=x,2=y
 }
 
 class m{
-    static int[] distance = new int[4];
+    static int[] distance = new int[4];//ボーダーの残り収縮距離0=x,1=y,2=-x,3=-y
 }
 
 /*

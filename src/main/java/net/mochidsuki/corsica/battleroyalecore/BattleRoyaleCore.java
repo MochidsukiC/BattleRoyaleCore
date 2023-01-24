@@ -93,7 +93,6 @@ class v{
     static double exVector;
     static double eyVector;
     static double esLimit;
-    static int mapScale;
 }
 class b{
     static int nx;

@@ -32,25 +32,6 @@ public class border extends BukkitRunnable {
             world.getWorldBorder().setSize((v.now[0]-v.now[1]));
 
 
-            /*
-            int x= (int)v.now[0];
-            int mx= (int)v.now[1];
-            int z= (int)v.now[2];
-            int mz= (int)v.now[3];
-            for(; mx < x; mx = mx+1){
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
-                world.getBlockAt(mx,20,z).setBlockData(block);
-                world.getBlockAt(mx,20,mz).setBlockData(block);
-            }
-            for(; mz < z; mz = mz+1){
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
-                world.getBlockAt(x,20,mz).setBlockData(block);
-                world.getBlockAt(mx,20,mz).setBlockData(block);
-            }
-             */
-
 
         }else{
             if(v.gameround < 6){

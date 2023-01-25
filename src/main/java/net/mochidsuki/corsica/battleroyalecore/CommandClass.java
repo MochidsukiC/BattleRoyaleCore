@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
+import java.util.Objects;
+
 
 public class CommandClass implements CommandExecutor {
 
@@ -33,9 +35,19 @@ public class CommandClass implements CommandExecutor {
                 return true;
             }
             if(args[0].equalsIgnoreCase("setstart")){
-                GameStart g = new GameStart();
-                g.player(sender.getServer().getPlayer(sender.getName()));
-                return true;
+                switch (args[1]) {
+                    case "@a":
+                        Player[] players = sender.getServer().getOnlinePlayers().toArray(new Player[0]);
+                        for (Player player : players) {
+                            GameStart g = new GameStart();
+                            g.player(player);
+                        }
+                        return true;
+                    default:
+                        GameStart g = new GameStart();
+                        g.player(Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
+                        return true;
+                }
             }
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){
@@ -44,7 +56,7 @@ public class CommandClass implements CommandExecutor {
             ItemStack mapItem = new ItemStack(Material.FILLED_MAP,1);
             MapMeta mapMeta = (MapMeta)mapItem.getItemMeta();
             MapView view = player.getServer().createMap(player.getWorld());
-            mapMeta.setMapView(view);
+            Objects.requireNonNull(mapMeta).setMapView(view);
             mapItem.setItemMeta(mapMeta);
             switch (args[0]) {
                 case "0":

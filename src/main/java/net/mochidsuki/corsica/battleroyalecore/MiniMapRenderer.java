@@ -40,7 +40,7 @@ public class MiniMapRenderer extends MapRenderer {
                     if (x > 64) {
                         x = 64;
                     }
-                    int z = teamplayer[i].getLocation().getBlockX() - player.getLocation().getBlockZ();
+                    int z = teamplayer[i].getLocation().getBlockZ() - player.getLocation().getBlockZ();
                     if (z > 64) {
                         z = 64;
                     }

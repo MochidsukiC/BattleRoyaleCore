@@ -63,10 +63,14 @@ public class BigMapRenderer extends MapRenderer {
                         int x = (Objects.requireNonNull(teamplayer[i]).getLocation().getBlockX() - v.mcx) / mapZoom;
                         if (x > 64) {
                             x = 64;
+                        } else if (x < -64) {
+                            x = -64;
                         }
                         int z = (teamplayer[i].getLocation().getBlockZ() - v.mcz) / mapZoom;
                         if (z > 64) {
                             z = 64;
+                        }else if(z < -64){
+                            z = -64;
                         }
                         cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
                         canvas.setCursors(cursor);

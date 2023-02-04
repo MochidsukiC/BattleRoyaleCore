@@ -1,7 +1,6 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -110,9 +109,9 @@ public class event implements Listener{
 
 
             //シールド
-            int shieldMax;
+            double shieldMax;
             int shieldNow;
-            int damage = 0;
+            double damage = event.getDamage();
             ItemStack chestItem = player.getInventory().getItem(EquipmentSlot.CHEST);
             switch (Objects.requireNonNull(chestItem).getType()){
                 case CHAINMAIL_CHESTPLATE:
@@ -132,7 +131,10 @@ public class event implements Listener{
                     shieldMax = 0;
             }
             Damageable d = (Damageable)chestItem.getItemMeta();
-            shieldNow = (chestItem.getType().getMaxDurability()-Objects.requireNonNull(d).getDamage())/chestItem.getType().getMaxDurability()*shieldMax;
+            double maxDurability = chestItem.getType().getMaxDurability();
+            double dDamage = Objects.requireNonNull(d).getDamage();
+            double durableValue = maxDurability - dDamage;
+            shieldNow = (int) (durableValue/maxDurability*shieldMax);
             if(shieldNow>0){
                 damage = (int) (event.getDamage() - shieldNow);
                 shieldNow = (int) (shieldNow - event.getDamage());
@@ -142,14 +144,14 @@ public class event implements Listener{
                         damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
                     }
                 }
-            d.setDamage(shieldNow/shieldMax*chestItem.getType().getMaxDurability());
-            chestItem.setItemMeta(d);
             }
             if(damage <= 0){
-                event.setCancelled(true);
-            }else {
-                event.setDamage(damage);
+                damage = 0;
             }
+            event.setDamage(damage);
+            double da = (shieldMax - shieldNow)/shieldMax*maxDurability;
+            d.setDamage((int) da);
+            chestItem.setItemMeta(d);
         }
     }
 }

@@ -43,9 +43,13 @@ public class CommandClass implements CommandExecutor {
                             g.player(player);
                         }
                         return true;
-                    default:
+                    case "@s":
                         GameStart g = new GameStart();
-                        g.player(Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
+                        g.player((Player) sender);
+                        return true;
+                    default:
+                        GameStart ga = new GameStart();
+                        ga.player(Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
                         return true;
                 }
             }

@@ -63,13 +63,18 @@ public class everyticks extends BukkitRunnable {
             String half;
             String openings;
             Damageable d = (Damageable)chestItem.getItemMeta();
-            shield =  String.join("", Collections.nCopies(((int)((chestItem.getType().getMaxDurability()-Objects.requireNonNull(d).getDamage())/chestItem.getType().getMaxDurability()*shieldMax))/2, "■"));
-            if(!((Objects.requireNonNull(d).getDamage()/chestItem.getType().getMaxDurability()*shieldMax)%2 == 0)){
+            double maxDurability = chestItem.getType().getMaxDurability();
+            double dDamage = Objects.requireNonNull(d).getDamage();
+            double durableValue = maxDurability - dDamage;
+            double shieldNow = (int) (durableValue/maxDurability*shieldMax);
+            shield =  String.join("", Collections.nCopies((int) (shieldNow/2), "■"));
+
+            if(!(shieldNow%2 == 0)){
                 half = "□";
             }else {
                 half = "";
             }
-            openings =  String.join("", Collections.nCopies((shieldMax-(int)((chestItem.getType().getMaxDurability()-Objects.requireNonNull(d).getDamage())/chestItem.getType().getMaxDurability()*shieldMax))/2, "-"));
+            openings =  String.join("", Collections.nCopies((int) ((shieldMax - shieldNow)/2), "-"));
             component.setText("["+shield+half+openings+"]");
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR,component);
 

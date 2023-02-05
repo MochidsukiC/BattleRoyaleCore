@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class Pin {
+public class pin {
     public void Pin(Player player, Location loc){
         try {
             ProtocolManager manager = ProtocolLibrary.getProtocolManager();

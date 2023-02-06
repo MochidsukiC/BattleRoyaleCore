@@ -49,7 +49,7 @@ public class CommandClass implements CommandExecutor {
                         return true;
                     default:
                         GameStart ga = new GameStart();
-                        ga.player(Objects.requireNonNull(sender.getServer().getPlayer(sender.getName())));
+                        ga.player((Player) sender);
                         return true;
                 }
             }

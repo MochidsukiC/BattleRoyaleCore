@@ -37,46 +37,48 @@ public class everyticks extends BukkitRunnable {
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
             //タイトル
-            int shieldMax;
-            ItemStack chestItem = player.getInventory().getItem(EquipmentSlot.CHEST);
-            switch (Objects.requireNonNull(chestItem).getType()){
-                case CHAINMAIL_CHESTPLATE:
-                    shieldMax = 5;
-                    break;
-                case IRON_CHESTPLATE:
-                case GOLDEN_CHESTPLATE:
-                    shieldMax = 10;
-                    break;
-                case DIAMOND_CHESTPLATE:
-                    shieldMax = 15;
-                    break;
-                case NETHERITE_CHESTPLATE:
-                    shieldMax = 20;
-                    break;
-                default:
-                    shieldMax = 0;
-            }
+            try {
+                int shieldMax;
+                ItemStack chestItem = player.getInventory().getItem(EquipmentSlot.CHEST);
+                switch (Objects.requireNonNull(chestItem).getType()) {
+                    case CHAINMAIL_CHESTPLATE:
+                        shieldMax = 5;
+                        break;
+                    case IRON_CHESTPLATE:
+                    case GOLDEN_CHESTPLATE:
+                        shieldMax = 10;
+                        break;
+                    case DIAMOND_CHESTPLATE:
+                        shieldMax = 15;
+                        break;
+                    case NETHERITE_CHESTPLATE:
+                        shieldMax = 20;
+                        break;
+                    default:
+                        shieldMax = 0;
+                }
 
 
-            TextComponent component = new net.md_5.bungee.api.chat.TextComponent();
-            String shield;
-            String half;
-            String openings;
-            Damageable d = (Damageable)chestItem.getItemMeta();
-            double maxDurability = chestItem.getType().getMaxDurability();
-            double dDamage = Objects.requireNonNull(d).getDamage();
-            double durableValue = maxDurability - dDamage;
-            double shieldNow = (int) (durableValue/maxDurability*shieldMax);
-            shield =  String.join("", Collections.nCopies((int) (shieldNow/2), "■"));
+                TextComponent component = new net.md_5.bungee.api.chat.TextComponent();
+                String shield;
+                String half;
+                String openings;
+                Damageable d = (Damageable) chestItem.getItemMeta();
+                double maxDurability = chestItem.getType().getMaxDurability();
+                double dDamage = Objects.requireNonNull(d).getDamage();
+                double durableValue = maxDurability - dDamage;
+                double shieldNow = (int) (durableValue / maxDurability * shieldMax);
+                shield = String.join("", Collections.nCopies((int) (shieldNow / 2), "■"));
 
-            if(!(shieldNow%2 == 0)){
-                half = "□";
-            }else {
-                half = "";
-            }
-            openings =  String.join("", Collections.nCopies((int) ((shieldMax - shieldNow)/2), "-"));
-            component.setText("["+shield+half+openings+"]");
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR,component);
+                if (!(shieldNow % 2 == 0)) {
+                    half = "□";
+                } else {
+                    half = "";
+                }
+                openings = String.join("", Collections.nCopies((int) ((shieldMax - shieldNow) / 2), "-"));
+                component.setText("[" + shield + half + openings + "]");
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            }catch (Exception ignored){}
 
 
 

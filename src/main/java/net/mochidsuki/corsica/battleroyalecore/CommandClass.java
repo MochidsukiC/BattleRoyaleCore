@@ -2,6 +2,7 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,6 +53,10 @@ public class CommandClass implements CommandExecutor {
                         ga.player((Player) sender);
                         return true;
                 }
+            }
+            if(args[0].equalsIgnoreCase("testpin")){
+                Pin pin = new Pin();
+                pin.pin((Player) sender, new Location(sender.getServer().getWorld(sender.getName()),((Player) sender).getLocation().getBlockX(),((Player) sender).getLocation().getBlockY(),((Player) sender).getLocation().getBlockZ()));
             }
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){

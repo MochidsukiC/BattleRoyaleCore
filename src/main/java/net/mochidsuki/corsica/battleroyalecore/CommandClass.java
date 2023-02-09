@@ -57,6 +57,7 @@ public class CommandClass implements CommandExecutor {
             if(args[0].equalsIgnoreCase("testpin")){
                 Pin pin = new Pin();
                 pin.pin((Player) sender, new Location(sender.getServer().getWorld(sender.getName()),((Player) sender).getLocation().getBlockX(),((Player) sender).getLocation().getBlockY(),((Player) sender).getLocation().getBlockZ()));
+            return true;
             }
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){

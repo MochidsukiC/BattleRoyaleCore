@@ -16,7 +16,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Battle Royale 2 Pluginが目を覚ました！");
-        getServer().getPluginManager().registerEvents(new event(), this);
+        getServer().getPluginManager().registerEvents(new Event(), this);
         getCommand("gameround").setExecutor(new CommandClass()); //gameround
         getCommand("debugerb").setExecutor(new CommandClass()); //debugerb
         getCommand("brc").setExecutor(new CommandClass()); //brgame
@@ -34,7 +34,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
             new SomeExpansion(this).register();
         }
         //every ticks
-        new everyticks().runTaskTimer(this,0L,1);
+        new Everyticks().runTaskTimer(this,0L,1);
         //Big Map Data
         /*
         MapView origin = getMap(v.bigmapdata);

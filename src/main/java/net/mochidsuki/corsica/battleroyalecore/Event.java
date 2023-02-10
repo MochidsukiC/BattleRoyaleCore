@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
 
-public class event implements Listener{
+public class Event implements Listener{
     @EventHandler
     public void PlayerDropItemEvent(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
@@ -112,7 +112,7 @@ public class event implements Listener{
             double shieldMax;
             int shieldNow;
             double damage = event.getDamage();
-            ItemStack chestItem = player.getInventory().getItem(EquipmentSlot.CHEST);
+            ItemStack chestItem = player.getInventory().getItem(22);
             switch (Objects.requireNonNull(chestItem).getType()){
                 case CHAINMAIL_CHESTPLATE:
                     shieldMax = 5;

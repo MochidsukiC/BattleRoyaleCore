@@ -6,12 +6,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
 
-public class border extends BukkitRunnable {
+public class Border extends BukkitRunnable {
     double[] speed;
     double radius;
 
 
-    public border(double[] speed, double radius, int rtime) {
+    public Border(double[] speed, double radius, int rtime) {
         this.speed = speed;
         this.radius = radius;
         v.rtime = rtime*20;

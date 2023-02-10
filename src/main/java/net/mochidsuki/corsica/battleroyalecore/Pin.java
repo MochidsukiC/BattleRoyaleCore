@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLib;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.injector.PacketFilterManager;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -24,18 +25,18 @@ public class Pin{
         packet.getDoubles().write(0, loc.getX());
         packet.getDoubles().write(1, loc.getY());
         packet.getDoubles().write(2, loc.getZ());
-        /*
-        WrappedDataWatcher.Serializer byteSerializer = WrappedDataWatcher.Registry.get(Byte.class); //Serializer for data watcher object's value
-        WrappedDataWatcher.WrappedDataWatcherObject entityBitmask = new WrappedDataWatcher.WrappedDataWatcherObject(0, byteSerializer); //Creating a data watcher object with it's index and serializer for expected value type
 
-        WrappedDataWatcher watcher = new WrappedDataWatcher();
-        watcher.setObject(entityBitmask, (byte) 0x40); //Enable glow effect
+        WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
+        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class); //Found this through google, needed for some stupid reason
+        watcher.setEntity(player); //Set the new data watcher's target
+        watcher.setObject(0, serializer, (byte) (0x40)); //Set status to glowing, found on protocol page
 
-        WrapperPlayServerEntityMetadata metadataPacket = new WrapperPlayServerEntityMetadata();
-        metadataPacket.setEntityID(83);
-        metadataPacket.setMetadata(watcher.getWatchableObjects());
-        metadataPacket.sendPacket(player);
-        */
+        try {
+            packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         try {
             pm.sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {

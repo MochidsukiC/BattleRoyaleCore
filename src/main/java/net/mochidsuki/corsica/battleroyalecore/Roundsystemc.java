@@ -163,7 +163,7 @@ public class Roundsystemc {
         */
 
 
-        new border(speed,radius,rtime).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
+        new Border(speed,radius,rtime).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
 
     }
 

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -17,7 +18,7 @@ import org.bukkit.util.Vector;
 import java.util.Collections;
 import java.util.Objects;
 
-public class everyticks extends BukkitRunnable {
+public class Everyticks extends BukkitRunnable {
     int s = 19;
 
     @Override
@@ -39,7 +40,7 @@ public class everyticks extends BukkitRunnable {
             //タイトル
             try {
                 int shieldMax;
-                ItemStack chestItem = player.getInventory().getItem(EquipmentSlot.CHEST);
+                ItemStack chestItem = player.getInventory().getItem(22);
                 switch (Objects.requireNonNull(chestItem).getType()) {
                     case CHAINMAIL_CHESTPLATE:
                         shieldMax = 5;

@@ -54,11 +54,14 @@ public class CommandClass implements CommandExecutor {
                         return true;
                 }
             }
+            /*
             if(args[0].equalsIgnoreCase("testpin")){
                 Pin pin = new Pin();
-                pin.pin((Player) sender, new Location(sender.getServer().getWorld(sender.getName()),((Player) sender).getLocation().getBlockX(),((Player) sender).getLocation().getBlockY(),((Player) sender).getLocation().getBlockZ()));
+                pin.pin((Player) sender, ((Player) sender).getLocation());
             return true;
             }
+
+             */
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){
             Player player = (Player) sender;

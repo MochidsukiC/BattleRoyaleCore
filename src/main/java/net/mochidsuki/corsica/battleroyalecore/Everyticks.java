@@ -13,10 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Everyticks extends BukkitRunnable {
     int s = 19;
@@ -37,7 +40,7 @@ public class Everyticks extends BukkitRunnable {
         //everyticks
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
-            //タイトル
+            //アクションバー
             try {
                 int shieldMax;
                 ItemStack chestItem = player.getInventory().getItem(22);
@@ -116,8 +119,27 @@ public class Everyticks extends BukkitRunnable {
                 player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
                 player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
                 player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
-
             }
+
+
+            //Pin
+
+            Team playerteam = player.getScoreboard().getPlayerTeam(player);
+            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+            playerteam.getEntries().toArray(tp);
+            Player[] teamplayer = new Player[tp.length+3];
+            for (int i = 0;i < tp.length;i++) {
+                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+            }
+
+            Pin pin = new Pin();
+            Optional.of(new Location(player.getWorld(), 0,0,0));
+
+            Optional<Location> loc1 = Optional.ofNullable(v.pin.get(teamplayer[0]));
+            Optional<Location> loc2 = Optional.ofNullable(v.pin.get(teamplayer[1]));
+            Optional<Location> loc3 = Optional.ofNullable(v.pin.get(teamplayer[2]));
+
+            pin.pin(player,loc1.orElse(new Location(player.getWorld(),0,0,0)),loc2.orElse(new Location(player.getWorld(),0,0,0)),loc3.orElse(new Location(player.getWorld(),0,0,0)),!(v.pin.get(teamplayer[0]) == null),!(v.pin.get(teamplayer[1]) == null),!(v.pin.get(teamplayer[2]) == null));
         }
     }
 }

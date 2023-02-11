@@ -48,7 +48,7 @@ public class BigMapRenderer extends MapRenderer {
             for(int i = 0; i <= canvas.getCursors().size();i++){
                 try {
                     canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
-                }catch (Exception e){}
+                }catch (Exception ignored){}
             }
             try {
                 //チームメイト表示
@@ -73,10 +73,11 @@ public class BigMapRenderer extends MapRenderer {
                             z = -64;
                         }
                         cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
-                        canvas.setCursors(cursor);
                     }
+                    cursor.addCursor(new MapCursor((byte) ((Objects.requireNonNull(v.pin.get(teamplayer[i])).getBlockX() - v.mcx)/mapZoom*2),(byte) ((v.pin.get(teamplayer[i]).getBlockZ() - v.mcz)/mapZoom*2),(byte) 0 ,MapCursor.Type.BANNER_YELLOW,true));
                 }
-            }catch (Exception e){}
+                canvas.setCursors(cursor);
+            }catch (Exception ignored){}
 
             //border予測線
             int[] distance = new int[4];

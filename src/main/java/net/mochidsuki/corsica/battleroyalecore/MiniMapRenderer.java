@@ -24,7 +24,7 @@ public class MiniMapRenderer extends MapRenderer {
         for(int i = 0; i <= canvas.getCursors().size();i++){
             try {
                 canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
-            }catch (Exception e){}
+            }catch (Exception ignored){}
         }
         try {
             //チームメイト表示
@@ -52,9 +52,15 @@ public class MiniMapRenderer extends MapRenderer {
                     cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
 
                 }
+
+                int x = Objects.requireNonNull(v.pin.get(teamplayer[i])).getBlockX() - player.getLocation().getBlockX();
+                int z = v.pin.get(teamplayer[i]).getBlockZ() - player.getLocation().getBlockZ();
+                if(x < 128 && x > -128 && z < 128 && z > -128 ) {
+                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
+                }
             }
             canvas.setCursors(cursor);
-        }catch (Exception e){}
+        }catch (Exception ignored){}
 
         //中心に対する線
         double[] cDistance = new double[4];

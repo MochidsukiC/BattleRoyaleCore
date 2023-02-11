@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
@@ -21,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
@@ -87,6 +87,10 @@ public class Event implements Listener{
                 fireball.setShooter(event.getPlayer());
                 fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
                 event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() -1 );
+            }
+            if(event.getItem().getType() == Material.FILLED_MAP){
+                v.pin.put(event.getPlayer(),event.getPlayer().getTargetBlockExact(400).getLocation());
+                event.setCancelled(true);
             }
         }
     }

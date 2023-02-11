@@ -1,13 +1,16 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.awt.*;
+import java.util.HashMap;
 
 import static org.bukkit.Bukkit.getMap;
 
@@ -94,6 +97,7 @@ class v{
     static double eyVector;
     static double esLimit;
     static int mapScale;
+    static HashMap<Player, Location> pin = new HashMap<>();
 }
 class b{
     static int nx;
@@ -108,3 +112,4 @@ class b{
 class m{
     static int[] distance = new int[4];
 }
+

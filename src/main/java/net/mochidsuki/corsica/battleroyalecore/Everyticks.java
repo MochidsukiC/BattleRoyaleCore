@@ -143,9 +143,6 @@ public class Everyticks extends BukkitRunnable {
             loc[1] = Optional.ofNullable(v.pin.get(teamplayer[1]));
             loc[2] = Optional.ofNullable(v.pin.get(teamplayer[2]));
 
-
-            getLogger().info(v.pin.get(player).getX()+":"+v.pin.get(player).getY()+":"+v.pin.get(player).getZ()+":");
-
             Location[] location = new Location[3];
             boolean[] booleans = new boolean[3];
 

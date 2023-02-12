@@ -17,77 +17,61 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Pin{
-    public void pin(Player player, Location loc1, Location loc2 , Location loc3,Boolean b1,Boolean b2,Boolean b3) {
+    public void pin(Player player, Location[] locations,boolean[] b) {
         ProtocolManager pm = ProtocolLibrary.getProtocolManager();
+        EntityType entityType = EntityType.DRAGON_FIREBALL;
 
-        EntityType entityType = EntityType.ENDER_SIGNAL;
+        PacketContainer[] packet = new PacketContainer[locations.length];
+        PacketContainer[] packetmeta = new PacketContainer[locations.length]; // metadata packet
 
-        PacketContainer packet = pm.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
-        packet.getModifier().writeDefaults();
-        packet.getEntityTypeModifier().write(0, entityType);
-        packet.getUUIDs().write(0, UUID.randomUUID());
-        //packet.getIntegers().write(1, 1);
-        packet.getDoubles().write(0, loc1.getX()+0.5);
-        packet.getDoubles().write(1, loc1.getY()+1);
-        packet.getDoubles().write(2, loc1.getZ()+0.5);
+        for (int i = 0;i<locations.length;i++) {
+            try {
+                Location loc = new Location(player.getWorld(),0,0,0);
+                double x = locations[i].getX() - player.getLocation().getX();
+                double y = locations[i].getY() - player.getLocation().getY();
+                double z = locations[i].getZ() - player.getLocation().getZ();
+                double d =Math.sqrt(Math.abs(y * y + (x * x + z * z)));
 
-        PacketContainer packet2 = pm.createPacket(PacketType.Play.Server.ENTITY_METADATA); // metadata packet
-        packet2.getIntegers().write(0, packet.getIntegers().read(0)); //Set entity id from packet above
-        WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
-        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class); //Found this through google, needed for some stupid reason
-        watcher.setEntity(player); //Set the new data watcher's target
-        watcher.setObject(0, serializer, (byte) (0x20 | 0x40)); //Set status to glowing, found on protocol page
-        packet2.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created. This is Line 32
+                if (d > 16) {
+                    loc.setX(player.getLocation().getX()+x*16/d);
+                    loc.setY(player.getLocation().getY()+y*16/d);
+                    loc.setZ(player.getLocation().getZ()+z*16/d);
+                }else {
+                    loc = locations[i];
+                }
+
+                packet[i] = pm.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
+
+                packet[i].getModifier().writeDefaults();
+                packet[i].getEntityTypeModifier().write(0, entityType);
+                packet[i].getUUIDs().write(0, UUID.randomUUID());
+                //packet.getIntegers().write(1, 1);
+                packet[i].getDoubles().write(0, loc.getX()+0.5);
+                packet[i].getDoubles().write(1, loc.getY()+1);
+                packet[i].getDoubles().write(2, loc.getZ()+0.5);
+
+                packetmeta[i] = pm.createPacket(PacketType.Play.Server.ENTITY_METADATA);
+
+                packetmeta[i].getIntegers().write(0, packet[i].getIntegers().read(0)); //Set entity id from packet above
+                WrappedDataWatcher watcher = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
+                WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class); //Found this through google, needed for some stupid reason
+                watcher.setEntity(player); //Set the new data watcher's target
+                watcher.setObject(0, serializer, (byte) (0x20 | 0x40)); //Set status to glowing, found on protocol page
+                packetmeta[i].getWatchableCollectionModifier().write(0, watcher.getWatchableObjects()); //Make the packet's datawatcher the one we created. This is Line 32
+
+            }catch (Exception ignored){}
 
 
+        }
 
 
-        PacketContainer packet3 = pm.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
-        packet3.getModifier().writeDefaults();
-        packet3.getEntityTypeModifier().write(0, entityType);
-        packet3.getUUIDs().write(0, UUID.randomUUID());
-        //packet.getIntegers().write(1, 1);
-        packet3.getDoubles().write(0, loc2.getX()+0.5);
-        packet3.getDoubles().write(1, loc2.getY()+1);
-        packet3.getDoubles().write(2, loc2.getZ()+0.5);
-
-        PacketContainer packet4 = pm.createPacket(PacketType.Play.Server.ENTITY_METADATA); // metadata packet
-        packet4.getIntegers().write(0, packet4.getIntegers().read(0)); //Set entity id from packet above
-        WrappedDataWatcher watcher4 = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
-        WrappedDataWatcher.Serializer serializer4 = WrappedDataWatcher.Registry.get(Byte.class); //Found this through google, needed for some stupid reason
-        watcher4.setEntity(player); //Set the new data watcher's target
-        watcher4.setObject(0, serializer4, (byte) (0x20 | 0x40)); //Set status to glowing, found on protocol page
-        packet4.getWatchableCollectionModifier().write(0, watcher4.getWatchableObjects()); //Make the packet's datawatcher the one we created. This is Line 32
-
-        PacketContainer packet5 = pm.createPacket(PacketType.Play.Server.SPAWN_ENTITY);
-        packet5.getModifier().writeDefaults();
-        packet5.getEntityTypeModifier().write(0, entityType);
-        packet5.getUUIDs().write(0, UUID.randomUUID());
-        //packet.getIntegers().write(1, 1);
-        packet5.getDoubles().write(0, loc3.getX()+0.5);
-        packet5.getDoubles().write(1, loc3.getY()+1);
-        packet5.getDoubles().write(2, loc3.getZ()+0.5);
-
-        PacketContainer packet6 = pm.createPacket(PacketType.Play.Server.ENTITY_METADATA); // metadata packet
-        packet6.getIntegers().write(0, packet6.getIntegers().read(0)); //Set entity id from packet above
-        WrappedDataWatcher watcher6 = new WrappedDataWatcher(); //Create data watcher, the Entity Metadata packet requires this
-        WrappedDataWatcher.Serializer serializer6 = WrappedDataWatcher.Registry.get(Byte.class); //Found this through google, needed for some stupid reason
-        watcher6.setEntity(player); //Set the new data watcher's target
-        watcher6.setObject(0, serializer6, (byte) (0x20 | 0x40)); //Set status to glowing, found on protocol page
-        packet6.getWatchableCollectionModifier().write(0, watcher6.getWatchableObjects()); //Make the packet's datawatcher the one we created. This is Line 32
 
         try {
-            if(b1) {
-                pm.sendServerPacket(player, packet);
-                pm.sendServerPacket(player, packet2);
-            }
-            if(b2) {
-                pm.sendServerPacket(player, packet3);
-                pm.sendServerPacket(player, packet4);
-            }
-            if(b3) {
-                pm.sendServerPacket(player, packet5);
-                pm.sendServerPacket(player, packet6);
+            for(int i = 0; i < locations.length; i++){
+                if (b[i]) {
+                    pm.sendServerPacket(player, packet[i]);
+                    pm.sendServerPacket(player, packetmeta[i]);
+                }
             }
         } catch (InvocationTargetException e) {
             e.printStackTrace();

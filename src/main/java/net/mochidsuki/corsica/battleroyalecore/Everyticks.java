@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class Everyticks extends BukkitRunnable {
     int s = 19;
 
@@ -135,11 +137,24 @@ public class Everyticks extends BukkitRunnable {
             Pin pin = new Pin();
             Optional.of(new Location(player.getWorld(), 0,0,0));
 
-            Optional<Location> loc1 = Optional.ofNullable(v.pin.get(teamplayer[0]));
-            Optional<Location> loc2 = Optional.ofNullable(v.pin.get(teamplayer[1]));
-            Optional<Location> loc3 = Optional.ofNullable(v.pin.get(teamplayer[2]));
+            Optional<Location>[] loc = new Optional[3];
 
-            pin.pin(player,loc1.orElse(new Location(player.getWorld(),0,0,0)),loc2.orElse(new Location(player.getWorld(),0,0,0)),loc3.orElse(new Location(player.getWorld(),0,0,0)),!(v.pin.get(teamplayer[0]) == null),!(v.pin.get(teamplayer[1]) == null),!(v.pin.get(teamplayer[2]) == null));
+            loc[0] = Optional.ofNullable(v.pin.get(teamplayer[0]));
+            loc[1] = Optional.ofNullable(v.pin.get(teamplayer[1]));
+            loc[2] = Optional.ofNullable(v.pin.get(teamplayer[2]));
+
+
+            getLogger().info(v.pin.get(player).getX()+":"+v.pin.get(player).getY()+":"+v.pin.get(player).getZ()+":");
+
+            Location[] location = new Location[3];
+            boolean[] booleans = new boolean[3];
+
+            for(int i = 0;i < loc.length; i++) {
+                location[i] = loc[i].orElse(new Location(player.getWorld(),0,0,0));
+                booleans[i] = !(v.pin.get(teamplayer[i]) == null);
+            }
+
+            pin.pin(player, location,booleans);
         }
     }
 }

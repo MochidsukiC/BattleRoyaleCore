@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
 import java.util.Objects;
+import java.util.Optional;
 
 
 public class CommandClass implements CommandExecutor {
@@ -57,11 +58,16 @@ public class CommandClass implements CommandExecutor {
             /*
             if(args[0].equalsIgnoreCase("testpin")){
                 Pin pin = new Pin();
-                pin.pin((Player) sender, ((Player) sender).getLocation());
+                Optional.of(new Location((sender.getServer().getWorld(sender.getName())), 0,0,0));
+
+                Optional<Location> loc1 = Optional.ofNullable(v.pin.get(sender));
+
+                pin.pin((Player) sender,loc1.orElse(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),true,false,false);
             return true;
             }
 
              */
+
         }
         if(command.getName().equalsIgnoreCase("mapgenerator")){
             Player player = (Player) sender;

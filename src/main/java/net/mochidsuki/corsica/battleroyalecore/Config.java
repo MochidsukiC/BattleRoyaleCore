@@ -39,6 +39,7 @@ public class Config {
         v.exVector = config.getDouble("ADVANCED_SETTING.elytra_x_vector");
         v.eyVector = config.getDouble("ADVANCED_SETTING.elytra_y_vector");
         v.esLimit = config.getDouble("ADVANCED_SETTING.elytra_speed_limit");
+        v.inv = config.getBoolean("ADVANCED_SETTING.Inventory_Locker");
 
 
 

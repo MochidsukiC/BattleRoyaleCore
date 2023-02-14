@@ -32,10 +32,10 @@ public class Pin{
                 double z = locations[i].getZ() - player.getLocation().getZ();
                 double d =Math.sqrt(Math.abs(y * y + (x * x + z * z)));
 
-                if (d > 16) {
-                    loc.setX(player.getLocation().getX()+x*16/d);
-                    loc.setY(player.getLocation().getY()+y*16/d);
-                    loc.setZ(player.getLocation().getZ()+z*16/d);
+                if (d > 40) {
+                    loc.setX(player.getLocation().getX()+x*40/d);
+                    loc.setY(player.getLocation().getY()+y*40/d);
+                    loc.setZ(player.getLocation().getZ()+z*40/d);
                 }else {
                     loc = locations[i];
                 }

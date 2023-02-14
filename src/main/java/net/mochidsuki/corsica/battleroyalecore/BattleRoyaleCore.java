@@ -97,6 +97,7 @@ class v{
     static double eyVector;
     static double esLimit;
     static int mapScale;
+    static boolean inv;
     static HashMap<Player, Location> pin = new HashMap<>();
 }
 class b{

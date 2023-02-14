@@ -30,3 +30,4 @@ ADVANCED_SETTING:
   elytra_x_vector: 1
   elytra_y_vector: -0.1
   elytra_speed_limit: 0.5
+  Inventory_Locker: false

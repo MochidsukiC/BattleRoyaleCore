@@ -1,10 +1,14 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
@@ -13,13 +17,6 @@ public class GameStart {
         //ビッグマップ処理
         ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
         MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
-        /*
-        getMap(v.bigmapdata).addRenderer(new BigMapRenderer());
-        mapMetaB.setMapId(v.bigmapdata);
-         */
-
-
-
 
         MapView viewB = player.getServer().createMap(player.getWorld());
         viewB.addRenderer(new BigMapRenderer());
@@ -61,7 +58,20 @@ public class GameStart {
         view.setScale(MapView.Scale.CLOSEST);
         view.setTrackingPosition(true);
         player.getInventory().setItem(EquipmentSlot.OFF_HAND,mapItem);
+
+
+        //TeamColorレギンスを付与
+        Color c = Color.fromRGB(player.getScoreboard().getPlayerTeam(player).getColor().asBungee().getColor().getRed(),player.getScoreboard().getPlayerTeam(player).getColor().asBungee().getColor().getGreen(),player.getScoreboard().getPlayerTeam(player).getColor().asBungee().getColor().getBlue());
+        ItemStack i = new ItemStack(Material.LEATHER_LEGGINGS);
+        LeatherArmorMeta meta = (LeatherArmorMeta) i.getItemMeta();
+        meta.setColor(c);
+        i.setItemMeta(meta);
+        player.getInventory().setItem(35,i);
+        player.getInventory().setItem(21,new ItemStack(Material.LEATHER_HELMET));
+        player.getInventory().setItem(22,new ItemStack(Material.LEATHER_CHESTPLATE));
+        player.getInventory().setItem(23,new ItemStack(Material.LEATHER_BOOTS));
         }
+
 
     }
 

@@ -3,12 +3,8 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffectType;
@@ -17,11 +13,9 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.bukkit.Bukkit.getLogger;
 
 public class Everyticks extends BukkitRunnable {
     int s = 19;
@@ -46,22 +40,73 @@ public class Everyticks extends BukkitRunnable {
             try {
                 int shieldMax;
                 ItemStack chestItem = player.getInventory().getItem(22);
+                Optional<ItemStack> headItem = Optional.ofNullable(player.getInventory().getItem(21));
+                Optional<ItemStack> bootsItem = Optional.ofNullable(player.getInventory().getItem(23));
+                ChatColor colorH = ChatColor.RESET;
+                ChatColor colorC = ChatColor.RESET;
+                ChatColor colorB = ChatColor.RESET;
+
+                switch (headItem.orElse(new ItemStack(Material.LEATHER_HELMET)).getType()) {
+                    case CHAINMAIL_HELMET:
+                        colorH = ChatColor.GRAY;
+                        break;
+                    case IRON_HELMET:
+                        colorH = ChatColor.DARK_GRAY;
+                        break;
+                    case GOLDEN_HELMET:
+                        colorH = ChatColor.YELLOW;
+                        break;
+                    case DIAMOND_HELMET:
+                        colorH = ChatColor.AQUA;
+                        break;
+                    case NETHERITE_HELMET:
+                        colorH = ChatColor.DARK_RED;
+                        break;
+                    default:
+                }
+
                 switch (Objects.requireNonNull(chestItem).getType()) {
                     case CHAINMAIL_CHESTPLATE:
                         shieldMax = 5;
+                        colorC = ChatColor.GRAY;
                         break;
                     case IRON_CHESTPLATE:
+                        shieldMax = 10;
+                        colorC = ChatColor.DARK_GRAY;
+                        break;
                     case GOLDEN_CHESTPLATE:
                         shieldMax = 10;
+                        colorC = ChatColor.YELLOW;
                         break;
                     case DIAMOND_CHESTPLATE:
                         shieldMax = 15;
+                        colorC = ChatColor.AQUA;
                         break;
                     case NETHERITE_CHESTPLATE:
                         shieldMax = 20;
+                        colorC = ChatColor.DARK_RED;
                         break;
                     default:
                         shieldMax = 0;
+                }
+
+                switch (bootsItem.orElse(new ItemStack(Material.LEATHER_BOOTS)).getType()) {
+                    case CHAINMAIL_BOOTS:
+                        colorB = ChatColor.GRAY;
+                        break;
+                    case IRON_BOOTS:
+                        colorB = ChatColor.DARK_GRAY;
+                        break;
+                    case GOLDEN_BOOTS:
+                        colorB = ChatColor.YELLOW;
+                        break;
+                    case DIAMOND_BOOTS:
+                        colorB = ChatColor.AQUA;
+                        break;
+                    case NETHERITE_BOOTS:
+                        colorB = ChatColor.DARK_RED;
+                        break;
+                    default:
                 }
 
 
@@ -82,7 +127,7 @@ public class Everyticks extends BukkitRunnable {
                     half = "";
                 }
                 openings = String.join("", Collections.nCopies((int) ((shieldMax - shieldNow) / 2), "-"));
-                component.setText("[" + shield + half + openings + "]");
+                component.setText(colorH + "[" + colorC + shield + half + openings + colorB + "]");
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             }catch (Exception ignored){}
 

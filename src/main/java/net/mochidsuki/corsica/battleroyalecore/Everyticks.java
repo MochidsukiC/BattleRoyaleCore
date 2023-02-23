@@ -139,6 +139,9 @@ public class Everyticks extends BukkitRunnable {
 
 
             //エリトラのエフェクト
+            ItemStack chestPlate = player.getInventory().getItem(22);
+
+
             if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
                 Location l = player.getLocation();
                 l.setY(player.getLocation().getBlockY() + 1);
@@ -159,6 +162,8 @@ public class Everyticks extends BukkitRunnable {
                 player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
                 player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
 
+                chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
+
             }
             if(player.hasPotionEffect(PotionEffectType.LEVITATION)){
                 Location l = player.getLocation();
@@ -167,6 +172,8 @@ public class Everyticks extends BukkitRunnable {
                 player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
                 player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
                 player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
+
+                chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
             }
 
 
@@ -202,19 +209,20 @@ public class Everyticks extends BukkitRunnable {
 
 
             //Armor Synchronizer
-
-            if(player.getPotionEffect(PotionEffectType.INVISIBILITY) == null) {
-                player.getInventory().setItem(EquipmentSlot.HEAD, player.getInventory().getItem(21));
-                player.getInventory().setItem(EquipmentSlot.CHEST, player.getInventory().getItem(22));
-                player.getInventory().setItem(EquipmentSlot.FEET, player.getInventory().getItem(23));
-                player.getInventory().setItem(EquipmentSlot.LEGS, player.getInventory().getItem(35));
-                //player.updateInventory();
-            }else {
-                player.getInventory().setItem(EquipmentSlot.HEAD, new ItemStack(Material.AIR));
-                player.getInventory().setItem(EquipmentSlot.CHEST, new ItemStack(Material.AIR));
-                player.getInventory().setItem(EquipmentSlot.FEET, new ItemStack(Material.AIR));
-                player.getInventory().setItem(EquipmentSlot.LEGS, new ItemStack(Material.AIR));
-                //player.updateInventory();
+            if(v.inv) {
+                if (player.getPotionEffect(PotionEffectType.INVISIBILITY) == null) {
+                    player.getInventory().setItem(EquipmentSlot.HEAD, player.getInventory().getItem(21));
+                    player.getInventory().setItem(EquipmentSlot.CHEST, chestPlate);
+                    player.getInventory().setItem(EquipmentSlot.FEET, player.getInventory().getItem(23));
+                    player.getInventory().setItem(EquipmentSlot.LEGS, player.getInventory().getItem(35));
+                    //player.updateInventory();
+                } else {
+                    player.getInventory().setItem(EquipmentSlot.HEAD, new ItemStack(Material.AIR));
+                    player.getInventory().setItem(EquipmentSlot.CHEST, new ItemStack(Material.AIR));
+                    player.getInventory().setItem(EquipmentSlot.FEET, new ItemStack(Material.AIR));
+                    player.getInventory().setItem(EquipmentSlot.LEGS, new ItemStack(Material.AIR));
+                    //player.updateInventory();
+                }
             }
         }
     }

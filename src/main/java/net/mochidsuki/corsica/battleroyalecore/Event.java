@@ -135,6 +135,16 @@ public class Event implements Listener{
                         event.getPlayer().getInventory().setItem(23, newItemB);
                         event.getPlayer().getInventory().setItemInMainHand(originItemB);
                         break;
+
+                    case ENDER_PEARL:
+                        new LongPress(event.getPlayer(),"shieldmini",event.getMaterial(),40).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
+                        event.setCancelled(true);
+                        break;
+                    case MUSIC_DISC_5:
+                        new LongPress(event.getPlayer(),"shieldmax",event.getMaterial(),40).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
+                        event.setCancelled(true);
+                        break;
+
                 }
 
             }

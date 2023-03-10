@@ -180,31 +180,33 @@ public class Everyticks extends BukkitRunnable {
             //Pin
 
             Team playerteam = player.getScoreboard().getPlayerTeam(player);
-            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-            playerteam.getEntries().toArray(tp);
-            Player[] teamplayer = new Player[tp.length+3];
-            for (int i = 0;i < tp.length;i++) {
-                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+            if(playerteam != null) {
+                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                playerteam.getEntries().toArray(tp);
+                Player[] teamplayer = new Player[tp.length + 3];
+                for (int i = 0; i < tp.length; i++) {
+                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                }
+
+                Pin pin = new Pin();
+                Optional.of(new Location(player.getWorld(), 0, 0, 0));
+
+                Optional<Location>[] loc = new Optional[3];
+
+                loc[0] = Optional.ofNullable(v.pin.get(teamplayer[0]));
+                loc[1] = Optional.ofNullable(v.pin.get(teamplayer[1]));
+                loc[2] = Optional.ofNullable(v.pin.get(teamplayer[2]));
+
+                Location[] location = new Location[3];
+                boolean[] booleans = new boolean[3];
+
+                for (int i = 0; i < loc.length; i++) {
+                    location[i] = loc[i].orElse(new Location(player.getWorld(), 0, 0, 0));
+                    booleans[i] = !(v.pin.get(teamplayer[i]) == null);
+                }
+
+                pin.pin(player, location, booleans);
             }
-
-            Pin pin = new Pin();
-            Optional.of(new Location(player.getWorld(), 0,0,0));
-
-            Optional<Location>[] loc = new Optional[3];
-
-            loc[0] = Optional.ofNullable(v.pin.get(teamplayer[0]));
-            loc[1] = Optional.ofNullable(v.pin.get(teamplayer[1]));
-            loc[2] = Optional.ofNullable(v.pin.get(teamplayer[2]));
-
-            Location[] location = new Location[3];
-            boolean[] booleans = new boolean[3];
-
-            for(int i = 0;i < loc.length; i++) {
-                location[i] = loc[i].orElse(new Location(player.getWorld(),0,0,0));
-                booleans[i] = !(v.pin.get(teamplayer[i]) == null);
-            }
-
-            pin.pin(player, location,booleans);
 
 
 

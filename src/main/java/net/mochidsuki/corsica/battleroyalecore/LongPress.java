@@ -15,13 +15,13 @@ import java.util.Objects;
 
 
 public class LongPress extends BukkitRunnable {
-    int use = 0;
+    double use = 0;
     Player player;
     String type;
     Material item;
-    int time;
+    double time;
 
-    public LongPress(Player p, String t, Material i,int ti){
+    public LongPress(Player p, String t, Material i,double ti){
         player = p;
         type = t;
         item = i;
@@ -31,12 +31,12 @@ public class LongPress extends BukkitRunnable {
     @Override
     public void run() {
         if(player.getInventory().getItemInMainHand().getType() == item){
-            use++;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,2,0,true,true));
+            use = use + 1;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,2,4,true,false));
 
             double shieldMax;
             ChatColor colorC = ChatColor.RESET;
-            switch (Objects.requireNonNull(item)) {
+            switch (Objects.requireNonNull(player.getInventory().getItem(22).getType())) {
                 case CHAINMAIL_CHESTPLATE:
                     shieldMax = 5;
                     colorC = ChatColor.GRAY;
@@ -63,18 +63,16 @@ public class LongPress extends BukkitRunnable {
 
 
 
-            TextComponent component = new net.md_5.bungee.api.chat.TextComponent();
-            String bar = String.join("", Collections.nCopies(time/use*10,"■"));
-            String barM = String.join("", Collections.nCopies((use - time)/use*10,"-"));
+            String bar = String.join("", Collections.nCopies((int) (use/time*10),"■"));
+            String barM = String.join("", Collections.nCopies((int) ((time - use)/time*10),"-"));
             String half;
 
-            if(!(use % 2 == 0)){
+            if(use % (time/10) != 0){
                 half = "□";
             }else {
                 half = "";
             }
-            component.setText("["+ colorC+bar+half+barM+ChatColor.RESET+"]");
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            player.sendTitle("","["+ colorC+bar+half+barM+ChatColor.RESET+"]",0,2,20);
 
             if(use >= time){
 
@@ -85,14 +83,18 @@ public class LongPress extends BukkitRunnable {
                     Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
                     switch (type) {
                         case "shieldmini":
-                            double d = damageable.getDamage() - 2 / shieldMax * item.getMaxDurability();
+                            double d = damageable.getDamage() - (2 / shieldMax * player.getInventory().getItem(22).getType().getMaxDurability());
                             damageable.setDamage((int) d);
                             player.getInventory().getItem(22).setItemMeta(damageable);
+                            use = 0;
+                            cancel();
                             break;
 
                         case "shieldmax":
                             damageable.setDamage(0);
                             player.getInventory().getItem(22).setItemMeta(damageable);
+                            use = 0;
+                            cancel();
                             break;
                     }
                 }

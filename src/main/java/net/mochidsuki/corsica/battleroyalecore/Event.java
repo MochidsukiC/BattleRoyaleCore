@@ -5,15 +5,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -138,13 +139,23 @@ public class Event implements Listener{
 
                     case ENDER_PEARL:
                         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                            if(d.getDamage() != 0) {
+                                new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            }else {
+                                event.getPlayer().sendTitle("","シールドは新品同様です",10,10,20);
+                            }
                         }
                         event.setCancelled(true);
                         break;
                     case MUSIC_DISC_5:
                         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                            if(d.getDamage() != 0) {
+                                new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            }else {
+                                event.getPlayer().sendTitle("","シールドは新品同様です",10,10,20);
+                            }
                         }
                         event.setCancelled(true);
                         break;
@@ -154,6 +165,7 @@ public class Event implements Listener{
             }
         }catch (Exception ignored){}
     }
+
 
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
@@ -258,6 +270,25 @@ public class Event implements Listener{
             }
         }
     }
+
+    @EventHandler
+    public void PlayerDeathEvent(PlayerDeathEvent event){
+        Entity entity = event.getEntity().getWorld().spawn(event.getEntity().getLocation(),EntityType.MINECART_CHEST.getEntityClass());
+        entity.setGlowing(true);
+        StorageMinecart deathCart = (StorageMinecart)entity;
+        for (int i = 0; i <= 8;i++){
+            if(event.getEntity().getInventory().getItem(i).getType() != null) {
+                if (event.getEntity().getInventory().getItem(i).getType() != Material.FILLED_MAP) {
+                    deathCart.getInventory().setItem(i, event.getEntity().getInventory().getItem(i));
+                }
+            }
+        }
+        deathCart.getInventory().setItem(24, event.getEntity().getInventory().getItem(21));
+        deathCart.getInventory().setItem(25, event.getEntity().getInventory().getItem(22));
+        deathCart.getInventory().setItem(26, event.getEntity().getInventory().getItem(23));
+        event.getEntity().getInventory().clear();
+    }
+
 
 
 }

@@ -33,6 +33,7 @@ public class LongPress extends BukkitRunnable {
         if(player.getInventory().getItemInMainHand().getType() == item){
             use = use + 1;
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,2,4,true,false));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,2,200,true,false));
 
             double shieldMax;
             ChatColor colorC = ChatColor.RESET;
@@ -87,6 +88,7 @@ public class LongPress extends BukkitRunnable {
                             damageable.setDamage((int) d);
                             player.getInventory().getItem(22).setItemMeta(damageable);
                             use = 0;
+                            player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();
                             break;
 
@@ -94,6 +96,7 @@ public class LongPress extends BukkitRunnable {
                             damageable.setDamage(0);
                             player.getInventory().getItem(22).setItemMeta(damageable);
                             use = 0;
+                            player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();
                             break;
                     }

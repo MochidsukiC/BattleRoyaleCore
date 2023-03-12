@@ -51,6 +51,13 @@ public class Event implements Listener{
 
 
         }
+        /*
+        if(item.getItemStack().getType() == Material.FILLED_MAP){
+            v.pin.put(event.getPlayer(),null);
+            event.setCancelled(true);
+        }
+
+         */
     }
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
@@ -97,6 +104,20 @@ public class Event implements Listener{
                         break;
                     case FILLED_MAP:
                         v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+
+                        Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                        playerteam.getEntries().toArray(tp);
+                        Player[] teamplayer = new Player[tp.length];
+                        for (int i = 0;i < tp.length;i++) {
+                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                        }
+
+                        for (Player player : teamplayer) {//teamplayer全員に実行
+                            player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_FLUTE,100,0);
+                        }
+
+
                         event.setCancelled(true);
                         break;
                 }
@@ -275,6 +296,7 @@ public class Event implements Listener{
     public void PlayerDeathEvent(PlayerDeathEvent event){
         Entity entity = event.getEntity().getWorld().spawn(event.getEntity().getLocation(),EntityType.MINECART_CHEST.getEntityClass());
         entity.setGlowing(true);
+        entity.setInvulnerable(true);
         StorageMinecart deathCart = (StorageMinecart)entity;
         for (int i = 0; i <= 8;i++){
             if(event.getEntity().getInventory().getItem(i).getType() != null) {
@@ -284,7 +306,11 @@ public class Event implements Listener{
             }
         }
         deathCart.getInventory().setItem(24, event.getEntity().getInventory().getItem(21));
-        deathCart.getInventory().setItem(25, event.getEntity().getInventory().getItem(22));
+        ItemStack chest = event.getEntity().getInventory().getItem(22);
+        Damageable chestD = (Damageable) chest.getItemMeta();
+        chestD.setDamage(0);
+        chest.setItemMeta(chestD);
+        deathCart.getInventory().setItem(25, chest);
         deathCart.getInventory().setItem(26, event.getEntity().getInventory().getItem(23));
         event.getEntity().getInventory().clear();
     }

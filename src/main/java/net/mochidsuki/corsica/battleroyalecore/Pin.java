@@ -24,7 +24,7 @@ public class Pin{
         PacketContainer[] packet = new PacketContainer[locations.length];
         PacketContainer[] packetmeta = new PacketContainer[locations.length]; // metadata packet
 
-        for (int i = 0;i<locations.length;i++) {
+        for (int i = 0;i <= locations.length;i++) {
             try {
                 Location loc = new Location(player.getWorld(),0,0,0);
                 double x = locations[i].getX() - player.getLocation().getX();

@@ -103,7 +103,7 @@ public class Event implements Listener{
                         event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
                         break;
                     case FILLED_MAP:
-                        v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                        v.pin.put(event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer()), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
                         Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
                         String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
@@ -265,7 +265,7 @@ public class Event implements Listener{
                 event.setCancelled(true);
                 event.setResult(org.bukkit.event.Event.Result.DENY);
             }
-            if (slot >= 10 && slot <= 20) {
+            if (slot >= 15 && slot <= 20) {
                 event.setCancelled(true);
                 event.setResult(org.bukkit.event.Event.Result.DENY);
             }

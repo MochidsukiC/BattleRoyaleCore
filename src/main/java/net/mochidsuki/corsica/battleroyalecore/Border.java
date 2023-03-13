@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
 
 public class Border extends BukkitRunnable {
+    static boolean stop;
     double[] speed;
     double radius;
 
@@ -41,7 +42,10 @@ public class Border extends BukkitRunnable {
             }
             cancel();
         }
-
+        if(stop){
+            stop = false;
+            cancel();
+        }
     }
 
 }

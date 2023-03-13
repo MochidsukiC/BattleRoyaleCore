@@ -25,6 +25,10 @@ public class CommandClass implements CommandExecutor {
             if(args[0].equalsIgnoreCase("0")){
 
             }
+            if(args[0].equalsIgnoreCase("stop")){
+                Border.stop = true;
+            }
+
             v.gameround = Integer.parseInt(args[0]);
             Roundsystemc r = new Roundsystemc();
             r.Roundsystem();

@@ -204,7 +204,15 @@ public class Everyticks extends BukkitRunnable {
             if(v.inv) {
                 if (player.getPotionEffect(PotionEffectType.INVISIBILITY) == null) {
                     player.getInventory().setItem(EquipmentSlot.HEAD, player.getInventory().getItem(21));
-                    player.getInventory().setItem(EquipmentSlot.CHEST, chestPlate);
+
+
+                    if(player.getInventory().getItem(EquipmentSlot.CHEST) != null){
+                     if(player.getInventory().getItem(EquipmentSlot.CHEST).getType() != Material.ELYTRA){
+                         player.getInventory().setItem(EquipmentSlot.CHEST,chestPlate);
+                     }
+                    }else {
+                        player.getInventory().setItem(EquipmentSlot.CHEST,chestPlate);
+                    }
                     player.getInventory().setItem(EquipmentSlot.FEET, player.getInventory().getItem(23));
                     player.getInventory().setItem(EquipmentSlot.LEGS, player.getInventory().getItem(35));
                     //player.updateInventory();

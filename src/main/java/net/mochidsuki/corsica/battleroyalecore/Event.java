@@ -307,7 +307,7 @@ public class Event implements Listener{
         entity.setInvulnerable(true);
         StorageMinecart deathCart = (StorageMinecart)entity;
         for (int i = 0; i <= 10;i++){
-            if(event.getEntity().getInventory().getItem(i).getType() != null) {
+            if(event.getEntity().getInventory().getItem(i) != null) {
                 if (event.getEntity().getInventory().getItem(i).getType() != Material.FILLED_MAP) {
                     deathCart.getInventory().setItem(i, event.getEntity().getInventory().getItem(i));
                 }

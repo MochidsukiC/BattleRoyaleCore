@@ -4,6 +4,7 @@ package net.mochidsuki.corsica.battleroyalecore;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -182,20 +183,31 @@ public class Everyticks extends BukkitRunnable {
 
             Team playerteam = player.getScoreboard().getPlayerTeam(player);
             if(playerteam != null) {
+                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                playerteam.getEntries().toArray(tp);
+                Player[] teamplayer = new Player[tp.length + 3];
+                for (int i = 0; i < tp.length; i++) {
+                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                }
 
                 Pin pin = new Pin();
                 Optional.of(new Location(player.getWorld(), 0, 0, 0));
 
-                Optional<Location> loc = Optional.ofNullable(v.pin.get(playerteam));
+                Optional<Location>[] loc = new Optional[teamplayer.length];
 
-                Location location;
-                boolean booleans;
+                for (int i = 0; i < teamplayer.length;i++){
+                    loc[i] = Optional.ofNullable(v.pin.get(teamplayer[i]));
+                }
 
+                Location[] location = new Location[teamplayer.length];
+                boolean[] booleans = new boolean[teamplayer.length];
 
-                location = loc.orElse(new Location(player.getWorld(), 0, 0, 0));
-                booleans = !(v.pin.get(playerteam) == null);
+                for (int i = 0; i < loc.length; i++) {
+                    location[i] = loc[i].orElse(new Location(player.getWorld(), 0, 0, 0));
+                    booleans[i] = !(v.pin.get(teamplayer[i]) == null);
+                }
 
-                pin.pin(player, location, booleans);
+                pin.pushPin(player, location, booleans, EntityType.DRAGON_FIREBALL);
             }
 
 
@@ -206,12 +218,8 @@ public class Everyticks extends BukkitRunnable {
                     player.getInventory().setItem(EquipmentSlot.HEAD, player.getInventory().getItem(21));
 
 
-                    if(player.getInventory().getItem(EquipmentSlot.CHEST) != null){
-                     if(player.getInventory().getItem(EquipmentSlot.CHEST).getType() != Material.ELYTRA){
-                         player.getInventory().setItem(EquipmentSlot.CHEST,chestPlate);
-                     }
-                    }else {
-                        player.getInventory().setItem(EquipmentSlot.CHEST,chestPlate);
+                    if (!Objects.equals(player.getInventory().getItem(EquipmentSlot.CHEST), new ItemStack(Material.ELYTRA))) {
+                        player.getInventory().setItem(EquipmentSlot.CHEST, chestPlate);
                     }
                     player.getInventory().setItem(EquipmentSlot.FEET, player.getInventory().getItem(23));
                     player.getInventory().setItem(EquipmentSlot.LEGS, player.getInventory().getItem(35));

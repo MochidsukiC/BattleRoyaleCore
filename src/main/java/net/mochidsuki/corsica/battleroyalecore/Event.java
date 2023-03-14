@@ -2,6 +2,7 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
@@ -103,7 +104,7 @@ public class Event implements Listener{
                         event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
                         break;
                     case FILLED_MAP:
-                        v.pin.put(event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer()), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                        v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
                         Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
                         String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
@@ -160,11 +161,15 @@ public class Event implements Listener{
 
                     case ENDER_PEARL:
                         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
-                            if(d.getDamage() != 0) {
-                                new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            if (!(event.getPlayer().getInventory().getItem(22) == null || event.getPlayer().getInventory().getItem(22) == new ItemStack(Material.LEATHER_CHESTPLATE))) {
+                                Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                                if (d.getDamage() != 0) {
+                                    new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                } else {
+                                    event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
+                                }
                             }else {
-                                event.getPlayer().sendTitle("","シールドは新品同様です",10,10,20);
+                                event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
                             }
                         }
                         event.setCancelled(true);
@@ -179,6 +184,21 @@ public class Event implements Listener{
                             }
                         }
                         event.setCancelled(true);
+                        break;
+                    case FILLED_MAP:
+                        v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+
+                        Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                        playerteam.getEntries().toArray(tp);
+                        Player[] teamplayer = new Player[tp.length];
+                        for (int i = 0;i < tp.length;i++) {
+                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                        }
+
+                        for (Player player : teamplayer) {//teamplayer全員に実行
+                            player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_FLUTE,100,0);
+                        }
                         break;
 
                 }
@@ -279,19 +299,19 @@ public class Event implements Listener{
             }
             switch (slot) {
                 case 21:
-                    if (!(cursor.orElse(Material.LEATHER_HELMET) == Material.LEATHER_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.CHAINMAIL_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.DIAMOND_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_HELMET || event.getAction() == InventoryAction.DROP_ONE_SLOT || event.getAction() == InventoryAction.PICKUP_ALL)) {
+                    if (!(cursor.orElse(Material.LEATHER_HELMET) == Material.LEATHER_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.CHAINMAIL_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.GOLDEN_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.DIAMOND_HELMET || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_HELMET || event.getAction() == InventoryAction.DROP_ONE_SLOT || event.getAction() == InventoryAction.PICKUP_ALL)) {
                         event.setCancelled(true);
                         event.setResult(org.bukkit.event.Event.Result.DENY);
                     }
                     break;
                 case 22:
-                    if (!(cursor.orElse(Material.LEATHER_CHESTPLATE) == Material.LEATHER_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.CHAINMAIL_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.DIAMOND_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_CHESTPLATE || event.getAction() == InventoryAction.DROP_ONE_SLOT|| event.getAction() == InventoryAction.PICKUP_ALL)) {
+                    if (!(cursor.orElse(Material.LEATHER_CHESTPLATE) == Material.LEATHER_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.CHAINMAIL_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.GOLDEN_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.DIAMOND_CHESTPLATE || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_CHESTPLATE || event.getAction() == InventoryAction.DROP_ONE_SLOT|| event.getAction() == InventoryAction.PICKUP_ALL)) {
                         event.setCancelled(true);
                         event.setResult(org.bukkit.event.Event.Result.DENY);
                     }
                     break;
                 case 23:
-                    if (!(cursor.orElse(Material.LEATHER_BOOTS) == Material.LEATHER_BOOTS || cursor.orElse(Material.LEATHER_BOOTS) == Material.CHAINMAIL_BOOTS || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_BOOTS || cursor.orElse(Material.LEATHER_BOOTS) == Material.DIAMOND_BOOTS || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_BOOTS || event.getAction() == InventoryAction.DROP_ONE_SLOT|| event.getAction() == InventoryAction.PICKUP_ALL)) {
+                    if (!(cursor.orElse(Material.LEATHER_BOOTS) == Material.LEATHER_BOOTS || cursor.orElse(Material.LEATHER_BOOTS) == Material.CHAINMAIL_BOOTS || cursor.orElse(Material.LEATHER_HELMET) == Material.IRON_BOOTS || cursor.orElse(Material.LEATHER_HELMET) == Material.GOLDEN_BOOTS || cursor.orElse(Material.LEATHER_BOOTS) == Material.DIAMOND_BOOTS || cursor.orElse(Material.LEATHER_HELMET) == Material.NETHERITE_BOOTS || event.getAction() == InventoryAction.DROP_ONE_SLOT|| event.getAction() == InventoryAction.PICKUP_ALL)) {
                         event.setCancelled(true);
                         event.setResult(org.bukkit.event.Event.Result.DENY);
                     }

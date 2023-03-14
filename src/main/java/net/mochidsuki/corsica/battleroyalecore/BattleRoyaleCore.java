@@ -99,7 +99,8 @@ class v{
     static double esLimit;
     static int mapScale;
     static boolean inv;
-    static HashMap<Team, Location> pin = new HashMap<>();
+    static HashMap<Player, Location> pin = new HashMap<>();
+    static HashMap<Player, Location> pinRed = new HashMap<>();
 }
 class b{
     static int nx;

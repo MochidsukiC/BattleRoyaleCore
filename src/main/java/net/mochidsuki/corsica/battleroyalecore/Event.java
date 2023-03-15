@@ -161,7 +161,7 @@ public class Event implements Listener{
 
                     case ENDER_PEARL:
                         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            if (!(event.getPlayer().getInventory().getItem(22) == null || event.getPlayer().getInventory().getItem(22) == new ItemStack(Material.LEATHER_CHESTPLATE))) {
+                            if (!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
                                 Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
                                 if (d.getDamage() != 0) {
                                     new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
@@ -176,28 +176,34 @@ public class Event implements Listener{
                         break;
                     case MUSIC_DISC_5:
                         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
-                            if(d.getDamage() != 0) {
-                                new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                            if(!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
+                                Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                                if (d.getDamage() != 0) {
+                                    new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                } else {
+                                    event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
+                                }
                             }else {
-                                event.getPlayer().sendTitle("","シールドは新品同様です",10,10,20);
+                                event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
                             }
                         }
                         event.setCancelled(true);
                         break;
                     case FILLED_MAP:
-                        v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                        if(event.getPlayer().getInventory().getItemInMainHand().equals(new ItemStack(Material.FILLED_MAP))) {
+                            v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
-                        Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
-                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                        playerteam.getEntries().toArray(tp);
-                        Player[] teamplayer = new Player[tp.length];
-                        for (int i = 0;i < tp.length;i++) {
-                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                        }
+                            Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                            playerteam.getEntries().toArray(tp);
+                            Player[] teamplayer = new Player[tp.length];
+                            for (int i = 0; i < tp.length; i++) {
+                                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                            }
 
-                        for (Player player : teamplayer) {//teamplayer全員に実行
-                            player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_FLUTE,100,0);
+                            for (Player player : teamplayer) {//teamplayer全員に実行
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
+                            }
                         }
                         break;
 

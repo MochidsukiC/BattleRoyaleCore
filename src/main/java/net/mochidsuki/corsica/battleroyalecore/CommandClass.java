@@ -4,6 +4,9 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +34,17 @@ public class CommandClass implements CommandExecutor {
 
             v.gameround = Integer.parseInt(args[0]);
             Roundsystemc r = new Roundsystemc();
-            r.Roundsystem();
+            World world = sender.getServer().getWorld("World");
+            try {
+                Block b = (Block) sender;
+                world = b.getWorld();
+            }catch (Exception e){}
+
+            try{
+                Player player = (Player) sender;
+                world = player.getWorld();
+            }catch (Exception e){}
+            r.Roundsystem(world);
             return true;
         }
         if(command.getName().equalsIgnoreCase("brc")){

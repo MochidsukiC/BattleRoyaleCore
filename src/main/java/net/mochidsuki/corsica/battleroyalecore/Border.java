@@ -10,12 +10,14 @@ public class Border extends BukkitRunnable {
     static boolean stop;
     double[] speed;
     double radius;
+    World world;
 
 
-    public Border(double[] speed, double radius, int rtime) {
+    public Border(double[] speed, double radius, int rtime,World world) {
         this.speed = speed;
         this.radius = radius;
         v.rtime = rtime*20;
+        this.world = world;
     }
 
 
@@ -28,7 +30,6 @@ public class Border extends BukkitRunnable {
             v.now[1] = v.now[1] + speed[1];
             v.now[2] = v.now[2] + speed[2];
             v.now[3] = v.now[3] + speed[3];
-            World world = Bukkit.getWorld("world");
             world.getWorldBorder().setCenter(v.now[1] + (v.now[0] - v.now[1])/2,v.now[3] + (v.now[2] - v.now[3])/2);
             world.getWorldBorder().setSize((v.now[0]-v.now[1]));
 
@@ -38,7 +39,7 @@ public class Border extends BukkitRunnable {
             if(v.gameround < 6){
                 Roundsystemc r = new Roundsystemc();
                 v.gameround = v.gameround + 1;
-                r.Roundsystem();
+                r.Roundsystem(world);
             }
             cancel();
         }

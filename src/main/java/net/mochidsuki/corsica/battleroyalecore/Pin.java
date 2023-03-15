@@ -11,8 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 public class Pin{
-    public void pushPin(Player player, Location location[],boolean b[],EntityType entityType) {
-        int entityId = 10000;
+    public void pushPin(Player player, Location[] location,boolean[] b,EntityType entityType,int entityIdPlus) {
+        int entityId = 10000 + entityIdPlus;
 
 
         for(int i = 0;i <=2;i++) {

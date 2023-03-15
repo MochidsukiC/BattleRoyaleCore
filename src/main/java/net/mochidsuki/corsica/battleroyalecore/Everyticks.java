@@ -191,7 +191,6 @@ public class Everyticks extends BukkitRunnable {
                 }
 
                 Pin pin = new Pin();
-                Optional.of(new Location(player.getWorld(), 0, 0, 0));
 
                 Optional<Location>[] loc = new Optional[teamplayer.length];
 
@@ -207,7 +206,24 @@ public class Everyticks extends BukkitRunnable {
                     booleans[i] = !(v.pin.get(teamplayer[i]) == null);
                 }
 
-                pin.pushPin(player, location, booleans, EntityType.DRAGON_FIREBALL);
+
+
+                pin.pushPin(player, location, booleans, EntityType.DRAGON_FIREBALL,0);
+
+                Optional<Location>[] locR = new Optional[teamplayer.length];
+
+                for (int i = 0; i < teamplayer.length;i++){
+                    locR[i] = Optional.ofNullable(v.pinRed.get(teamplayer[i]));
+                }
+
+                Location[] locationR = new Location[teamplayer.length];
+                boolean[] booleansR = new boolean[teamplayer.length];
+
+                for (int i = 0; i < locR.length; i++) {
+                    locationR[i] = locR[i].orElse(new Location(player.getWorld(), 0, 0, 0));
+                    booleansR[i] = !(v.pinRed.get(teamplayer[i]) == null);
+                }
+                pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);
             }
 
 

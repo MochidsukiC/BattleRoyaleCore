@@ -14,7 +14,7 @@ import static net.mochidsuki.corsica.battleroyalecore.v.stime;
 
 public class Roundsystemc {
     //ラウンドシステム
-    public void Roundsystem(){
+    public void Roundsystem(World world){
         double[] speed = new double[4];
         double radius=0;
         double radiusk=0;
@@ -163,7 +163,7 @@ public class Roundsystemc {
         */
 
 
-        new Border(speed,radius,rtime).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
+        new Border(speed,radius,rtime,world).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
 
     }
 

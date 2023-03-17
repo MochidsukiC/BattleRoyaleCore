@@ -31,20 +31,30 @@ public class CommandClass implements CommandExecutor {
             if(args[0].equalsIgnoreCase("stop")){
                 Border.stop = true;
             }
+            try {
+                v.gameround = Integer.parseInt(args[0]);
+            }catch (Exception ignored){}
 
-            v.gameround = Integer.parseInt(args[0]);
             Roundsystemc r = new Roundsystemc();
             World world = sender.getServer().getWorld("World");
-            try {
-                Block b = (Block) sender;
-                world = b.getWorld();
-            }catch (Exception e){}
+            if(args[1] == null) {
 
-            try{
-                Player player = (Player) sender;
-                world = player.getWorld();
-            }catch (Exception e){}
-            r.Roundsystem(world);
+                try {
+                    Block b = (Block) sender;
+                    world = b.getWorld();
+                } catch (Exception e) {
+                }
+
+                try {
+                    Player player = (Player) sender;
+                    world = player.getWorld();
+                } catch (Exception e) {
+                }
+                r.Roundsystem(world);
+            }else {
+                r.Roundsystem(sender.getServer().getWorld(args[1]));
+            }
+
             return true;
         }
         if(command.getName().equalsIgnoreCase("brc")){

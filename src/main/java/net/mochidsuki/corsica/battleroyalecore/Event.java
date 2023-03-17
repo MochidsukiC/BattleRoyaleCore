@@ -1,25 +1,24 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockSupport;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -96,7 +95,7 @@ public class Event implements Listener{
     public void PlayerInteractEvent(PlayerInteractEvent event){
         try {
             if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                switch (Objects.requireNonNull(event.getItem()).getType()) {
+                switch (Objects.requireNonNull(event.getMaterial())) {
                     case FIRE_CHARGE:
                         Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
                         fireball.setShooter(event.getPlayer());
@@ -124,7 +123,7 @@ public class Event implements Listener{
                 }
             }
             if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                switch (Objects.requireNonNull(event.getItem()).getType()) {
+                switch (Objects.requireNonNull(event.getMaterial())) {
                     case LEATHER_HELMET:
                     case CHAINMAIL_HELMET:
                     case IRON_HELMET:
@@ -190,7 +189,7 @@ public class Event implements Listener{
                         event.setCancelled(true);
                         break;
                     case FILLED_MAP:
-                        if(event.getPlayer().getInventory().getItemInMainHand().equals(new ItemStack(Material.FILLED_MAP))) {
+                        if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
                             v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
                             Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
@@ -202,13 +201,66 @@ public class Event implements Listener{
                             }
 
                             for (Player player : teamplayer) {//teamplayer全員に実行
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.3F);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.6F);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 1);
                             }
                         }
                         break;
 
                 }
 
+            }
+            if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
+                Block block = event.getClickedBlock();
+                if(block.getType() == Material.OAK_DOOR || block.getType() == Material.SPRUCE_DOOR || block.getType() == Material.BIRCH_DOOR || block.getType() == Material.JUNGLE_DOOR || block.getType() == Material.ACACIA_DOOR || block.getType() == Material.DARK_OAK_DOOR || block.getType() == Material.MANGROVE_DOOR || block.getType() == Material.CRIMSON_DOOR || block.getType() == Material.WARPED_DOOR){
+
+                    Player[] players = event.getPlayer().getServer().getOnlinePlayers().toArray(new Player[0]);
+
+                    if((block.getBlockData().isFaceSturdy(BlockFace.NORTH, BlockSupport.FULL))){
+                        for(Player player : players){
+                            Location location = player.getLocation();
+                            if(Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < 0.8 && block.getZ() - location.getZ() >= -0.6){
+                                if(player.isSneaking()){
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                        }
+                    }if((block.getBlockData().isFaceSturdy(BlockFace.EAST, BlockSupport.FULL))){
+                        for(Player player : players){
+                            Location location = player.getLocation();
+                            if(Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < -0.4 && block.getX() - location.getX() >= -1.6){
+                                if(player.isSneaking()){
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                        }
+                    }if((block.getBlockData().isFaceSturdy(BlockFace.WEST, BlockSupport.FULL))){
+                        for(Player player : players){
+                            Location location = player.getLocation();
+                            if(Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < 0.8 && block.getX() - location.getX() >= -0.6){
+                                if(player.isSneaking()){
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                        }
+                    }if((block.getBlockData().isFaceSturdy(BlockFace.SOUTH, BlockSupport.FULL))){
+                        for(Player player : players){
+                            Location location = player.getLocation();
+                            if(Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < -0.4 && block.getZ() - location.getZ() >= -1.6){
+                                if(player.isSneaking()){
+                                    event.setCancelled(true);
+                                }
+                            }
+
+                        }
+                    }
+
+                }
             }
         }catch (Exception ignored){}
     }
@@ -345,6 +397,7 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(20, event.getEntity().getInventory().getItem(28));
 
         deathCart.getInventory().setItem(24, event.getEntity().getInventory().getItem(21));
+        deathCart.setCustomName(event.getEntity().getName());
         ItemStack chest = event.getEntity().getInventory().getItem(22);
         Damageable chestD = (Damageable) chest.getItemMeta();
         chestD.setDamage(0);
@@ -353,6 +406,8 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(26, event.getEntity().getInventory().getItem(23));
         event.getEntity().getInventory().clear();
     }
+
+
 
 
 

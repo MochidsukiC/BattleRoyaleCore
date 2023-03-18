@@ -88,6 +88,7 @@ class v{
     static boolean inv;
     static HashMap<Player, Location> pin = new HashMap<>();
     static HashMap<Player, Location> pinRed = new HashMap<>();
+
 }
 class b{
     static int nx;
@@ -103,5 +104,10 @@ class b{
 
 class m{
     static int[] distance = new int[4];
+}
+
+class ui{
+    static HashMap<Player , Integer> kill = new HashMap<>();
+    static HashMap<Player , Integer> damage = new HashMap<>();
 }
 

@@ -35,32 +35,7 @@ public class LongPress extends BukkitRunnable {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,2,4,true,false));
             player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,2,200,true,false));
 
-            double shieldMax;
-            ChatColor colorC = ChatColor.RESET;
-            switch (Objects.requireNonNull(player.getInventory().getItem(22).getType())) {
-                case CHAINMAIL_CHESTPLATE:
-                    shieldMax = 5;
-                    colorC = ChatColor.GRAY;
-                    break;
-                case IRON_CHESTPLATE:
-                    shieldMax = 10;
-                    colorC = ChatColor.DARK_GRAY;
-                    break;
-                case GOLDEN_CHESTPLATE:
-                    shieldMax = 10;
-                    colorC = ChatColor.YELLOW;
-                    break;
-                case DIAMOND_CHESTPLATE:
-                    shieldMax = 15;
-                    colorC = ChatColor.AQUA;
-                    break;
-                case NETHERITE_CHESTPLATE:
-                    shieldMax = 20;
-                    colorC = ChatColor.DARK_RED;
-                    break;
-                default:
-                    shieldMax = 0;
-            }
+            ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
 
 
 
@@ -73,7 +48,7 @@ public class LongPress extends BukkitRunnable {
             }else {
                 half = "";
             }
-            player.sendTitle("","["+ colorC+bar+half+barM+ChatColor.RESET+"]",0,2,20);
+            player.sendTitle("","["+ shieldUtil.getShieldColor() +bar+half+barM+ChatColor.RESET+"]",0,2,20);
 
             if(use >= time){
 
@@ -81,20 +56,19 @@ public class LongPress extends BukkitRunnable {
                 use =0;
 
                 if(player.getInventory().getItem(22) != null) {
-                    Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
                     switch (type) {
                         case "shieldmini":
-                            double d = damageable.getDamage() - (2 / shieldMax * player.getInventory().getItem(22).getType().getMaxDurability());
-                            damageable.setDamage((int) d);
-                            player.getInventory().getItem(22).setItemMeta(damageable);
+                            double d = shieldUtil.getShieldMeta().getDamage() - (2 / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability());
+                            shieldUtil.getShieldMeta().setDamage((int) d);
+                            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
                             use = 0;
                             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();
                             break;
 
                         case "shieldmax":
-                            damageable.setDamage(0);
-                            player.getInventory().getItem(22).setItemMeta(damageable);
+                            shieldUtil.getShieldMeta().setDamage(0);
+                            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
                             use = 0;
                             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();

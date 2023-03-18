@@ -280,36 +280,17 @@ public class Event implements Listener{
             Player player = (Player) event.getEntity();
             if(damagerType) {
                 damager.setLevel((int) event.getDamage());//ダメージを経験値に変換
+                ui.damage.put(damager,(int)(ui.damage.get(damager)+event.getDamage()));
             }
 
 
             //シールド
-            double shieldMax;
             int shieldNow;
             double damage = event.getDamage();
-            ItemStack chestItem = player.getInventory().getItem(22);
-            switch (Objects.requireNonNull(chestItem).getType()){
-                case CHAINMAIL_CHESTPLATE:
-                    shieldMax = 5;
-                    break;
-                case IRON_CHESTPLATE:
-                case GOLDEN_CHESTPLATE:
-                    shieldMax = 10;
-                    break;
-                case DIAMOND_CHESTPLATE:
-                    shieldMax = 15;
-                    break;
-                case NETHERITE_CHESTPLATE:
-                    shieldMax = 20;
-                    break;
-                default:
-                    shieldMax = 0;
-            }
-            Damageable d = (Damageable)chestItem.getItemMeta();
-            double maxDurability = chestItem.getType().getMaxDurability();
-            double dDamage = Objects.requireNonNull(d).getDamage();
-            double durableValue = maxDurability - dDamage;
-            shieldNow = (int) (durableValue/maxDurability*shieldMax);
+
+            ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
+
+            shieldNow = shieldUtil.getShieldNow();
             if(shieldNow>0){
                 damage = (int) (event.getDamage() - shieldNow);
                 shieldNow = (int) (shieldNow - event.getDamage());
@@ -324,9 +305,9 @@ public class Event implements Listener{
                 damage = 0;
             }
             event.setDamage(damage);
-            double da = (shieldMax - shieldNow)/shieldMax*maxDurability;
-            d.setDamage((int) da);
-            chestItem.setItemMeta(d);
+            double da = (shieldUtil.getShieldMax() - shieldNow)/shieldUtil.getShieldMax()*shieldUtil.getShieldMaxDurability();
+            shieldUtil.getShieldMeta().setDamage((int) da);
+            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
         }
     }
     @EventHandler
@@ -405,6 +386,11 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(25, chest);
         deathCart.getInventory().setItem(26, event.getEntity().getInventory().getItem(23));
         event.getEntity().getInventory().clear();
+
+        //kill counter
+
+
+
     }
 
 

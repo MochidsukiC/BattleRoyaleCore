@@ -43,12 +43,9 @@ public class Everyticks extends BukkitRunnable {
         for (Player player : players) {//全プレイヤーに適応
             //アクションバー
             try {
-                int shieldMax;
-                ItemStack chestItem = player.getInventory().getItem(22);
                 Optional<ItemStack> headItem = Optional.ofNullable(player.getInventory().getItem(21));
                 Optional<ItemStack> bootsItem = Optional.ofNullable(player.getInventory().getItem(23));
                 ChatColor colorH = ChatColor.RESET;
-                ChatColor colorC = ChatColor.RESET;
                 ChatColor colorB = ChatColor.RESET;
 
                 switch (headItem.orElse(new ItemStack(Material.LEATHER_HELMET)).getType()) {
@@ -68,31 +65,6 @@ public class Everyticks extends BukkitRunnable {
                         colorH = ChatColor.DARK_RED;
                         break;
                     default:
-                }
-
-                switch (Objects.requireNonNull(chestItem).getType()) {
-                    case CHAINMAIL_CHESTPLATE:
-                        shieldMax = 5;
-                        colorC = ChatColor.GRAY;
-                        break;
-                    case IRON_CHESTPLATE:
-                        shieldMax = 10;
-                        colorC = ChatColor.DARK_GRAY;
-                        break;
-                    case GOLDEN_CHESTPLATE:
-                        shieldMax = 10;
-                        colorC = ChatColor.YELLOW;
-                        break;
-                    case DIAMOND_CHESTPLATE:
-                        shieldMax = 15;
-                        colorC = ChatColor.AQUA;
-                        break;
-                    case NETHERITE_CHESTPLATE:
-                        shieldMax = 20;
-                        colorC = ChatColor.DARK_RED;
-                        break;
-                    default:
-                        shieldMax = 0;
                 }
 
                 switch (bootsItem.orElse(new ItemStack(Material.LEATHER_BOOTS)).getType()) {
@@ -119,20 +91,17 @@ public class Everyticks extends BukkitRunnable {
                 String shield;
                 String half;
                 String openings;
-                Damageable d = (Damageable) chestItem.getItemMeta();
-                double maxDurability = chestItem.getType().getMaxDurability();
-                double dDamage = Objects.requireNonNull(d).getDamage();
-                double durableValue = maxDurability - dDamage;
-                double shieldNow = (int) (durableValue / maxDurability * shieldMax);
-                shield = String.join("", Collections.nCopies((int) (shieldNow / 2), "■"));
 
-                if (!(shieldNow % 2 == 0)) {
+                ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
+                shield = String.join("", Collections.nCopies((int) (shieldUtil.getShieldNow() / 2), "■"));
+
+                if (!(shieldUtil.getShieldNow() % 2 == 0)) {
                     half = "□";
                 } else {
                     half = "";
                 }
-                openings = String.join("", Collections.nCopies((int) ((shieldMax - shieldNow) / 2), "-"));
-                component.setText(colorH + "[" + colorC + shield + half + openings + colorB + "]");
+                openings = String.join("", Collections.nCopies((int) ((shieldUtil.getShieldMax() - shieldUtil.getShieldNow()) / 2), "-"));
+                component.setText(colorH + "[" + shieldUtil.getShieldColor() + shield + half + openings + colorB + "]");
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             }catch (Exception ignored){}
 

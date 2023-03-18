@@ -4,6 +4,9 @@ package net.mochidsuki.corsica.battleroyalecore;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -247,6 +250,25 @@ public class Everyticks extends BukkitRunnable {
                     player.getInventory().setItem(EquipmentSlot.LEGS, new ItemStack(Material.AIR));
                     //player.updateInventory();
                 }
+            }
+            //BossBar
+            b.bossBar.addPlayer(player);
+            double d = 1;
+            if(v.gameround != 0) {
+                if (v.stime > 0) {
+                    b.bossBar.setTitle(ChatColor.YELLOW + "ラウンド" + v.gameround + ChatColor.GREEN + " - ボーダー収縮待機中・・・" + ChatColor.AQUA + (v.stime - v.stime % 60) / 60 + ":" + v.stime % 60 + ChatColor.GRAY + " - 残り部隊数 :" + player.getScoreboard().getObjective("teams").getScore("system").getScore());
+                    b.bossBar.setColor(BarColor.GREEN);
+                    b.bossBar.setProgress(d * v.stime / v.roundstime[v.gameround]);
+                } else {
+                    int r = v.rtime / 20;
+                    b.bossBar.setTitle(ChatColor.YELLOW + "ラウンド" + v.gameround + ChatColor.RED + " - ボーダー収縮中・・・" + ChatColor.AQUA + (r - r % 60) / 60 + ":" + r % 60 + ChatColor.GRAY + " - 残り部隊数 :" + player.getScoreboard().getObjective("teams").getScore("system").getScore());
+                    b.bossBar.setColor(BarColor.RED);
+                    b.bossBar.setProgress(d * v.rtime / v.roundrtime[v.gameround] / 20);
+                }
+            }else {
+                b.bossBar.setTitle("開始までお待ちください。。。");
+                b.bossBar.setColor(BarColor.WHITE);
+                b.bossBar.setProgress(1);
             }
         }
     }

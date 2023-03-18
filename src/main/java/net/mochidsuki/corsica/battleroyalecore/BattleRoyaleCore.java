@@ -3,6 +3,9 @@ package net.mochidsuki.corsica.battleroyalecore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
@@ -36,35 +39,20 @@ public final class BattleRoyaleCore extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new SomeExpansion(this).register();
         }
+
+        //BossBar
+        b.bossBar = this.getServer().createBossBar("開始までお待ちください。。。", BarColor.WHITE, BarStyle.SEGMENTED_10);
+        b.bossBar.setVisible(true);
+
+
         //every ticks
         new Everyticks().runTaskTimer(this,0L,1);
-        //Big Map Data
-        /*
-        MapView origin = getMap(v.bigmapdata);
-        origin.addRenderer(new MapRenderer() {
-            @Override
-            public void render(@NotNull MapView mapView, @NotNull MapCanvas mapCanvas, @NotNull Player player) {
-                int colorsi = 0;
-                for(int x = 0;x <= 127;x++){
-                    for(int y = 0;y <= 127;y++){
-                        v.colors[colorsi] = mapCanvas.getBasePixelColor(x,y);
-                        colorsi = colorsi +1;
 
-                    }
-                }
-            }
-        });
-
-         */
         ItemStack mapItemB = new ItemStack(Material.FILLED_MAP,1);
         MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
         getMap(v.bigmapdata).addRenderer(new OriginMapRender());
         mapMetaB.setMapId(v.bigmapdata);
-/*
-        MapView viewB = Bukkit.getServer().;
-        mapMetaB.setMapView(viewB);
 
- */
         mapItemB.setItemMeta(mapMetaB);
         // Plugin startup logic
 
@@ -109,6 +97,8 @@ class b{
     static int[] target = new int[4];
 
     static double[] center = new double[3];
+
+    static BossBar bossBar;
 }
 
 class m{

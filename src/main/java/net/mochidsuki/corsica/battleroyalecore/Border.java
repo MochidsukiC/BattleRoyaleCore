@@ -40,11 +40,14 @@ public class Border extends BukkitRunnable {
                 Roundsystemc r = new Roundsystemc();
                 v.gameround = v.gameround + 1;
                 r.Roundsystem(world);
+            }else {
+                v.gameround = 0;
             }
             cancel();
         }
         if(stop){
             stop = false;
+            v.gameround = 0;
             cancel();
         }
     }

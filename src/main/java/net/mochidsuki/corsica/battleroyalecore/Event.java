@@ -269,7 +269,6 @@ public class Event implements Listener{
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
         Player damager = null;
-        Player player = (Player) event.getEntity();
         boolean damagerType = true;
         try {
             damager = (Player) event.getDamager();
@@ -278,6 +277,7 @@ public class Event implements Listener{
         }
 
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
+            Player player = (Player) event.getEntity();
             if(damagerType) {
                 damager.setLevel((int) event.getDamage());//ダメージを経験値に変換
             }

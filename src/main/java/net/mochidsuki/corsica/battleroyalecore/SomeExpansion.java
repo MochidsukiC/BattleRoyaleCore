@@ -41,6 +41,17 @@ public class SomeExpansion extends PlaceholderExpansion {
             int r = v.rtime/20;
             return (r-r % 60)/60+":"+r % 60;
         }
+
+        if(params.equalsIgnoreCase("bar")){
+            if(v.stime > 0){
+                return ChatColor.GREEN + "ボーダー収縮待機中・・・" + ChatColor.AQUA + (v.stime-v.stime % 60)/60+":"+v.stime % 60;
+            }else {
+                int r = v.rtime/20;
+                return  ChatColor.RED + "ボーダー収縮中・・・" + ChatColor.AQUA + (r-r % 60)/60+":"+r % 60;
+            }
+        }
+
+
         Team playerteam = player.getPlayer().getScoreboard().getPlayerTeam(player);
         String[] tp = new String[playerteam.getEntries().size()];
         playerteam.getEntries().toArray(tp);

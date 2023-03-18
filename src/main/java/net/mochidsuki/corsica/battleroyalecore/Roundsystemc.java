@@ -49,14 +49,14 @@ public class Roundsystemc {
                 break;
             case 4:
                 radius = (int)(v.mr * 0.5*0.65*0.6);
-                radiusk = 0.5;
+                radiusk = 0.3;
                 rtime = v.roundrtime[4];
                 stime = v.roundstime[4];
                 rnd = 5;
                 break;
             case 5:
                 radius = (int)(v.mr * 0.5*0.65*0.6*0.5);
-                radiusk = 0.5;
+                radiusk = 0.3;
                 rtime = v.roundrtime[5];
                 stime = v.roundstime[5];
                 rnd = 5;
@@ -114,53 +114,7 @@ public class Roundsystemc {
         speed[1] = (b.target[1] - v.now[1])/rtime/20;
         speed[2] = (b.target[2] - v.now[2])/rtime/20;
         speed[3] = (b.target[3] - v.now[3])/rtime/20;
-        /*
-        try {
-            //元枠クリア
-            int x = b.nx;
-            int mx = b.nmx;
-            int z = b.nz;
-            int mz = b.nmz;
-            for (; mx < x; mx = mx + 1) {
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("AIR").createBlockData();
-                world.getBlockAt(mx, 20, z).setBlockData(block);
-                world.getBlockAt(mx, 20, mz).setBlockData(block);
-            }
-            mx = b.nmx;
-            for (; mz < z; mz = mz + 1) {
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("AIR").createBlockData();
-                world.getBlockAt(x, 20, mz).setBlockData(block);
-                world.getBlockAt(mx, 20, mz).setBlockData(block);
-            }
-            //新規枠
-            int nx = target[0];
-            int nmx = target[1];
-            int nz = target[2];
-            int nmz = target[3];
-            for (; nmx < nx; nmx = nmx + 1) {
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
-                world.getBlockAt(nmx, 20, nz).setBlockData(block);
-                world.getBlockAt(nmx, 20, nmz).setBlockData(block);
-            }
-            nmx = target[1];
-            for (; nmz < nz; nmz = nmz + 1) {
-                World world = Bukkit.getWorld("world");
-                BlockData block = Material.getMaterial("REDSTONE_BLOCK").createBlockData();
-                world.getBlockAt(nx, 20, nmz).setBlockData(block);
-                world.getBlockAt(nmx, 20, nmz).setBlockData(block);
-            }
-            nmz = target[3];
-            b.nx = nx;
-            b.nmx = nmx;
-            b.nz = nz;
-            b.nmz = nmz;
-        }catch (Exception e){
 
-        }
-        */
 
 
         new Border(speed,radius,rtime,world).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);

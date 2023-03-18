@@ -26,7 +26,7 @@ public class CommandClass implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(command.getName().equalsIgnoreCase("gameround")){
             if(args[0].equalsIgnoreCase("0")){
-
+                return false;
             }
             if(args[0].equalsIgnoreCase("stop")){
                 Border.stop = true;
@@ -37,7 +37,7 @@ public class CommandClass implements CommandExecutor {
 
             Roundsystemc r = new Roundsystemc();
             World world = sender.getServer().getWorld("World");
-            if(args[1] == null) {
+            if(args.length == 1) {
 
                 try {
                     Block b = (Block) sender;

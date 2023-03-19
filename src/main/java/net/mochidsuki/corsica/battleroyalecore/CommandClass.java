@@ -30,6 +30,7 @@ public class CommandClass implements CommandExecutor {
             }
             if(args[0].equalsIgnoreCase("stop")){
                 Border.stop = true;
+                return true;
             }
             try {
                 v.gameround = Integer.parseInt(args[0]);

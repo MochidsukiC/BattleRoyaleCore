@@ -306,8 +306,9 @@ public class Event implements Listener{
             }
             event.setDamage(damage);
             double da = (shieldUtil.getShieldMax() - shieldNow)/shieldUtil.getShieldMax()*shieldUtil.getShieldMaxDurability();
-            shieldUtil.getShieldMeta().setDamage((int) da);
-            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
+            Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
+            damageable.setDamage((int) da);
+            player.getInventory().getItem(22).setItemMeta(damageable);
         }
     }
     @EventHandler

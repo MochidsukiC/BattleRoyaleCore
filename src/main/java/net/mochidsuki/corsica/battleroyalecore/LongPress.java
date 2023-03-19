@@ -56,19 +56,20 @@ public class LongPress extends BukkitRunnable {
                 use =0;
 
                 if(player.getInventory().getItem(22) != null) {
+                    Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
                     switch (type) {
                         case "shieldmini":
-                            double d = shieldUtil.getShieldMeta().getDamage() - (2 / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability());
-                            shieldUtil.getShieldMeta().setDamage((int) d);
-                            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
+                            double d = damageable.getDamage() - (2 / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability());
+                            damageable.setDamage((int) d);
+                            player.getInventory().getItem(22).setItemMeta(damageable);
                             use = 0;
                             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();
                             break;
 
                         case "shieldmax":
-                            shieldUtil.getShieldMeta().setDamage(0);
-                            player.getInventory().getItem(22).setItemMeta(shieldUtil.getShieldMeta());
+                            damageable.setDamage(0);
+                            player.getInventory().getItem(22).setItemMeta(damageable);
                             use = 0;
                             player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                             cancel();

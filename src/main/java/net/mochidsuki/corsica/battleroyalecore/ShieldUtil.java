@@ -30,7 +30,7 @@ public class ShieldUtil {
     }
 
     public int getShieldNow(){
-        Damageable d = getShieldMeta();
+        Damageable d = (Damageable) chest.getItemMeta();
 
         double dDamage = Objects.requireNonNull(d).getDamage();
         double durableValue = getShieldMaxDurability() - dDamage;
@@ -57,7 +57,4 @@ public class ShieldUtil {
         return chest.getType().getMaxDurability();
     }
 
-    public Damageable getShieldMeta(){
-        return (Damageable)chest.getItemMeta();
-    }
 }

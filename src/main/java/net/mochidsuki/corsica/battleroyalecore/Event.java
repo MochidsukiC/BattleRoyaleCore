@@ -67,6 +67,7 @@ public class Event implements Listener{
                 case 1:
                 case 2:
                     event.setDamage(0.1);
+
                     break;
                 case 3:
                     event.setDamage(0.8);

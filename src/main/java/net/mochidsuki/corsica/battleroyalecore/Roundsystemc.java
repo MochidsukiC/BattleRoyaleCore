@@ -1,9 +1,6 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.data.BlockData;
 
 import java.util.Random;
 
@@ -118,6 +115,7 @@ public class Roundsystemc {
 
 
         new Border(speed,radius,rtime,world).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
+        new BorderShiver((int) (stime*20),world).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
 
     }
 

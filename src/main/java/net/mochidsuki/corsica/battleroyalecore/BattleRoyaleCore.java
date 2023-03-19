@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -91,19 +92,11 @@ class v{
 
 }
 class b{
-    static int nx;
-    static int nmx;
-    static int nz;
-    static int nmz;
     static int[] target = new int[4];
 
     static double[] center = new double[3];
 
     static BossBar bossBar;
-}
-
-class m{
-    static int[] distance = new int[4];
 }
 
 class ui{

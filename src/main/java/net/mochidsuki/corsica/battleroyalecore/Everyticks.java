@@ -36,9 +36,6 @@ public class Everyticks extends BukkitRunnable {
             s = 0;
         }
 
-
-
-        //everyticks
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
             //アクションバー

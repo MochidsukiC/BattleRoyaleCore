@@ -101,6 +101,7 @@ public class Event implements Listener{
                         Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
                         fireball.setShooter(event.getPlayer());
                         fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
+
                         event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
                         break;
                     case FILLED_MAP:
@@ -281,7 +282,13 @@ public class Event implements Listener{
             Player player = (Player) event.getEntity();
             if(damagerType) {
                 damager.setLevel((int) event.getDamage());//ダメージを経験値に変換
-                ui.damage.put(damager,(int)(ui.damage.get(damager)+event.getDamage()));
+                int i;
+                if(ui.damage.get(damager) == null){
+                    i = 0;
+                }else {
+                    i=ui.damage.get(damager);
+                }
+                ui.damage.put(damager,(int)(i + event.getDamage()));
             }
 
 

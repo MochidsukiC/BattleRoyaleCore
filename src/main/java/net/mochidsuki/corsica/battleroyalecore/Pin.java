@@ -47,7 +47,7 @@ public class Pin{
                 if(b[i]) {
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet0);
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-                }
+            }
             } catch (InvocationTargetException ignored) {
             }
         }

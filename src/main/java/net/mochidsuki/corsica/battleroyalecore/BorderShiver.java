@@ -19,11 +19,11 @@ public class BorderShiver extends BukkitRunnable {
             time = time - 1;
             int i;
             if(time % 2 == 1){
-                i = 1;
+                i = 2;
             }else {
-                i=-1;
+                i= -2;
             }
-            world.getWorldBorder().setSize(world.getWorldBorder().getSize() - i);
+            world.getWorldBorder().setSize(world.getWorldBorder().getSize() + i);
         }
     }
 }

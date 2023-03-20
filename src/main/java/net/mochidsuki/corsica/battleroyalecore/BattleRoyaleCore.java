@@ -6,7 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.Plugin;
@@ -15,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.bukkit.Bukkit.getMap;
 
@@ -89,6 +93,7 @@ class v{
     static boolean inv;
     static HashMap<Player, Location> pin = new HashMap<>();
     static HashMap<Player, Location> pinRed = new HashMap<>();
+    static HashMap<Player, ItemStack[]> knockDownBU = new HashMap<>();
 
 }
 class b{

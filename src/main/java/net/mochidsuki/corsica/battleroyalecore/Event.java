@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockSupport;
-import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
@@ -16,9 +15,12 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,7 +30,7 @@ import org.bukkit.scoreboard.Team;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.SUFFOCATION;
+import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
 public class Event implements Listener{
     @EventHandler
@@ -62,26 +64,49 @@ public class Event implements Listener{
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
         EntityDamageEvent.DamageCause cause = event.getCause();
+        double damage = event.getDamage();
         if(cause.equals(SUFFOCATION)){//ボーダー外ダメージ
             switch (v.gameround) {
                 case 1:
                 case 2:
-                    event.setDamage(0.1);
+                    damage = 0.1;
 
                     break;
                 case 3:
-                    event.setDamage(0.8);
+                    damage = 0.8;
                     break;
                 case 4:
-                    event.setDamage(1.8);
+                    damage = 1.8;
                     break;
                 case 5:
                 case 6:
-                    event.setDamage(2.9);
+                    damage = 2.9;
                     break;
 
             }
         }
+        if(event.getEntity().getType() == EntityType.PLAYER){
+            Player player = (Player) event.getEntity();
+            if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))){
+                if(!(cause.equals(ENTITY_ATTACK) || cause.equals(ENTITY_SWEEP_ATTACK) || cause.equals(SONIC_BOOM))){
+                    if((player.getHealth() < damage)){
+                        ItemStack[] itemStacks = new ItemStack[36];
+                        for(int i = 0;i < itemStacks.length;i++){
+                            itemStacks[i] = player.getInventory().getItem(i);
+                        }
+                        v.knockDownBU.put(player,itemStacks);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK,999999999,0,true,true));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,999999999,4,true,true));
+                        player.setHealth(40);
+                        player.setFoodLevel(0);
+                        event.setCancelled(true);
+                        player.getInventory().clear();
+                        player.updateInventory();
+                    }
+                }
+            }
+        }
+        event.setDamage(damage);
     }
 
     @EventHandler
@@ -165,7 +190,7 @@ public class Event implements Listener{
                             if (!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
                                 Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
                                 if (d.getDamage() != 0) {
-                                    new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                    new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40,null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
                                 } else {
                                     event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
                                 }
@@ -180,7 +205,7 @@ public class Event implements Listener{
                             if(!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
                                 Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
                                 if (d.getDamage() != 0) {
-                                    new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                    new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100,null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
                                 } else {
                                     event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
                                 }
@@ -267,6 +292,15 @@ public class Event implements Listener{
         }catch (Exception ignored){}
     }
 
+    @EventHandler
+    public void PlayerInteractEntityEvent(PlayerInteractEntityEvent event){
+        if(event.getRightClicked().getType() == EntityType.PLAYER) {
+            if (event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer()) == event.getPlayer().getScoreboard().getEntryTeam(event.getRightClicked().toString())) {
+                new LongPress(event.getPlayer(), "fenix", null, 100, (Player) event.getRightClicked()).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+            }
+        }
+    }
+
 
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
@@ -317,6 +351,23 @@ public class Event implements Listener{
             Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
             damageable.setDamage((int) da);
             player.getInventory().getItem(22).setItemMeta(damageable);
+
+            if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
+                if ((player.getHealth() < damage)) {
+                    ItemStack[] itemStacks = new ItemStack[36];
+                    for(int i = 0;i < itemStacks.length;i++){
+                        itemStacks[i] = player.getInventory().getItem(i);
+                    }
+                    v.knockDownBU.put(player,itemStacks);
+                    player.updateInventory();
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK,999999999,0,true,true));
+                    player.setSaturation(-20);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,999999999,4,true,true));
+                    player.setHealth(40);
+                    event.setCancelled(true);
+                    player.getInventory().clear();
+                }
+            }
         }
     }
     @EventHandler
@@ -375,25 +426,27 @@ public class Event implements Listener{
         entity.setInvulnerable(true);
         StorageMinecart deathCart = (StorageMinecart)entity;
         for (int i = 0; i <= 10;i++){
-            if(event.getEntity().getInventory().getItem(i) != null) {
-                if (event.getEntity().getInventory().getItem(i).getType() != Material.FILLED_MAP) {
-                    deathCart.getInventory().setItem(i, event.getEntity().getInventory().getItem(i));
+            if(v.knockDownBU.get(event.getEntity())[i] != null) {
+                if (v.knockDownBU.get(event.getEntity())[i].getType() != Material.FILLED_MAP) {
+                    deathCart.getInventory().setItem(i, v.knockDownBU.get(event.getEntity())[i]);
                 }
             }
         }
-        deathCart.getInventory().setItem(11, event.getEntity().getInventory().getItem(18));
-        deathCart.getInventory().setItem(18, event.getEntity().getInventory().getItem(19));
-        deathCart.getInventory().setItem(19, event.getEntity().getInventory().getItem(27));
-        deathCart.getInventory().setItem(20, event.getEntity().getInventory().getItem(28));
+        deathCart.getInventory().setItem(11, v.knockDownBU.get(event.getEntity())[18]);
+        deathCart.getInventory().setItem(18, v.knockDownBU.get(event.getEntity())[19]);
+        deathCart.getInventory().setItem(19, v.knockDownBU.get(event.getEntity())[27]);
+        deathCart.getInventory().setItem(20, v.knockDownBU.get(event.getEntity())[28]);
 
-        deathCart.getInventory().setItem(24, event.getEntity().getInventory().getItem(21));
+        deathCart.getInventory().setItem(24, v.knockDownBU.get(event.getEntity())[21]);
         deathCart.setCustomName(event.getEntity().getName());
-        ItemStack chest = event.getEntity().getInventory().getItem(22);
-        Damageable chestD = (Damageable) chest.getItemMeta();
-        chestD.setDamage(0);
-        chest.setItemMeta(chestD);
-        deathCart.getInventory().setItem(25, chest);
-        deathCart.getInventory().setItem(26, event.getEntity().getInventory().getItem(23));
+        try {
+            ItemStack chest = v.knockDownBU.get(event.getEntity())[22];
+            Damageable chestD = (Damageable) chest.getItemMeta();
+            chestD.setDamage(0);
+            chest.setItemMeta(chestD);
+            deathCart.getInventory().setItem(25, chest);
+        }catch (Exception e){}
+        deathCart.getInventory().setItem(26, v.knockDownBU.get(event.getEntity())[23]);
         event.getEntity().getInventory().clear();
 
         //kill counter
@@ -401,8 +454,6 @@ public class Event implements Listener{
 
 
     }
-
-
 
 
 

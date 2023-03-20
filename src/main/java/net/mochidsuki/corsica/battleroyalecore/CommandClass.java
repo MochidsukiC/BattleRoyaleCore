@@ -97,6 +97,22 @@ public class CommandClass implements CommandExecutor {
              */
 
         }
+        if(command.getName().equalsIgnoreCase("openelytra")) {
+            switch (args[1]) {
+                case "@a":
+                    Player[] players = sender.getServer().getOnlinePlayers().toArray(new Player[0]);
+                    for (Player player : players) {
+                        player.setGliding(true);
+                    }
+                    return true;
+                case "@s":
+                    ((Player)sender).setGliding(true);
+                    return true;
+                default:
+                    ((Player)sender).setGliding(true);
+                    return true;
+            }
+        }
         if(command.getName().equalsIgnoreCase("mapgenerator")){
             Player player = (Player) sender;
 

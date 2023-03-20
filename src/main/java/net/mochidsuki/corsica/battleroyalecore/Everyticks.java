@@ -38,6 +38,24 @@ public class Everyticks extends BukkitRunnable {
 
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
+
+            if (player.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                for(int i =0;i<=2;i++){
+                    for(int ii = 0;ii<=2;ii++){
+                        for(int iii = 0; iii <= 2; iii++) {
+                            player.sendBlockChange(player.getLocation().add(i - 1, iii, ii - 1), player.getLocation().add(i - 1, iii, ii - 1).getBlock().getBlockData());
+                        }
+                    }
+                }
+
+
+                if(player.getLocation().add(0,1,0).getBlock().getType() == Material.AIR) {
+                    player.sendBlockChange(player.getLocation().add(0, 1, 0), Material.BARRIER.createBlockData());
+                }
+            }
+
+
+
             //アクションバー
             try {
                 Optional<ItemStack> headItem = Optional.ofNullable(player.getInventory().getItem(21));
@@ -159,7 +177,7 @@ public class Everyticks extends BukkitRunnable {
                     teamplayer[i] = Bukkit.getPlayer(tp[i]);
                 }
 
-                Pin pin = new Pin();
+                Protocol pin = new Protocol();
 
                 Optional<Location>[] loc = new Optional[teamplayer.length];
 

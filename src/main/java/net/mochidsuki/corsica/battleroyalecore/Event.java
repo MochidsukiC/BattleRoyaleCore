@@ -360,7 +360,7 @@ public class Event implements Listener{
 
             //シールド
             double damage = event.getDamage();
-            if(player.getInventory().getItem(22) == new ItemStack(Material.LEATHER_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.CHAINMAIL_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.IRON_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.GOLDEN_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.DIAMOND_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.NETHERITE_CHESTPLATE )) {
+            if(player.getInventory().getItem(22).getType() == Material.LEATHER_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.CHAINMAIL_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.IRON_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.GOLDEN_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.DIAMOND_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.NETHERITE_CHESTPLATE ) {
                 int shieldNow;
 
 
@@ -510,18 +510,5 @@ public class Event implements Listener{
 
 
     }
-
-    @EventHandler
-    public void onJoin(final PlayerJoinEvent event) {
-        //Delay the update by a few ticks until the player is actually on the server
-        Bukkit.getScheduler().runTaskLater(BattleRoyaleCore.getPlugin(), new Runnable() {
-            @Override
-            public void run() {
-                //Set the event's player glowing in DARK_AQUA for all online players
-                GlowAPI.setGlowing(event.getPlayer(), GlowAPI.Color.DARK_AQUA, Bukkit.getOnlinePlayers());
-            }
-        }, 10);
-    }
-
 
 }

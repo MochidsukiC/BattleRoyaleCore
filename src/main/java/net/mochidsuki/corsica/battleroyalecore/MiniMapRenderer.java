@@ -37,15 +37,15 @@ public class MiniMapRenderer extends MapRenderer {
                 teamplayer[i] = Bukkit.getPlayer(tp[i]);
                 if (!(teamplayer[i] == player)) {
                     int x = Objects.requireNonNull(teamplayer[i]).getLocation().getBlockX() - player.getLocation().getBlockX();
-                    if (x > 64) {
+                    if (x > 128) {
                         x = 64;
-                    }else if(x < -64){
+                    }else if(x < -128){
                         x = -64;
                     }
                     int z = (teamplayer[i].getLocation().getBlockZ() - player.getLocation().getBlockZ());
-                    if (z > 64) {
+                    if (z > 128) {
                         z = 64;
-                    }else if(z < -64){
+                    }else if(z < -128){
                         z = -64;
                     }
 

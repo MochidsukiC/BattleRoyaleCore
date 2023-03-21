@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
-import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Objects;
 
@@ -80,10 +79,13 @@ public class CommandClass implements CommandExecutor {
                         return true;
                 }
             }
+            /*
             if(args[0].equalsIgnoreCase("glow")){
                 GlowAPI.setGlowing((Player)sender, GlowAPI.Color.WHITE , Bukkit.getOnlinePlayers());
                 return true;
             }
+
+             */
 
 
 

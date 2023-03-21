@@ -23,7 +23,6 @@ import org.bukkit.map.MapCursorCollection;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
-import org.inventivetalent.glow.GlowAPI;
 
 
 import java.util.Objects;
@@ -163,6 +162,9 @@ public class Event implements Listener{
 
 
                             event.setCancelled(true);
+                            break;
+                        case SPYGLASS:
+                            event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(),Sound.ENTITY_FIREWORK_ROCKET_BLAST,1,0);
                             break;
                     }
                 }
@@ -360,67 +362,69 @@ public class Event implements Listener{
 
             //シールド
             double damage = event.getDamage();
-            if(player.getInventory().getItem(22).getType() == Material.LEATHER_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.CHAINMAIL_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.IRON_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.GOLDEN_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.DIAMOND_CHESTPLATE  || player.getInventory().getItem(22).getType() == Material.NETHERITE_CHESTPLATE ) {
-                int shieldNow;
+            if(player.getInventory().getItem(22) != null) {
+                if (player.getInventory().getItem(22).getType() == Material.LEATHER_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.CHAINMAIL_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.IRON_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.GOLDEN_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.DIAMOND_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.NETHERITE_CHESTPLATE) {
+                    int shieldNow;
 
 
-                ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
+                    ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
 
-                shieldNow = shieldUtil.getShieldNow();
-                if (shieldNow > 0) {
-                    damage = (int) (event.getDamage() - shieldNow);
-                    shieldNow = (int) (shieldNow - event.getDamage());
-                    if (shieldNow <= 0) {
-                        shieldNow = 0;
-                        if (event.getDamager().getType() == EntityType.PLAYER) {
-                            damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+                    shieldNow = shieldUtil.getShieldNow();
+                    if (shieldNow > 0) {
+                        damage = (int) (event.getDamage() - shieldNow);
+                        shieldNow = (int) (shieldNow - event.getDamage());
+                        if (shieldNow <= 0) {
+                            shieldNow = 0;
+                            if (event.getDamager().getType() == EntityType.PLAYER) {
+                                damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+                            }
                         }
                     }
-                }
-                if (damage <= 0) {
-                    damage = 0;
-                }
-                event.setDamage(damage);
-                double da = (shieldUtil.getShieldMax() - shieldNow) / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability();
-                Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
-                damageable.setDamage((int) da);
-                player.getInventory().getItem(22).setItemMeta(damageable);
-
-
-            }
-            if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
-                if ((player.getHealth() < damage)) {
-                    ItemStack[] itemStacks = new ItemStack[36];
-                    for (int i = 0; i < itemStacks.length; i++) {
-                        itemStacks[i] = player.getInventory().getItem(i);
+                    if (damage <= 0) {
+                        damage = 0;
                     }
-                    v.knockDownBU.put(player, itemStacks);
-                    player.updateInventory();
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
-                    player.setSaturation(-20);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
-                    player.setHealth(40);
-                    event.setCancelled(true);
-                    player.getInventory().clear();
+                    event.setDamage(damage);
+                    double da = (shieldUtil.getShieldMax() - shieldNow) / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability();
+                    Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
+                    damageable.setDamage((int) da);
+                    player.getInventory().getItem(22).setItemMeta(damageable);
 
-                    Team playerteam = player.getScoreboard().getPlayerTeam(player);
-                    String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                    playerteam.getEntries().toArray(tp);
-                    Player[] teamplayer = new Player[tp.length];
-                    int allDeath = 0;
-                    for (int i = 0; i < tp.length; i++) {
-                        teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                        if (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR) {
-                            allDeath++;
+
+                }
+                if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
+                    if ((player.getHealth() < damage)) {
+                        ItemStack[] itemStacks = new ItemStack[41];
+                        for (int i = 0; i < itemStacks.length; i++) {
+                            itemStacks[i] = player.getInventory().getItem(i);
                         }
-                    }
-                    if (allDeath == tp.length) {
+                        v.knockDownBU.put(player, itemStacks);
+                        player.updateInventory();
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
+                        player.setFoodLevel(0);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
+                        player.setHealth(40);
+                        event.setCancelled(true);
+                        player.getInventory().clear();
+
+                        Team playerteam = player.getScoreboard().getPlayerTeam(player);
+                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                        playerteam.getEntries().toArray(tp);
+                        Player[] teamplayer = new Player[tp.length];
+                        int allDeath = 0;
                         for (int i = 0; i < tp.length; i++) {
-                            teamplayer[i].setHealth(0);
+                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                            if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
+                                allDeath++;
+                            }
                         }
+                        if (allDeath == tp.length) {
+                            for (int i = 0; i < tp.length; i++) {
+                                teamplayer[i].setHealth(0);
+                            }
+                        }
+
+
                     }
-
-
                 }
             }
 
@@ -432,8 +436,10 @@ public class Event implements Listener{
         if (v.inv) {
             Optional<Material> cursor = Optional.of(Objects.requireNonNull(event.getCursor()).getType());
             int slot = event.getSlot();
-            if (!(Objects.requireNonNull(event.getClickedInventory()).getType() == InventoryType.PLAYER)) {
-                slot = 0;
+            if(event.getClickedInventory() != null) {
+                if (!(Objects.requireNonNull(event.getClickedInventory()).getType() == InventoryType.PLAYER)) {
+                    slot = 0;
+                }
             }
 
             if (slot >= 11 && slot <= 17) {

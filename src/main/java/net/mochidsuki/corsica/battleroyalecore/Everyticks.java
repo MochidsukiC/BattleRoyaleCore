@@ -36,7 +36,6 @@ public class Everyticks extends BukkitRunnable {
 
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
-
             if (player.hasPotionEffect(PotionEffectType.UNLUCK)) {
                 for(int i =0;i<=2;i++){
                     for(int ii = 0;ii<=2;ii++){
@@ -210,7 +209,7 @@ public class Everyticks extends BukkitRunnable {
                 }
                 pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);
 
-
+                /*
                 Player[] players1 = new Player[tp.length];
                 for(int i = 0; i < tp.length;i++){
                     if(teamplayer[i] != player){
@@ -219,6 +218,8 @@ public class Everyticks extends BukkitRunnable {
                 }
 
                 pin.glowTeamMate(player,teamplayer);
+
+                 */
             }
 
 

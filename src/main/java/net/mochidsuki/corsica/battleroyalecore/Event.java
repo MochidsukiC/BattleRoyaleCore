@@ -14,17 +14,16 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.map.MapCursorCollection;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.inventivetalent.glow.GlowAPI;
 
 
 import java.util.Objects;
@@ -102,6 +101,23 @@ public class Event implements Listener{
                         event.setCancelled(true);
                         player.getInventory().clear();
                         player.updateInventory();
+
+                        Team playerteam = player.getScoreboard().getPlayerTeam(player);
+                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                        playerteam.getEntries().toArray(tp);
+                        Player[] teamplayer = new Player[tp.length];
+                        int allDeath = 0;
+                        for (int i = 0; i < tp.length; i++) {
+                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                            if (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR){
+                                allDeath++;
+                            }
+                        }
+                        if(allDeath == tp.length){
+                            for (int i = 0; i < tp.length; i++) {
+                                teamplayer[i].setHealth(0);
+                            }
+                        }
                     }
                 }
             }
@@ -119,105 +135,19 @@ public class Event implements Listener{
 
     @EventHandler
     public void PlayerInteractEvent(PlayerInteractEvent event){
-        try {
-            if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-                switch (Objects.requireNonNull(event.getMaterial())) {
-                    case FIRE_CHARGE:
-                        Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
-                        fireball.setShooter(event.getPlayer());
-                        fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
+        if(!(event.getPlayer().hasPotionEffect(PotionEffectType.UNLUCK))) {
+            try {
+                if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+                    switch (Objects.requireNonNull(event.getMaterial())) {
+                        case FIRE_CHARGE:
+                            Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
+                            fireball.setShooter(event.getPlayer());
+                            fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
 
-                        event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
-                        break;
-                    case FILLED_MAP:
-                        v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
-
-                        Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
-                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                        playerteam.getEntries().toArray(tp);
-                        Player[] teamplayer = new Player[tp.length];
-                        for (int i = 0;i < tp.length;i++) {
-                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                        }
-
-                        for (Player player : teamplayer) {//teamplayer全員に実行
-                            player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_FLUTE,100,0);
-                        }
-
-
-                        event.setCancelled(true);
-                        break;
-                }
-            }
-            if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-                switch (Objects.requireNonNull(event.getMaterial())) {
-                    case LEATHER_HELMET:
-                    case CHAINMAIL_HELMET:
-                    case IRON_HELMET:
-                    case GOLDEN_HELMET:
-                    case DIAMOND_HELMET:
-                    case NETHERITE_HELMET:
-                        ItemStack originItemH = event.getPlayer().getInventory().getItem(21);
-                        ItemStack newItemH = event.getItem();
-                        event.getPlayer().getInventory().setItem(21, newItemH);
-                        event.getPlayer().getInventory().setItemInMainHand(originItemH);
-                        break;
-                    case LEATHER_CHESTPLATE:
-                    case CHAINMAIL_CHESTPLATE:
-                    case IRON_CHESTPLATE:
-                    case GOLDEN_CHESTPLATE:
-                    case DIAMOND_CHESTPLATE:
-                    case NETHERITE_CHESTPLATE:
-                        ItemStack originItemC = event.getPlayer().getInventory().getItem(22);
-                        ItemStack newItemC = event.getItem();
-                        event.getPlayer().getInventory().setItem(22, newItemC);
-                        event.getPlayer().getInventory().setItemInMainHand(originItemC);
-                        break;
-                    case LEATHER_BOOTS:
-                    case CHAINMAIL_BOOTS:
-                    case IRON_BOOTS:
-                    case GOLDEN_BOOTS:
-                    case DIAMOND_BOOTS:
-                    case NETHERITE_BOOTS:
-                        ItemStack originItemB = event.getPlayer().getInventory().getItem(23);
-                        ItemStack newItemB = event.getItem();
-                        event.getPlayer().getInventory().setItem(23, newItemB);
-                        event.getPlayer().getInventory().setItemInMainHand(originItemB);
-                        break;
-
-                    case ENDER_PEARL:
-                        if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            if (!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
-                                Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
-                                if (d.getDamage() != 0) {
-                                    new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40,null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
-                                } else {
-                                    event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
-                                }
-                            }else {
-                                event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
-                            }
-                        }
-                        event.setCancelled(true);
-                        break;
-                    case MUSIC_DISC_5:
-                        if(!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
-                            if(!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
-                                Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
-                                if (d.getDamage() != 0) {
-                                    new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100,null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
-                                } else {
-                                    event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
-                                }
-                            }else {
-                                event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
-                            }
-                        }
-                        event.setCancelled(true);
-                        break;
-                    case FILLED_MAP:
-                        if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
-                            v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                            event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
+                            break;
+                        case FILLED_MAP:
+                            v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
                             Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
                             String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
@@ -228,75 +158,171 @@ public class Event implements Listener{
                             }
 
                             for (Player player : teamplayer) {//teamplayer全員に実行
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0);
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.3F);
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.6F);
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 1);
+                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
                             }
-                        }
-                        break;
 
+
+                            event.setCancelled(true);
+                            break;
+                    }
                 }
+                if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    switch (Objects.requireNonNull(event.getMaterial())) {
+                        case LEATHER_HELMET:
+                        case CHAINMAIL_HELMET:
+                        case IRON_HELMET:
+                        case GOLDEN_HELMET:
+                        case DIAMOND_HELMET:
+                        case NETHERITE_HELMET:
+                            ItemStack originItemH = event.getPlayer().getInventory().getItem(21);
+                            ItemStack newItemH = event.getItem();
+                            event.getPlayer().getInventory().setItem(21, newItemH);
+                            event.getPlayer().getInventory().setItemInMainHand(originItemH);
+                            break;
+                        case LEATHER_CHESTPLATE:
+                        case CHAINMAIL_CHESTPLATE:
+                        case IRON_CHESTPLATE:
+                        case GOLDEN_CHESTPLATE:
+                        case DIAMOND_CHESTPLATE:
+                        case NETHERITE_CHESTPLATE:
+                            ItemStack originItemC = event.getPlayer().getInventory().getItem(22);
+                            ItemStack newItemC = event.getItem();
+                            event.getPlayer().getInventory().setItem(22, newItemC);
+                            event.getPlayer().getInventory().setItemInMainHand(originItemC);
+                            break;
+                        case LEATHER_BOOTS:
+                        case CHAINMAIL_BOOTS:
+                        case IRON_BOOTS:
+                        case GOLDEN_BOOTS:
+                        case DIAMOND_BOOTS:
+                        case NETHERITE_BOOTS:
+                            ItemStack originItemB = event.getPlayer().getInventory().getItem(23);
+                            ItemStack newItemB = event.getItem();
+                            event.getPlayer().getInventory().setItem(23, newItemB);
+                            event.getPlayer().getInventory().setItemInMainHand(originItemB);
+                            break;
 
-            }
-            if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
-                Block block = event.getClickedBlock();
-                if(block.getType() == Material.OAK_DOOR || block.getType() == Material.SPRUCE_DOOR || block.getType() == Material.BIRCH_DOOR || block.getType() == Material.JUNGLE_DOOR || block.getType() == Material.ACACIA_DOOR || block.getType() == Material.DARK_OAK_DOOR || block.getType() == Material.MANGROVE_DOOR || block.getType() == Material.CRIMSON_DOOR || block.getType() == Material.WARPED_DOOR){
-
-                    Player[] players = event.getPlayer().getServer().getOnlinePlayers().toArray(new Player[0]);
-
-                    if((block.getBlockData().isFaceSturdy(BlockFace.NORTH, BlockSupport.FULL))){
-                        for(Player player : players){
-                            Location location = player.getLocation();
-                            if(Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < 0.8 && block.getZ() - location.getZ() >= -0.6){
-                                if(player.isSneaking()){
-                                    event.setCancelled(true);
+                        case ENDER_PEARL:
+                            if (!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
+                                if (!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
+                                    Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                                    if (d.getDamage() != 0) {
+                                        new LongPress(event.getPlayer(), "shieldmini", event.getMaterial(), 40, null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                    } else {
+                                        event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
+                                    }
+                                } else {
+                                    event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
                                 }
                             }
-
-                        }
-                    }if((block.getBlockData().isFaceSturdy(BlockFace.EAST, BlockSupport.FULL))){
-                        for(Player player : players){
-                            Location location = player.getLocation();
-                            if(Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < -0.4 && block.getX() - location.getX() >= -1.6){
-                                if(player.isSneaking()){
-                                    event.setCancelled(true);
+                            event.setCancelled(true);
+                            break;
+                        case MUSIC_DISC_5:
+                            if (!(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
+                                if (!(event.getPlayer().getInventory().getItem(22) == null || Objects.equals(event.getPlayer().getInventory().getItem(22), new ItemStack(Material.LEATHER_CHESTPLATE)))) {
+                                    Damageable d = (Damageable) event.getPlayer().getInventory().getItem(22).getItemMeta();
+                                    if (d.getDamage() != 0) {
+                                        new LongPress(event.getPlayer(), "shieldmax", event.getMaterial(), 100, null).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                                    } else {
+                                        event.getPlayer().sendTitle("", "シールドは新品同様です", 10, 10, 20);
+                                    }
+                                } else {
+                                    event.getPlayer().sendTitle("", ChatColor.RED + "シールドがありません", 10, 10, 20);
                                 }
                             }
+                            event.setCancelled(true);
+                            break;
+                        case FILLED_MAP:
+                            if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
+                                v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
 
-                        }
-                    }if((block.getBlockData().isFaceSturdy(BlockFace.WEST, BlockSupport.FULL))){
-                        for(Player player : players){
-                            Location location = player.getLocation();
-                            if(Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < 0.8 && block.getX() - location.getX() >= -0.6){
-                                if(player.isSneaking()){
-                                    event.setCancelled(true);
+                                Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                                playerteam.getEntries().toArray(tp);
+                                Player[] teamplayer = new Player[tp.length];
+                                for (int i = 0; i < tp.length; i++) {
+                                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                                }
+
+                                for (Player player : teamplayer) {//teamplayer全員に実行
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.3F);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.6F);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 1);
                                 }
                             }
+                            break;
 
-                        }
-                    }if((block.getBlockData().isFaceSturdy(BlockFace.SOUTH, BlockSupport.FULL))){
-                        for(Player player : players){
-                            Location location = player.getLocation();
-                            if(Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < -0.4 && block.getZ() - location.getZ() >= -1.6){
-                                if(player.isSneaking()){
-                                    event.setCancelled(true);
-                                }
-                            }
-
-                        }
                     }
 
                 }
+                if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    Block block = event.getClickedBlock();
+                    if (block.getType() == Material.OAK_DOOR || block.getType() == Material.SPRUCE_DOOR || block.getType() == Material.BIRCH_DOOR || block.getType() == Material.JUNGLE_DOOR || block.getType() == Material.ACACIA_DOOR || block.getType() == Material.DARK_OAK_DOOR || block.getType() == Material.MANGROVE_DOOR || block.getType() == Material.CRIMSON_DOOR || block.getType() == Material.WARPED_DOOR) {
+
+                        Player[] players = event.getPlayer().getServer().getOnlinePlayers().toArray(new Player[0]);
+
+                        if ((block.getBlockData().isFaceSturdy(BlockFace.NORTH, BlockSupport.FULL))) {
+                            for (Player player : players) {
+                                Location location = player.getLocation();
+                                if (Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < 0.8 && block.getZ() - location.getZ() >= -0.6) {
+                                    if (player.isSneaking()) {
+                                        event.setCancelled(true);
+                                    }
+                                }
+
+                            }
+                        }
+                        if ((block.getBlockData().isFaceSturdy(BlockFace.EAST, BlockSupport.FULL))) {
+                            for (Player player : players) {
+                                Location location = player.getLocation();
+                                if (Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < -0.4 && block.getX() - location.getX() >= -1.6) {
+                                    if (player.isSneaking()) {
+                                        event.setCancelled(true);
+                                    }
+                                }
+
+                            }
+                        }
+                        if ((block.getBlockData().isFaceSturdy(BlockFace.WEST, BlockSupport.FULL))) {
+                            for (Player player : players) {
+                                Location location = player.getLocation();
+                                if (Math.abs(block.getZ() + 0.5 - location.getZ()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getX() - location.getX() < 0.8 && block.getX() - location.getX() >= -0.6) {
+                                    if (player.isSneaking()) {
+                                        event.setCancelled(true);
+                                    }
+                                }
+
+                            }
+                        }
+                        if ((block.getBlockData().isFaceSturdy(BlockFace.SOUTH, BlockSupport.FULL))) {
+                            for (Player player : players) {
+                                Location location = player.getLocation();
+                                if (Math.abs(block.getX() + 0.5 - location.getX()) < 0.7 && Math.abs(block.getY() - location.getBlockY()) <= 1 && block.getZ() - location.getZ() < -0.4 && block.getZ() - location.getZ() >= -1.6) {
+                                    if (player.isSneaking()) {
+                                        event.setCancelled(true);
+                                    }
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            } catch (Exception ignored) {
             }
-        }catch (Exception ignored){}
+        }else {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void PlayerInteractEntityEvent(PlayerInteractEntityEvent event){
         if(event.getRightClicked().getType() == EntityType.PLAYER) {
-            if (event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer()) == event.getPlayer().getScoreboard().getEntryTeam(event.getRightClicked().toString())) {
-                new LongPress(event.getPlayer(), "fenix", null, 100, (Player) event.getRightClicked()).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+            Team team = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+
+            if (team.hasPlayer((OfflinePlayer) event.getRightClicked()) && event.getPlayer().getLocation().distance(event.getRightClicked().getLocation()) < 2 && ((Player)event.getRightClicked()).hasPotionEffect(PotionEffectType.UNLUCK) && !(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
+                    new LongPress(event.getPlayer(), "fenix", null, 100, (Player) event.getRightClicked()).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
             }
         }
     }
@@ -305,17 +331,23 @@ public class Event implements Listener{
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
         Player damager = null;
-        boolean damagerType = true;
-        try {
-            damager = (Player) event.getDamager();
-        }catch (Exception e){
-            damagerType = false;
+
+        if(event.getDamager().getType().equals(EntityType.PLAYER)){
+            if(((Player)event.getDamager()).hasPotionEffect(PotionEffectType.UNLUCK)){
+                event.setCancelled(true);
+                return;
+            }
         }
 
+
+
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
+
+
             Player player = (Player) event.getEntity();
-            if(damagerType) {
-                damager.setLevel((int) event.getDamage());//ダメージを経験値に変換
+            if(event.getDamager().getType() == EntityType.PLAYER) {
+                damager = (Player) event.getDamager();
+                damager.setLevel((int) event.getDamage()+damager.getLevel());//ダメージを経験値に変換
                 int i;
                 if(ui.damage.get(damager) == null){
                     i = 0;
@@ -327,47 +359,71 @@ public class Event implements Listener{
 
 
             //シールド
-            int shieldNow;
             double damage = event.getDamage();
+            if(player.getInventory().getItem(22) == new ItemStack(Material.LEATHER_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.CHAINMAIL_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.IRON_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.GOLDEN_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.DIAMOND_CHESTPLATE ) || player.getInventory().getItem(22) == new ItemStack(Material.NETHERITE_CHESTPLATE )) {
+                int shieldNow;
 
-            ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
 
-            shieldNow = shieldUtil.getShieldNow();
-            if(shieldNow>0){
-                damage = (int) (event.getDamage() - shieldNow);
-                shieldNow = (int) (shieldNow - event.getDamage());
-                if(shieldNow <= 0){
-                    shieldNow = 0;
-                    if(damagerType) {
-                        damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+                ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
+
+                shieldNow = shieldUtil.getShieldNow();
+                if (shieldNow > 0) {
+                    damage = (int) (event.getDamage() - shieldNow);
+                    shieldNow = (int) (shieldNow - event.getDamage());
+                    if (shieldNow <= 0) {
+                        shieldNow = 0;
+                        if (event.getDamager().getType() == EntityType.PLAYER) {
+                            damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+                        }
                     }
                 }
-            }
-            if(damage <= 0){
-                damage = 0;
-            }
-            event.setDamage(damage);
-            double da = (shieldUtil.getShieldMax() - shieldNow)/shieldUtil.getShieldMax()*shieldUtil.getShieldMaxDurability();
-            Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
-            damageable.setDamage((int) da);
-            player.getInventory().getItem(22).setItemMeta(damageable);
+                if (damage <= 0) {
+                    damage = 0;
+                }
+                event.setDamage(damage);
+                double da = (shieldUtil.getShieldMax() - shieldNow) / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability();
+                Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
+                damageable.setDamage((int) da);
+                player.getInventory().getItem(22).setItemMeta(damageable);
 
-            if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
+
+            }
+            if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
                 if ((player.getHealth() < damage)) {
                     ItemStack[] itemStacks = new ItemStack[36];
-                    for(int i = 0;i < itemStacks.length;i++){
+                    for (int i = 0; i < itemStacks.length; i++) {
                         itemStacks[i] = player.getInventory().getItem(i);
                     }
-                    v.knockDownBU.put(player,itemStacks);
+                    v.knockDownBU.put(player, itemStacks);
                     player.updateInventory();
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK,999999999,0,true,true));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
                     player.setSaturation(-20);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,999999999,4,true,true));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
                     player.setHealth(40);
                     event.setCancelled(true);
                     player.getInventory().clear();
+
+                    Team playerteam = player.getScoreboard().getPlayerTeam(player);
+                    String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                    playerteam.getEntries().toArray(tp);
+                    Player[] teamplayer = new Player[tp.length];
+                    int allDeath = 0;
+                    for (int i = 0; i < tp.length; i++) {
+                        teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                        if (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR) {
+                            allDeath++;
+                        }
+                    }
+                    if (allDeath == tp.length) {
+                        for (int i = 0; i < tp.length; i++) {
+                            teamplayer[i].setHealth(0);
+                        }
+                    }
+
+
                 }
             }
+
         }
     }
     @EventHandler
@@ -455,6 +511,17 @@ public class Event implements Listener{
 
     }
 
+    @EventHandler
+    public void onJoin(final PlayerJoinEvent event) {
+        //Delay the update by a few ticks until the player is actually on the server
+        Bukkit.getScheduler().runTaskLater(BattleRoyaleCore.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                //Set the event's player glowing in DARK_AQUA for all online players
+                GlowAPI.setGlowing(event.getPlayer(), GlowAPI.Color.DARK_AQUA, Bukkit.getOnlinePlayers());
+            }
+        }, 10);
+    }
 
 
 }

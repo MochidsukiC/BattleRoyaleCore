@@ -5,13 +5,11 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
@@ -211,6 +209,16 @@ public class Everyticks extends BukkitRunnable {
                     booleansR[i] = !(v.pinRed.get(teamplayer[i]) == null);
                 }
                 pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);
+
+
+                Player[] players1 = new Player[tp.length];
+                for(int i = 0; i < tp.length;i++){
+                    if(teamplayer[i] != player){
+                        players1[i] = teamplayer[i];
+                    }
+                }
+
+                pin.glowTeamMate(player,teamplayer);
             }
 
 

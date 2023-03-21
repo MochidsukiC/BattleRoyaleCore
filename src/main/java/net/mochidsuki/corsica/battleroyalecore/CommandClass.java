@@ -2,11 +2,8 @@ package net.mochidsuki.corsica.battleroyalecore;
 
 
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,9 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.Objects;
-import java.util.Optional;
 
 
 public class CommandClass implements CommandExecutor {
@@ -83,18 +80,12 @@ public class CommandClass implements CommandExecutor {
                         return true;
                 }
             }
-            /*
-            if(args[0].equalsIgnoreCase("testpin")){
-                Pin pin = new Pin();
-                Optional.of(new Location((sender.getServer().getWorld(sender.getName())), 0,0,0));
-
-                Optional<Location> loc1 = Optional.ofNullable(v.pin.get(sender));
-
-                pin.pin((Player) sender,loc1.orElse(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),(new Location(sender.getServer().getWorld(sender.getName()),0,0,0)),true,false,false);
-            return true;
+            if(args[0].equalsIgnoreCase("glow")){
+                GlowAPI.setGlowing((Player)sender, GlowAPI.Color.WHITE , Bukkit.getOnlinePlayers());
+                return true;
             }
 
-             */
+
 
         }
         if(command.getName().equalsIgnoreCase("openelytra")) {

@@ -4,8 +4,10 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
@@ -67,6 +69,12 @@ public class Protocol{
             }
         }
 
+    }
+
+    public void glowTeamMate(Player player, Player[] players){
+        for(Player p : players) {
+            GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, player);
+        }
     }
 
 }

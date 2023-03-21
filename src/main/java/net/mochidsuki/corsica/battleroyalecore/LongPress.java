@@ -1,19 +1,16 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collections;
-import java.util.Objects;
 
 
 public class LongPress extends BukkitRunnable {
@@ -87,11 +84,14 @@ public class LongPress extends BukkitRunnable {
                 use = 0;
                 cancel();
             }
+            break;
             case "fenix":
                 if (player.isSneaking()) {
                     use = use + 1;
                     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 10, true, false));
                     player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 2, 200, true, false));
+                    fenixPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 10, true, false));
+                    fenixPlayer.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 2, 200, true, false));
 
 
                     String bar = String.join("", Collections.nCopies((int) (use / time * 10), "■"));
@@ -104,8 +104,9 @@ public class LongPress extends BukkitRunnable {
                         half = "";
                     }
                     player.sendTitle("", "["+ ChatColor.LIGHT_PURPLE + bar + half + barM + ChatColor.RESET + "]", 0, 2, 20);
+                    fenixPlayer.sendTitle("", "["+ ChatColor.LIGHT_PURPLE + bar + half + barM + ChatColor.RESET + "]", 0, 2, 20);
 
-                    fenixPlayer.getWorld().spawnParticle(Particle.HEART,fenixPlayer.getLocation(),100,1,1,1);
+                    fenixPlayer.getWorld().spawnParticle(Particle.COMPOSTER,fenixPlayer.getLocation(),10,0.5,1,0.5,0);
 
                     if (use >= time) {
                         use = 0;
@@ -113,11 +114,25 @@ public class LongPress extends BukkitRunnable {
                         fenixPlayer.removePotionEffect(PotionEffectType.HEALTH_BOOST);
                         fenixPlayer.setHealth(2);
                         fenixPlayer.setFoodLevel(10);
+
+                        for(int i = 0; i < v.knockDownBU.get(fenixPlayer).length; i++){
+                            fenixPlayer.getInventory().setItem(i,v.knockDownBU.get(fenixPlayer)[i]);
+                        }
+
+                        for(int i =0;i<=2;i++){
+                            for(int ii = 0;ii<=2;ii++){
+                                for(int iii = 0; iii <= 2; iii++) {
+                                    fenixPlayer.sendBlockChange(player.getLocation().add(i - 1, iii, ii - 1), player.getLocation().add(i - 1, iii, ii - 1).getBlock().getBlockData());
+                                }
+                            }
+                        }
+                        cancel();
                     }
                 } else {
                     use = 0;
                     cancel();
                 }
+                break;
         }
     }
 }

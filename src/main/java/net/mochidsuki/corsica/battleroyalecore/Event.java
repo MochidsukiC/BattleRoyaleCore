@@ -10,6 +10,7 @@ import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.map.MapCursorCollection;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -51,6 +53,7 @@ public class Event implements Listener{
 
 
         }
+
         /*
         if(item.getItemStack().getType() == Material.FILLED_MAP){
             v.pin.put(event.getPlayer(),null);
@@ -142,8 +145,10 @@ public class Event implements Listener{
                             Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
                             fireball.setShooter(event.getPlayer());
                             fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
-
                             event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
+
+                            fireball.setMetadata("Owner", (MetadataValue) event.getPlayer());
+
                             break;
                         case FILLED_MAP:
                             v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
@@ -162,9 +167,6 @@ public class Event implements Listener{
 
 
                             event.setCancelled(true);
-                            break;
-                        case SPYGLASS:
-                            event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(),Sound.ENTITY_FIREWORK_ROCKET_BLAST,1,0);
                             break;
                     }
                 }
@@ -254,6 +256,10 @@ public class Event implements Listener{
                                 }
                             }
                             break;
+
+                        case SPYGLASS:
+                            break;
+
 
                     }
 
@@ -515,6 +521,27 @@ public class Event implements Listener{
 
 
 
+    }
+
+    @EventHandler
+    public void BlockBreakEvent(BlockBreakEvent event){
+        Block block = event.getBlock();
+        if (!(block.getType() == Material.FIRE || block.getType() == Material.OAK_DOOR || block.getType() == Material.SPRUCE_DOOR || block.getType() == Material.BIRCH_DOOR || block.getType() == Material.JUNGLE_DOOR || block.getType() == Material.ACACIA_DOOR || block.getType() == Material.DARK_OAK_DOOR || block.getType() == Material.MANGROVE_DOOR || block.getType() == Material.CRIMSON_DOOR || block.getType() == Material.WARPED_DOOR)) {
+            if(!event.getPlayer().isOp()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void EntityExplodeEvent(EntityExplodeEvent event){
+        if(event.getEntity().getType() == EntityType.FIREBALL){
+            event.setCancelled(true);
+            event.getEntity().getWorld().spawnParticle(Particle.EXPLOSION_LARGE,event.getLocation(),1,0,0,0,0);
+            event.getEntity().getWorld().playSound(event.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,100,1);
+
+
+        }
     }
 
 }

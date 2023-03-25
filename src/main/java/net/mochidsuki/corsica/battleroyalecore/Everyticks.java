@@ -209,17 +209,16 @@ public class Everyticks extends BukkitRunnable {
                 }
                 pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);
 
-                /*
-                Player[] players1 = new Player[tp.length];
+
                 for(int i = 0; i < tp.length;i++){
                     if(teamplayer[i] != player){
-                        players1[i] = teamplayer[i];
+                        pin.setGlowing(teamplayer[i],player);
                     }
                 }
 
-                pin.glowTeamMate(player,teamplayer);
 
-                 */
+
+
             }
 
 

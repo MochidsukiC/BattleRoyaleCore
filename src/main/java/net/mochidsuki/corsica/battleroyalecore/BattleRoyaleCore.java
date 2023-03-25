@@ -32,6 +32,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         getCommand("debugerb").setExecutor(new CommandClass()); //debugerb
         getCommand("brc").setExecutor(new CommandClass()); //brgame
         getCommand("mapgenerator").setExecutor(new CommandClass()); //mapgenerator
+        getCommand("openelytra").setExecutor(new CommandClass()); //openelytra
         v.rtime = 0;
         v.stime =0;
         plugin = this;

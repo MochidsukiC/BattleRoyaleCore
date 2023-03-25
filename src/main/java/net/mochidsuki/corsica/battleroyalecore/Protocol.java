@@ -3,6 +3,7 @@ package net.mochidsuki.corsica.battleroyalecore;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -70,10 +71,22 @@ public class Protocol{
 
     }
 
-    public void glowTeamMate(Player player, Player[] players){
-        for(Player p : players) {
-            //GlowAPI.setGlowing(p, GlowAPI.Color.WHITE, player);
+    public void setGlowing(Player glowingPlayer, Player sendPacket) {
+
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
+        packet.getIntegers().write(0, glowingPlayer.getEntityId());
+        WrappedDataWatcher watcher = new WrappedDataWatcher();
+        WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
+        watcher.setEntity(glowingPlayer);
+        watcher.setObject(0, serializer, (byte) (0x40));
+        packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+
+        try {
+            ProtocolLibrary.getProtocolManager().sendServerPacket(sendPacket, packet);
+        } catch (InvocationTargetException e) {
+            System.out.println("There was an issue with one of the glowing enchants!");
         }
+
     }
 
 }

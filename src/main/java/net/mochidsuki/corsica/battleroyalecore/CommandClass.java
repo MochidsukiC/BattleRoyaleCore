@@ -91,7 +91,7 @@ public class CommandClass implements CommandExecutor {
 
         }
         if(command.getName().equalsIgnoreCase("openelytra")) {
-            switch (args[1]) {
+            switch (args[0]) {
                 case "@a":
                     Player[] players = sender.getServer().getOnlinePlayers().toArray(new Player[0]);
                     for (Player player : players) {

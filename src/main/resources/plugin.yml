@@ -30,3 +30,8 @@ commands:
     permission: battleroyale2.command.mapgenerator
     permission-message: Permission denied
     usage: Command usage
+  openelytra:
+    description: エリトラ強制展開
+    permission: battleroyale2.command.openelytra
+    permission-message: Permission denied
+    usage: Command usage

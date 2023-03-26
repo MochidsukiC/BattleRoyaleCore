@@ -16,12 +16,8 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.map.MapCursorCollection;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -419,14 +415,18 @@ public class Event implements Listener{
                     playerteam.getEntries().toArray(tp);
                     Player[] teamplayer = new Player[tp.length];
                     int allDeath = 0;
+                    int allPlayers = 0;
                     for (int i = 0; i < tp.length; i++) {
-                        teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                        if (Bukkit.getPlayer(tp[i]).isOnline()) {
+                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                            allPlayers++;
+                        }
                         if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
                             allDeath++;
                         }
                     }
-                    if (allDeath == tp.length) {
-                        for (int i = 0; i < tp.length; i++) {
+                    if (allDeath == teamplayer.length) {
+                        for (int i = 0; i < allPlayers; i++) {
                             teamplayer[i].setHealth(0);
                         }
                         }
@@ -543,6 +543,12 @@ public class Event implements Listener{
             event.getEntity().getWorld().playSound(event.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,100,1);
 
 
+        }
+    }
+    @EventHandler
+    public void EntityPickupItemEvent(EntityPickupItemEvent event){
+        if(event.getEntity().hasPotionEffect(PotionEffectType.UNLUCK)){
+            event.setCancelled(true);
         }
     }
 

@@ -91,7 +91,7 @@ public class Event implements Listener{
             if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))){
                 if(!(cause.equals(ENTITY_ATTACK) || cause.equals(ENTITY_SWEEP_ATTACK) || cause.equals(SONIC_BOOM))){
                     if((player.getHealth() < damage)){
-                        ItemStack[] itemStacks = new ItemStack[36];
+                        ItemStack[] itemStacks = new ItemStack[41];
                         for(int i = 0;i < itemStacks.length;i++){
                             itemStacks[i] = player.getInventory().getItem(i);
                         }
@@ -147,7 +147,7 @@ public class Event implements Listener{
                             fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
                             event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
 
-                            fireball.setMetadata("Owner", (MetadataValue) event.getPlayer());
+                            //fireball.setMetadata("Owner", (MetadataValue) event.getPlayer());
 
                             break;
                         case FILLED_MAP:
@@ -397,42 +397,43 @@ public class Event implements Listener{
 
 
                 }
-                if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
-                    if ((player.getHealth() < damage)) {
-                        ItemStack[] itemStacks = new ItemStack[41];
-                        for (int i = 0; i < itemStacks.length; i++) {
-                            itemStacks[i] = player.getInventory().getItem(i);
+            }
+            if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
+                if ((player.getHealth() < damage)) {
+                    ItemStack[] itemStacks = new ItemStack[41];
+                    for (int i = 0; i < itemStacks.length; i++) {
+                        itemStacks[i] = player.getInventory().getItem(i);
+                    }
+                    v.knockDownBU.put(player, itemStacks);
+                    player.updateInventory();
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
+                    player.setFoodLevel(0);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
+                    player.setHealth(40);
+                    event.setCancelled(true);
+                    player.getInventory().clear();
+                    event.getDamager().sendMessage(player.getName()+"をノックダウン!");
+                    ((Player)event.getDamager()).playSound(event.getDamager(),Sound.BLOCK_ANVIL_PLACE,100,0);
+                    Team playerteam = player.getScoreboard().getPlayerTeam(player);
+                    String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                    playerteam.getEntries().toArray(tp);
+                    Player[] teamplayer = new Player[tp.length];
+                    int allDeath = 0;
+                    for (int i = 0; i < tp.length; i++) {
+                        teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                        if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
+                            allDeath++;
                         }
-                        v.knockDownBU.put(player, itemStacks);
-                        player.updateInventory();
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
-                        player.setFoodLevel(0);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
-                        player.setHealth(40);
-                        event.setCancelled(true);
-                        player.getInventory().clear();
-
-                        Team playerteam = player.getScoreboard().getPlayerTeam(player);
-                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                        playerteam.getEntries().toArray(tp);
-                        Player[] teamplayer = new Player[tp.length];
-                        int allDeath = 0;
+                    }
+                    if (allDeath == tp.length) {
                         for (int i = 0; i < tp.length; i++) {
-                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                            if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
-                                allDeath++;
-                            }
+                            teamplayer[i].setHealth(0);
                         }
-                        if (allDeath == tp.length) {
-                            for (int i = 0; i < tp.length; i++) {
-                                teamplayer[i].setHealth(0);
-                            }
                         }
 
 
                     }
                 }
-            }
 
         }
     }
@@ -515,6 +516,7 @@ public class Event implements Listener{
             deathCart.getInventory().setItem(25, chest);
         }catch (Exception e){}
         deathCart.getInventory().setItem(26, v.knockDownBU.get(event.getEntity())[23]);
+        deathCart.getInventory().setItem(21,v.knockDownBU.get(event.getEntity())[40]);
         event.getEntity().getInventory().clear();
 
         //kill counter

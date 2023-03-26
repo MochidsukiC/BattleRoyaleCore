@@ -51,12 +51,36 @@ public class LongPress extends BukkitRunnable {
                 } else {
                     half = "";
                 }
+                //バリアブロック設置
+                for(int i =0;i<=2;i++){
+                    for(int ii = 0;ii<=2;ii++){
+                        for(int iii = 0; iii <= 2; iii++) {
+                            player.sendBlockChange(player.getLocation().add(i - 1, iii+1, ii - 1), player.getLocation().add(i - 1, iii+1, ii - 1).getBlock().getBlockData());
+                        }
+                    }
+                }
+
+
+                if(player.getLocation().add(0,2,0).getBlock().getType() == Material.AIR) {
+                    player.sendBlockChange(player.getLocation().add(0, 2, 0), Material.BARRIER.createBlockData());
+                }
+
+
+
                 player.sendTitle("", "[" + shieldUtil.getShieldColor() + bar + half + barM + ChatColor.RESET + "]", 0, 2, 20);
 
                 if (use >= time) {
 
 
                     use = 0;
+
+                    for(int i =0;i<=2;i++){
+                        for(int ii = 0;ii<=2;ii++){
+                            for(int iii = 0; iii <= 2; iii++) {
+                                player.sendBlockChange(player.getLocation().add(i - 1, iii+1, ii - 1), player.getLocation().add(i - 1, iii+1, ii - 1).getBlock().getBlockData());
+                            }
+                        }
+                    }
 
                     if (player.getInventory().getItem(22) != null) {
                         Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();

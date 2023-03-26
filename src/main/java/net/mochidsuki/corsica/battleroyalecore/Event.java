@@ -104,15 +104,19 @@ public class Event implements Listener{
                         String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
                         playerteam.getEntries().toArray(tp);
                         Player[] teamplayer = new Player[tp.length];
+                        int allPlayers = 0;
                         int allDeath = 0;
                         for (int i = 0; i < tp.length; i++) {
-                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                            if (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR){
+                            if (Bukkit.getPlayer(tp[i]).isOnline()) {
+                                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                                allPlayers++;
+                            }
+                            if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
                                 allDeath++;
                             }
                         }
-                        if(allDeath == tp.length){
-                            for (int i = 0; i < tp.length; i++) {
+                        if (allDeath == teamplayer.length) {
+                            for (int i = 0; i < allPlayers; i++) {
                                 teamplayer[i].setHealth(0);
                             }
                         }
@@ -550,6 +554,11 @@ public class Event implements Listener{
         if(event.getEntity().hasPotionEffect(PotionEffectType.UNLUCK)){
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void EntityPotionEffectEvent(EntityPotionEffectEvent event){
+        ((Player)event.getEntity()).updateInventory();
     }
 
 }

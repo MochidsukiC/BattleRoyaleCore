@@ -225,7 +225,7 @@ public class Everyticks extends BukkitRunnable {
 
             //Armor Synchronizer
             if(v.inv) {
-                if (player.getPotionEffect(PotionEffectType.INVISIBILITY) == null) {
+                if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                     player.getInventory().setItem(EquipmentSlot.HEAD, player.getInventory().getItem(21));
 
 

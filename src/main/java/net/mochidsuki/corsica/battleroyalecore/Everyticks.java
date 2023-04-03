@@ -186,7 +186,7 @@ public class Everyticks extends BukkitRunnable {
                 boolean[] booleans = new boolean[teamplayer.length];
 
                 for (int i = 0; i < loc.length; i++) {
-                    location[i] = loc[i].orElse(new Location(player.getWorld(), 0, 0, 0));
+                    location[i] = loc[i].orElse(new Location(player.getWorld(), player.getLocation().getX(), -80, player.getLocation().getZ()));
                     booleans[i] = !(v.pin.get(teamplayer[i]) == null);
                 }
 
@@ -204,7 +204,7 @@ public class Everyticks extends BukkitRunnable {
                 boolean[] booleansR = new boolean[teamplayer.length];
 
                 for (int i = 0; i < locR.length; i++) {
-                    locationR[i] = locR[i].orElse(new Location(player.getWorld(), 0, 0, 0));
+                    locationR[i] = locR[i].orElse(new Location(player.getWorld(), player.getLocation().getX(), -80, player.getLocation().getZ()));
                     booleansR[i] = !(v.pinRed.get(teamplayer[i]) == null);
                 }
                 pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);

@@ -1,6 +1,7 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 
+import net.mochidsuki.corsica.battleroyalecore.BukkitRunnableUtils.DistanceKiller;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -32,31 +33,17 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerDropItemEvent(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
-        if(item.getItemStack().getType() == Material.FIREWORK_ROCKET){//ドロップシップからの降下
-            Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
-            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-            playerteam.getEntries().toArray(tp);
-            Player[] teamplayer = new Player[tp.length];
-            for (int i = 0;i < tp.length;i++) {
-                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+        if(item.getItemStack().getType().equals(Material.SPYGLASS)){
+            if(event.getPlayer().isSneaking()){
+                Arrow ammo = event.getPlayer().getWorld().spawnArrow(event.getPlayer().getLocation().add(0,1,0),event.getPlayer().getLocation().getDirection(),10,1);
+                ammo.setShooter(event.getPlayer());
+                ammo.setColor(Color.GRAY);
+                ammo.setPierceLevel(3);
+                new DistanceKiller(ammo,event.getPlayer().getLocation(),40).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
+                event.getPlayer().playSound(event.getPlayer().getLocation(),Sound.ENTITY_FIREWORK_ROCKET_BLAST,10,0);
+                event.setCancelled(true);
             }
-
-            for (Player player : teamplayer) {//teamplayer全員に実行
-                GameStart g = new GameStart();
-                g.player(player);
-            }
-
-
-
         }
-
-        /*
-        if(item.getItemStack().getType() == Material.FILLED_MAP){
-            v.pin.put(event.getPlayer(),null);
-            event.setCancelled(true);
-        }
-
-         */
     }
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
@@ -151,19 +138,27 @@ public class Event implements Listener{
 
                             break;
                         case FILLED_MAP:
-                            v.pin.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                            if(event.getPlayer().getTargetBlockExact(400) != null) {
+                                v.pin.put(event.getPlayer(),event.getPlayer().getTargetBlockExact(400).getLocation());
 
-                            Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
-                            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                            playerteam.getEntries().toArray(tp);
-                            Player[] teamplayer = new Player[tp.length];
-                            for (int i = 0; i < tp.length; i++) {
-                                teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                                Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                                playerteam.getEntries().toArray(tp);
+                                Player[] teamplayer = new Player[tp.length];
+                                for (int i = 0; i < tp.length; i++) {
+                                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                                }
+
+                                for (Player player : teamplayer) {//teamplayer全員に実行
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
+                                }
+
+                            }else {
+                                v.pin.remove(event.getPlayer());
+                                event.getPlayer().playSound(event.getPlayer().getLocation(),Sound.BLOCK_FIRE_EXTINGUISH,0.5F,1);
                             }
 
-                            for (Player player : teamplayer) {//teamplayer全員に実行
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
-                            }
+
 
 
                             event.setCancelled(true);
@@ -238,21 +233,26 @@ public class Event implements Listener{
                             break;
                         case FILLED_MAP:
                             if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.FILLED_MAP) {
-                                v.pinRed.put(event.getPlayer(), Objects.requireNonNull(event.getPlayer().getTargetBlockExact(400)).getLocation());
+                                if(event.getPlayer().getTargetBlockExact(400) != null) {
+                                    v.pinRed.put(event.getPlayer(), event.getPlayer().getTargetBlockExact(400).getLocation());
 
-                                Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
-                                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                                playerteam.getEntries().toArray(tp);
-                                Player[] teamplayer = new Player[tp.length];
-                                for (int i = 0; i < tp.length; i++) {
-                                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                                }
+                                    Team playerteam = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
+                                    String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
+                                    playerteam.getEntries().toArray(tp);
+                                    Player[] teamplayer = new Player[tp.length];
+                                    for (int i = 0; i < tp.length; i++) {
+                                        teamplayer[i] = Bukkit.getPlayer(tp[i]);
+                                    }
 
-                                for (Player player : teamplayer) {//teamplayer全員に実行
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0);
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.3F);
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.6F);
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 1);
+                                    for (Player player : teamplayer) {//teamplayer全員に実行
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.3F);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 0.6F);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 50, 1);
+                                    }
+                                }else {
+                                    v.pinRed.remove(event.getPlayer());
+                                    event.getPlayer().playSound(event.getPlayer().getLocation(),Sound.BLOCK_FIRE_EXTINGUISH,0.5F,1);
                                 }
                             }
                             break;
@@ -329,7 +329,7 @@ public class Event implements Listener{
         if(event.getRightClicked().getType() == EntityType.PLAYER) {
             Team team = event.getPlayer().getScoreboard().getPlayerTeam(event.getPlayer());
 
-            if (team.hasPlayer((OfflinePlayer) event.getRightClicked()) && event.getPlayer().getLocation().distance(event.getRightClicked().getLocation()) < 2 && ((Player)event.getRightClicked()).hasPotionEffect(PotionEffectType.UNLUCK) && !(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
+            if (team.hasPlayer((OfflinePlayer) event.getRightClicked()) && event.getPlayer().getLocation().distance(event.getRightClicked().getLocation()) < 2 && ((Player)event.getRightClicked()).hasPotionEffect(PotionEffectType.UNLUCK) && !(event.getPlayer()).hasPotionEffect(PotionEffectType.UNLUCK) && !(event.getPlayer().hasPotionEffect(PotionEffectType.SLOW))) {
                     new LongPress(event.getPlayer(), "fenix", null, 100, (Player) event.getRightClicked()).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
             }
         }
@@ -465,7 +465,7 @@ public class Event implements Listener{
                 event.setCancelled(true);
                 event.setResult(org.bukkit.event.Event.Result.DENY);
             }
-            if (slot >= 29 && slot <= 34) {
+            if (slot >= 29 && slot <= 39) {
                 event.setCancelled(true);
                 event.setResult(org.bukkit.event.Event.Result.DENY);
             }
@@ -522,6 +522,8 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(26, v.knockDownBU.get(event.getEntity())[23]);
         deathCart.getInventory().setItem(21,v.knockDownBU.get(event.getEntity())[40]);
         event.getEntity().getInventory().clear();
+        event.getEntity().sendMessage("死んでしまった!!");
+        event.getEntity().sendMessage("数字ボタンを押すとほかの人のところにTPできるぞ!!");
 
         //kill counter
 
@@ -544,7 +546,7 @@ public class Event implements Listener{
         if(event.getEntity().getType() == EntityType.FIREBALL){
             event.setCancelled(true);
             event.getEntity().getWorld().spawnParticle(Particle.EXPLOSION_LARGE,event.getLocation(),1,0,0,0,0);
-            event.getEntity().getWorld().playSound(event.getLocation(),Sound.ENTITY_GENERIC_EXPLODE,100,1);
+            event.getEntity().getWorld().playSound(event.getEntity().getLocation(),Sound.ENTITY_GENERIC_EXPLODE,1,1);
 
 
         }

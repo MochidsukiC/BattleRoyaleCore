@@ -1,4 +1,4 @@
-package net.mochidsuki.corsica.battleroyalecore;
+package net.mochidsuki.corsica.battleroyalecore.BukkitRunnableUtils;
 
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;

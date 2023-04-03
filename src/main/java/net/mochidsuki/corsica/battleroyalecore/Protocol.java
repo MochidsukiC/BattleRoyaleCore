@@ -51,7 +51,9 @@ public class Protocol{
 
             byte bitmask = 0x00; // First bitmask, 0x00 by default
             bitmask |= 0x20; // is invisible
-            bitmask |= 0x40; // is glowing
+            if(b[i]) {
+                bitmask |= 0x40; // is glowing
+            }
 
             metadata.write(0, bitmask); // Write the first bitmask
 
@@ -61,10 +63,8 @@ public class Protocol{
 
 
             try {
-                if(b[i]) {
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet0);
                     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
-            }
             } catch (InvocationTargetException ignored) {
             }
         }

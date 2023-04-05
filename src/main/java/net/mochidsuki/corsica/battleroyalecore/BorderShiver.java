@@ -1,10 +1,10 @@
-package net.mochidsuki.corsica.battleroyalecore.BukkitRunnableUtils;
+package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class BorderShiver extends BukkitRunnable {
-
+    static boolean stop;
     int time;
     World world;
 
@@ -24,6 +24,11 @@ public class BorderShiver extends BukkitRunnable {
                 i= -2;
             }
             world.getWorldBorder().setSize(world.getWorldBorder().getSize() + i);
+        }
+        if(stop){
+            stop = false;
+            v.gameround = 0;
+            cancel();
         }
     }
 }

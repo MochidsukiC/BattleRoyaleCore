@@ -7,6 +7,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class MiniMapRenderer extends MapRenderer {
@@ -26,41 +27,47 @@ public class MiniMapRenderer extends MapRenderer {
                 canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
             }catch (Exception ignored){}
         }
-        try {
             //チームメイト表示
             Team playerteam = player.getScoreboard().getPlayerTeam(player);
-            String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-            playerteam.getEntries().toArray(tp);
-            Player[] teamplayer = new Player[tp.length];
-            MapCursorCollection cursor = new MapCursorCollection();
-            for (int i = 0; i < tp.length; i++) {
-                teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                if (!(teamplayer[i] == player)) {
-                    int x = Objects.requireNonNull(teamplayer[i]).getLocation().getBlockX() - player.getLocation().getBlockX();
-                    if (x > 128) {
+        Iterator<String> iterator = playerteam.getEntries().iterator();
+        MapCursorCollection cursor = new MapCursorCollection();
+            while (iterator.hasNext()){
+            Player teammate = player.getServer().getPlayer(iterator.next());
+            if(teammate != null) {
+                if (!(teammate == player)) {
+                    int x = teammate.getLocation().getBlockX() - player.getLocation().getBlockX();
+                    if (x > 64) {
                         x = 64;
-                    }else if(x < -128){
+                    } else if (x < -64) {
                         x = -64;
                     }
-                    int z = (teamplayer[i].getLocation().getBlockZ() - player.getLocation().getBlockZ());
-                    if (z > 128) {
+                    int z = (teammate.getLocation().getBlockZ() - player.getLocation().getBlockZ());
+                    if (z > 64) {
                         z = 64;
-                    }else if(z < -128){
+                    } else if (z < -64) {
                         z = -64;
                     }
 
-                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
+                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
 
                 }
-
-                int x = Objects.requireNonNull(v.pin.get(teamplayer[i])).getBlockX() - player.getLocation().getBlockX();
-                int z = v.pin.get(teamplayer[i]).getBlockZ() - player.getLocation().getBlockZ();
-                if(x < 128 && x > -128 && z < 128 && z > -128 ) {
-                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
-                }
+                try {
+                    int x = v.pin.get(teammate).getBlockX() - player.getLocation().getBlockX();
+                    int z = v.pin.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
+                    if (x < 128 && x > -128 && z < 128 && z > -128) {
+                        cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
+                    }
+                }catch (Exception e){}
+                try {
+                    int x = v.pinRed.get(teammate).getBlockX() - player.getLocation().getBlockX();
+                    int z = v.pinRed.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
+                    if (x < 128 && x > -128 && z < 128 && z > -128) {
+                        cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_RED, true));
+                    }
+                }catch (Exception e){}
+            }
             }
             canvas.setCursors(cursor);
-        }catch (Exception ignored){}
 
         //中心に対する線
         double[] cDistance = new double[4];

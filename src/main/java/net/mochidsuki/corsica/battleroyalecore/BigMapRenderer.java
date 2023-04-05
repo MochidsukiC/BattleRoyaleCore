@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Objects;
 
 
@@ -50,34 +51,37 @@ public class BigMapRenderer extends MapRenderer {
                     canvas.getCursors().removeCursor(canvas.getCursors().getCursor(i));
                 }catch (Exception ignored){}
             }
-            try {
                 //チームメイト表示
                 Team playerteam = player.getScoreboard().getPlayerTeam(player);
-                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                playerteam.getEntries().toArray(tp);
-                Player[] teamplayer = new Player[tp.length];
+                Iterator<String> iterator = playerteam.getEntries().iterator();
                 MapCursorCollection cursor = new MapCursorCollection();
-                for (int i = 0; i < tp.length; i++) {
-                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                    if (!(teamplayer[i] == player)) {
-                        int x = (Objects.requireNonNull(teamplayer[i]).getLocation().getBlockX() - v.mcx) / mapZoom;
-                        if (x > 64) {
-                            x = 64;
-                        } else if (x < -64) {
-                            x = -64;
+                while (iterator.hasNext()){
+                    Player teammate = player.getServer().getPlayer(iterator.next());
+                    if(teammate != null) {
+                        if (!(teammate == player)) {
+                            int x = (teammate.getLocation().getBlockX() - v.mcx) / mapZoom;
+                            if (x > 64) {
+                                x = 64;
+                            } else if (x < -64) {
+                                x = -64;
+                            }
+                            int z = (teammate.getLocation().getBlockZ() - v.mcz) / mapZoom;
+                            if (z > 64) {
+                                z = 64;
+                            } else if (z < -64) {
+                                z = -64;
+                            }
+                            cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
                         }
-                        int z = (teamplayer[i].getLocation().getBlockZ() - v.mcz) / mapZoom;
-                        if (z > 64) {
-                            z = 64;
-                        }else if(z < -64){
-                            z = -64;
-                        }
-                        cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teamplayer[i].getLocation().getYaw() - teamplayer[i].getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
+                        try {
+                            cursor.addCursor(new MapCursor((byte) ((v.pin.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pin.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
+                        }catch (Exception e){}
+                        try {
+                            cursor.addCursor(new MapCursor((byte) ((v.pinRed.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pinRed.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_RED, true));
+                        }catch (Exception e){}
                     }
-                    cursor.addCursor(new MapCursor((byte) ((Objects.requireNonNull(v.pin.get(teamplayer[i])).getBlockX() - v.mcx)/mapZoom*2),(byte) ((v.pin.get(teamplayer[i]).getBlockZ() - v.mcz)/mapZoom*2),(byte) 0 ,MapCursor.Type.BANNER_YELLOW,true));
                 }
                 canvas.setCursors(cursor);
-            }catch (Exception ignored){}
 
             //border予測線
             int[] distance = new int[4];

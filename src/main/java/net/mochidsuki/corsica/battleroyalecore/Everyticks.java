@@ -211,7 +211,7 @@ public class Everyticks extends BukkitRunnable {
 
 
                 for(int i = 0; i < tp.length;i++){
-                    if(teamplayer[i] != player){
+                    if(teamplayer[i] != null && teamplayer[i] != player){
                         pin.setGlowing(teamplayer[i],player);
                     }
                 }

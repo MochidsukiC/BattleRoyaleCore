@@ -35,12 +35,21 @@ public class Event implements Listener{
         Item item = event.getItemDrop();
         if(item.getItemStack().getType().equals(Material.SPYGLASS)){
             if(event.getPlayer().isSneaking()){
-                Arrow ammo = event.getPlayer().getWorld().spawnArrow(event.getPlayer().getLocation().add(0,1,0),event.getPlayer().getLocation().getDirection(),10,1);
-                ammo.setShooter(event.getPlayer());
-                ammo.setColor(Color.GRAY);
-                ammo.setPierceLevel(3);
-                new DistanceKiller(ammo,event.getPlayer().getLocation(),40).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
-                event.getPlayer().playSound(event.getPlayer().getLocation(),Sound.ENTITY_FIREWORK_ROCKET_BLAST,10,0);
+                if(event.getPlayer().getCooldown(Material.SPYGLASS) <= 0 && event.getPlayer().getInventory().contains(Material.ARROW)) {
+
+                    event.getPlayer().getInventory().removeItem(new ItemStack(Material.ARROW, 1));
+
+
+                    Arrow ammo = event.getPlayer().getWorld().spawnArrow(event.getPlayer().getLocation().add(0, 1, 0), event.getPlayer().getLocation().getDirection(), 50, 1);
+                    ammo.setShooter(event.getPlayer());
+                    ammo.setColor(Color.GRAY);
+                    ammo.setPierceLevel(3);
+                    ammo.setDamage(0.15);
+                    ammo.setShooter(event.getPlayer());
+                    new DistanceKiller(ammo, event.getPlayer().getLocation(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 10, 0);
+                    event.getPlayer().setCooldown(Material.SPYGLASS, 15);
+                }
                 event.setCancelled(true);
             }
         }
@@ -125,7 +134,6 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerInteractEvent(PlayerInteractEvent event){
         if(!(event.getPlayer().hasPotionEffect(PotionEffectType.UNLUCK))) {
-            try {
                 if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
                     switch (Objects.requireNonNull(event.getMaterial())) {
                         case FIRE_CHARGE:
@@ -150,7 +158,9 @@ public class Event implements Listener{
                                 }
 
                                 for (Player player : teamplayer) {//teamplayer全員に実行
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
+                                    if(player != null) {
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_FLUTE, 100, 0);
+                                    }
                                 }
 
                             }else {
@@ -317,8 +327,6 @@ public class Event implements Listener{
 
                     }
                 }
-            } catch (Exception ignored) {
-            }
         }else {
             event.setCancelled(true);
         }
@@ -347,15 +355,17 @@ public class Event implements Listener{
             }
         }
 
-
-
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
 
 
             Player player = (Player) event.getEntity();
-            if(event.getDamager().getType() == EntityType.PLAYER) {
-                damager = (Player) event.getDamager();
-                damager.setLevel((int) event.getDamage()+damager.getLevel());//ダメージを経験値に変換
+            if(event.getDamager().getType() == EntityType.PLAYER || event.getDamager().getType() == EntityType.ARROW) {
+                if(event.getDamager().getType() == EntityType.PLAYER) {
+                    damager = (Player) event.getDamager();
+                }else {
+                    damager = (Player) ((Arrow)event.getDamager()).getShooter();
+                }
+                damager.setLevel((int) event.getDamage() + damager.getLevel());//ダメージを経験値に変換
                 int i;
                 if(ui.damage.get(damager) == null){
                     i = 0;

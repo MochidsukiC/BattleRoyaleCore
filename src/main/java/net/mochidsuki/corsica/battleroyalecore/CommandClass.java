@@ -26,6 +26,7 @@ public class CommandClass implements CommandExecutor {
             }
             if(args[0].equalsIgnoreCase("stop")){
                 Border.stop = true;
+                BorderShiver.stop = true;
                 return true;
             }
             try {

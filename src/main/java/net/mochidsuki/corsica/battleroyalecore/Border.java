@@ -1,6 +1,4 @@
 package net.mochidsuki.corsica.battleroyalecore;
-
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 

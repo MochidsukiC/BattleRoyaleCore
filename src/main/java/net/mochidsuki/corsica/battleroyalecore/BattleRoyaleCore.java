@@ -1,29 +1,34 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.*;
+import com.sun.tools.jdi.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.List;
 
 import static org.bukkit.Bukkit.getMap;
+import static org.bukkit.Bukkit.getScoreboardManager;
 
 public final class BattleRoyaleCore extends JavaPlugin {
     private static Plugin plugin;
+
+    private ProtocolManager protocolManager;
     @Override
     public void onEnable() {
         getLogger().info("Battle Royale 2 Pluginが目を覚ました！");
@@ -33,6 +38,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         getCommand("brc").setExecutor(new CommandClass()); //brgame
         getCommand("mapgenerator").setExecutor(new CommandClass()); //mapgenerator
         getCommand("openelytra").setExecutor(new CommandClass()); //openelytra
+
         v.rtime = 0;
         v.stime =0;
         plugin = this;
@@ -45,6 +51,26 @@ public final class BattleRoyaleCore extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new SomeExpansion(this).register();
         }
+
+        //ProtocolLib
+        protocolManager = ProtocolLibrary.getProtocolManager();
+
+        protocolManager.addPacketListener(new PacketAdapter(
+                this,
+                ListenerPriority.NORMAL,
+                PacketType.Play.Client.USE_ITEM
+        ) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                PacketContainer packet = event.getPacket();
+                if()
+
+            }
+        });
+
+
+
+
 
         //BossBar
         b.bossBar = this.getServer().createBossBar("開始までお待ちください。。。", BarColor.WHITE, BarStyle.SEGMENTED_10);
@@ -60,7 +86,17 @@ public final class BattleRoyaleCore extends JavaPlugin {
         mapMetaB.setMapId(v.bigmapdata);
 
         mapItemB.setItemMeta(mapMetaB);
+
+        try {
+            for(int i = 0;i<=10;i++) {
+                getScoreboardManager().getMainScoreboard().getTeam(i+"").getEntries().clear();
+            }
+
+        }catch (Exception ignored){}
+
+
         // Plugin startup logic
+
 
     }
 
@@ -72,6 +108,12 @@ public final class BattleRoyaleCore extends JavaPlugin {
     public static Plugin getPlugin() {
         return plugin;
     }
+
+
+
+
+
+
 
 }
 
@@ -95,6 +137,7 @@ class v{
     static HashMap<Player, Location> pin = new HashMap<>();
     static HashMap<Player, Location> pinRed = new HashMap<>();
     static HashMap<Player, ItemStack[]> knockDownBU = new HashMap<>();
+    static List<Player> useSniper = new ArrayList<Player>();
 
 }
 class b{
@@ -109,4 +152,5 @@ class ui{
     static HashMap<Player , Integer> kill = new HashMap<>();
     static HashMap<Player , Integer> damage = new HashMap<>();
 }
+
 

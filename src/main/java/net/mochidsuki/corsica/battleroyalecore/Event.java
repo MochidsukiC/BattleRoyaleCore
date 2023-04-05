@@ -24,8 +24,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
@@ -113,6 +112,7 @@ public class Event implements Listener{
                         }
                         if (allDeath == teamplayer.length) {
                             for (int i = 0; i < allPlayers; i++) {
+                                ui.ranking.put(playerteam,((Player) event.getEntity()).getScoreboard().getObjective("teams").getScore("system").getScore());
                                 teamplayer[i].setHealth(0);
                             }
                         }
@@ -373,6 +373,13 @@ public class Event implements Listener{
                     i=ui.damage.get(damager);
                 }
                 ui.damage.put(damager,(int)(i + event.getDamage()));
+                if(!ui.assisted.isEmpty()){
+                    ui.assisted.get(player).add(damager);
+                }else {
+                    HashSet<Player> players = new HashSet<>();
+                    players.add(damager);
+                    ui.assisted.put(player,players);
+                }
             }
 
 
@@ -422,8 +429,14 @@ public class Event implements Listener{
                     player.setHealth(40);
                     event.setCancelled(true);
                     player.getInventory().clear();
-                    event.getDamager().sendMessage(player.getName()+"をノックダウン!");
-                    ((Player)event.getDamager()).playSound(event.getDamager(),Sound.BLOCK_ANVIL_PLACE,100,0);
+                    damager.sendMessage(player.getName()+"をノックダウン!");
+                    damager.playSound(event.getDamager(),Sound.BLOCK_ANVIL_PLACE,100,0);
+                    if(!ui.knockDown.isEmpty()) {
+                        ui.knockDown.put(damager, ui.knockDown.get(damager)+1);
+                    }else {
+                        ui.knockDown.put(damager,1);
+                    }
+                    ui.killed.put(player,damager);
                     Team playerteam = player.getScoreboard().getPlayerTeam(player);
                     String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
                     playerteam.getEntries().toArray(tp);
@@ -442,6 +455,7 @@ public class Event implements Listener{
                     if (allDeath == teamplayer.length) {
                         for (int i = 0; i < allPlayers; i++) {
                             teamplayer[i].setHealth(0);
+                            ui.ranking.put(playerteam,((Player) event.getEntity()).getScoreboard().getObjective("teams").getScore("system").getScore());
                         }
                         }
 
@@ -532,6 +546,26 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(26, v.knockDownBU.get(event.getEntity())[23]);
         deathCart.getInventory().setItem(21,v.knockDownBU.get(event.getEntity())[40]);
         event.getEntity().getInventory().clear();
+
+        if(ui.killed.containsKey(event.getEntity())) {
+            if (!ui.kill.containsKey(ui.killed.get(event.getEntity()))) {
+                ui.kill.put(ui.killed.get(event.getEntity()), ui.kill.get(ui.killed.get(event.getEntity())) + 1);
+            } else {
+                ui.kill.put(ui.killed.get(event.getEntity()), 1);
+            }
+        }
+        Iterator<Player> it = ui.assisted.get(event.getEntity()).iterator();
+        while (it.hasNext()) {
+            if(it.next().getScoreboard().getPlayerTeam(it.next()) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && it.next() != ui.killed.get(event.getEntity())){
+                if(!ui.assist.containsKey(it.next())){
+                    ui.assist.put(it.next(),ui.assist.get(it.next()) + 1);
+                }else {
+                    ui.assist.put(it.next(),1);
+                }
+            }
+        }
+
+
         event.getEntity().sendMessage("死んでしまった!!");
         event.getEntity().sendMessage("数字ボタンを押すとほかの人のところにTPできるぞ!!");
 

@@ -4,7 +4,6 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.*;
-import com.sun.tools.jdi.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,14 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Team;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
-import static org.bukkit.Bukkit.getMap;
-import static org.bukkit.Bukkit.getScoreboardManager;
+import static org.bukkit.Bukkit.*;
 
 public final class BattleRoyaleCore extends JavaPlugin {
     private static Plugin plugin;
@@ -55,16 +53,10 @@ public final class BattleRoyaleCore extends JavaPlugin {
         //ProtocolLib
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        protocolManager.addPacketListener(new PacketAdapter(
-                this,
-                ListenerPriority.NORMAL,
-                PacketType.Play.Client.USE_ITEM
-        ) {
+        protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY) {
             @Override
-            public void onPacketReceiving(PacketEvent event) {
-                PacketContainer packet = event.getPacket();
-                if()
-
+            public void onPacketSending(PacketEvent event) {
+                event.getPlayer().sendMessage("a");
             }
         });
 
@@ -150,7 +142,12 @@ class b{
 
 class ui{
     static HashMap<Player , Integer> kill = new HashMap<>();
+    static HashMap<Player , Player> killed = new HashMap<>();
+    static HashMap<Player , Integer> assist = new HashMap<>();
+    static HashMap<Player , HashSet<Player>> assisted = new HashMap<>();
+    static HashMap<Player , Integer> knockDown = new HashMap<>();
     static HashMap<Player , Integer> damage = new HashMap<>();
+    static HashMap<Team , Integer> ranking = new HashMap<>();
 }
 
 

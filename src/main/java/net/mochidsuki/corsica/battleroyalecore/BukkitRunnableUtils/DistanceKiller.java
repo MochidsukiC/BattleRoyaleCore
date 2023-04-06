@@ -24,7 +24,7 @@ public class DistanceKiller extends BukkitRunnable {
         if(time > 0){
             time = time - 1;
             for (int i = 0;i < 40;i++) {
-                entity.getWorld().spawnParticle(Particle.END_ROD, entity.getLocation(), 3, 0, 0, 0, 0);
+                entity.getWorld().spawnParticle(Particle.END_ROD, entity.getLocation(), 1, 0, 0, 0, 0);
             }
             if(entity.getLocation().distance(location) > 400){
                 entity.remove();

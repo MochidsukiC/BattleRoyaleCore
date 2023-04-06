@@ -32,26 +32,6 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerDropItemEvent(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
-        if(item.getItemStack().getType().equals(Material.SPYGLASS)){
-            if(event.getPlayer().isSneaking()){
-                if(event.getPlayer().getCooldown(Material.SPYGLASS) <= 0 && event.getPlayer().getInventory().contains(Material.ARROW)) {
-
-                    event.getPlayer().getInventory().removeItem(new ItemStack(Material.ARROW, 1));
-
-
-                    Arrow ammo = event.getPlayer().getWorld().spawnArrow(event.getPlayer().getLocation().add(0, 1, 0), event.getPlayer().getLocation().getDirection(), 50, 1);
-                    ammo.setShooter(event.getPlayer());
-                    ammo.setColor(Color.GRAY);
-                    ammo.setPierceLevel(3);
-                    ammo.setDamage(0.15);
-                    ammo.setShooter(event.getPlayer());
-                    new DistanceKiller(ammo, event.getPlayer().getLocation(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
-                    event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 10, 0);
-                    event.getPlayer().setCooldown(Material.SPYGLASS, 15);
-                }
-                event.setCancelled(true);
-            }
-        }
     }
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
@@ -268,6 +248,7 @@ public class Event implements Listener{
                             break;
 
                         case SPYGLASS:
+                            v.useSniper.add(event.getPlayer());
                             break;
 
 
@@ -605,6 +586,40 @@ public class Event implements Listener{
     @EventHandler
     public void EntityPotionEffectEvent(EntityPotionEffectEvent event){
         ((Player)event.getEntity()).updateInventory();
+    }
+
+    @EventHandler
+    public void PlayerToggleSneakEvent(PlayerToggleSneakEvent event){
+
+        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.SPYGLASS) && event.isSneaking()){
+            if(v.useSniper.contains(event.getPlayer())){
+                if(event.getPlayer().getCooldown(Material.SPYGLASS) <= 0) {
+                    if(event.getPlayer().getInventory().contains(Material.ARROW)) {
+                        event.getPlayer().getInventory().removeItem(new ItemStack(Material.ARROW, 1));
+
+
+                        Arrow ammo = event.getPlayer().getWorld().spawnArrow(event.getPlayer().getLocation().add(0, 1.65, 0), event.getPlayer().getLocation().getDirection(), 50, 1);
+                        ammo.setShooter(event.getPlayer());
+                        ammo.setCritical(true);
+                        ammo.setColor(Color.GRAY);
+                        ammo.setPierceLevel(3);
+                        ammo.setDamage(0.15);
+                        ammo.setShooter(event.getPlayer());
+                        new DistanceKiller(ammo, event.getPlayer().getLocation(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
+                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 10, 0);
+                        event.getPlayer().setCooldown(Material.SPYGLASS, 15);
+                    }else {
+                        event.getPlayer().sendTitle("" ,"弾切れ!",10,10,20);
+                    }
+                }
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void PlayerItemHeldEvent(PlayerItemHeldEvent event){
+        v.useSniper.remove(event.getPlayer());
     }
 
 }

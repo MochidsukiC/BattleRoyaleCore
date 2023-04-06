@@ -53,10 +53,12 @@ public final class BattleRoyaleCore extends JavaPlugin {
         //ProtocolLib
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY) {
+        protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Client.BLOCK_DIG) {
             @Override
-            public void onPacketSending(PacketEvent event) {
-                event.getPlayer().sendMessage("a");
+            public void onPacketReceiving(PacketEvent event) {
+                if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.SPYGLASS){
+                    v.useSniper.remove(event.getPlayer());
+                }
             }
         });
 

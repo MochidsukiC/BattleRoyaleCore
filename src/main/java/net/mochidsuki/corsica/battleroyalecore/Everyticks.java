@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 
 public class Everyticks extends BukkitRunnable {
@@ -36,6 +37,9 @@ public class Everyticks extends BukkitRunnable {
 
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray((new Player[0]));
         for (Player player : players) {//全プレイヤーに適応
+
+
+
             if (player.hasPotionEffect(PotionEffectType.UNLUCK)) {
                 for(int i =0;i<=2;i++){
                     for(int ii = 0;ii<=2;ii++){

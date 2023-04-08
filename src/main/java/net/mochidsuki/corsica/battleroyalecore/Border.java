@@ -1,6 +1,10 @@
 package net.mochidsuki.corsica.battleroyalecore;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 import static net.mochidsuki.corsica.battleroyalecore.v.rtime;
 
@@ -38,6 +42,8 @@ public class Border extends BukkitRunnable {
                 Roundsystemc r = new Roundsystemc();
                 v.gameround = v.gameround + 1;
                 r.Roundsystem(world);
+
+
             }else {
                 v.gameround = 0;
             }

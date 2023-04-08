@@ -58,6 +58,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
             public void onPacketReceiving(PacketEvent event) {
                 if(event.getPlayer().getInventory().getItemInMainHand().getType() == Material.SPYGLASS){
                     v.useSniper.remove(event.getPlayer());
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(BattleRoyaleCore.getPlugin(), () -> v.useSniper.remove(event.getPlayer()),5L);
                 }
             }
         });

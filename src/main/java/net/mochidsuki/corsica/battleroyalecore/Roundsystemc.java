@@ -1,7 +1,13 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import static net.mochidsuki.corsica.battleroyalecore.b.center;
@@ -116,6 +122,26 @@ public class Roundsystemc {
 
         new Border(speed,radius,rtime,world).runTaskTimer(BattleRoyaleCore.getPlugin(), stime*20, 1L);
         new BorderShiver((int) (stime*20),world).runTaskTimer(BattleRoyaleCore.getPlugin(),0L,1L);
+
+        List<Player> players = (List<Player>) BattleRoyaleCore.getPlugin().getServer().getOnlinePlayers();
+        for(Player player : players){
+            player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "ラウンド" + v.gameround);
+            player.sendMessage("ボーダーの収縮待機を開始");
+            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_BREAK,1,0);
+        }
+
+        switch (random.nextInt()){
+            case 0:
+                break;
+        }
+
+
+
+
+
+
+
+
 
     }
 

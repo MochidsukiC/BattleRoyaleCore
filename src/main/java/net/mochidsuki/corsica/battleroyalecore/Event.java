@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
 
@@ -248,7 +249,7 @@ public class Event implements Listener{
                             break;
 
                         case SPYGLASS:
-                            v.useSniper.add(event.getPlayer());
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(BattleRoyaleCore.getPlugin(), () -> v.useSniper.add(event.getPlayer()),5L);
                             break;
 
 
@@ -591,7 +592,7 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerToggleSneakEvent(PlayerToggleSneakEvent event){
 
-        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.SPYGLASS) && event.isSneaking()){
+        if(event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.SPYGLASS) && event.isSneaking() && ((Entity)event.getPlayer()).isOnGround()){
             if(v.useSniper.contains(event.getPlayer())){
                 if(event.getPlayer().getCooldown(Material.SPYGLASS) <= 0) {
                     if(event.getPlayer().getInventory().contains(Material.ARROW)) {
@@ -603,16 +604,15 @@ public class Event implements Listener{
                         ammo.setCritical(true);
                         ammo.setColor(Color.GRAY);
                         ammo.setPierceLevel(3);
-                        ammo.setDamage(0.15);
+                        ammo.setDamage(0.2);
                         ammo.setShooter(event.getPlayer());
                         new DistanceKiller(ammo, event.getPlayer().getLocation(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
-                        event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 10, 0);
-                        event.getPlayer().setCooldown(Material.SPYGLASS, 15);
+                        event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 5, 0);
+                        event.getPlayer().setCooldown(Material.SPYGLASS, 50);
                     }else {
                         event.getPlayer().sendTitle("" ,"弾切れ!",10,10,20);
                     }
                 }
-                event.setCancelled(true);
             }
         }
     }

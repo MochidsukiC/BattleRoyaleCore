@@ -37,7 +37,6 @@ public class LongPress extends BukkitRunnable {
             if (player.getInventory().getItemInMainHand().getType() == item) {
                 use = use + 1;
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 4, true, false));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 2, 200, true, false));
 
                 ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
 

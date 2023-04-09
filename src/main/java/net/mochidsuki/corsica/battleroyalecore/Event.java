@@ -123,8 +123,6 @@ public class Event implements Listener{
                             fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
                             event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
 
-                            //fireball.setMetadata("Owner", (MetadataValue) event.getPlayer());
-
                             break;
                         case FILLED_MAP:
                             if(event.getPlayer().getTargetBlockExact(400) != null) {
@@ -354,13 +352,18 @@ public class Event implements Listener{
                 }else {
                     i=ui.damage.get(damager);
                 }
+
+                try {
                 ui.damage.put(damager,(int)(i + event.getDamage()));
                 if(!ui.assisted.isEmpty()){
-                    ui.assisted.get(player).add(damager);
+                        ui.assisted.get(player).add(damager);
                 }else {
                     HashSet<Player> players = new HashSet<>();
                     players.add(damager);
                     ui.assisted.put(player,players);
+                }
+
+                }catch (Exception e){
                 }
             }
 
@@ -529,6 +532,7 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(21,v.knockDownBU.get(event.getEntity())[40]);
         event.getEntity().getInventory().clear();
 
+        /*
         if(ui.killed.containsKey(event.getEntity())) {
             if (!ui.kill.containsKey(ui.killed.get(event.getEntity()))) {
                 ui.kill.put(ui.killed.get(event.getEntity()), ui.kill.get(ui.killed.get(event.getEntity())) + 1);
@@ -546,6 +550,7 @@ public class Event implements Listener{
                 }
             }
         }
+         */
 
 
         event.getEntity().sendMessage("死んでしまった!!");

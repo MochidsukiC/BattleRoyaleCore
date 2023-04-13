@@ -32,40 +32,43 @@ public class MiniMapRenderer extends MapRenderer {
         Iterator<String> iterator = playerteam.getEntries().iterator();
         MapCursorCollection cursor = new MapCursorCollection();
             while (iterator.hasNext()){
-            Player teammate = player.getServer().getPlayer(iterator.next());
-            if(teammate != null) {
-                if (!(teammate == player)) {
-                    int x = teammate.getLocation().getBlockX() - player.getLocation().getBlockX();
-                    if (x > 64) {
-                        x = 64;
-                    } else if (x < -64) {
-                        x = -64;
-                    }
-                    int z = (teammate.getLocation().getBlockZ() - player.getLocation().getBlockZ());
-                    if (z > 64) {
-                        z = 64;
-                    } else if (z < -64) {
-                        z = -64;
-                    }
-
-                    cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
-
-                }
                 try {
-                    int x = v.pin.get(teammate).getBlockX() - player.getLocation().getBlockX();
-                    int z = v.pin.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
-                    if (x < 128 && x > -128 && z < 128 && z > -128) {
-                        cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
+
+                    Player teammate = player.getServer().getPlayer(iterator.next());
+                    if (teammate != null) {
+                        if (!(teammate == player)) {
+                            int x = teammate.getLocation().getBlockX() - player.getLocation().getBlockX();
+                            if (x > 64) {
+                                x = 64;
+                            } else if (x < -64) {
+                                x = -64;
+                            }
+                            int z = (teammate.getLocation().getBlockZ() - player.getLocation().getBlockZ());
+                            if (z > 64) {
+                                z = 64;
+                            } else if (z < -64) {
+                                z = -64;
+                            }
+
+                            cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
+
+                        }
+                        if(v.pin.containsKey(teammate)) {
+                            int x = v.pin.get(teammate).getBlockX() - player.getLocation().getBlockX();
+                            int z = v.pin.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
+                            if (x < 128 && x > -128 && z < 128 && z > -128) {
+                                cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
+                            }
+                        }
+                        if(v.pinRed.containsKey(teammate)) {
+                            int xR = v.pinRed.get(teammate).getBlockX() - player.getLocation().getBlockX();
+                            int zR = v.pinRed.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
+                            if (xR < 128 && xR > -128 && zR < 128 && zR > -128) {
+                                cursor.addCursor(new MapCursor((byte) xR, (byte) zR, (byte) 0, MapCursor.Type.BANNER_RED, true));
+                            }
+                        }
                     }
                 }catch (Exception e){}
-                try {
-                    int x = v.pinRed.get(teammate).getBlockX() - player.getLocation().getBlockX();
-                    int z = v.pinRed.get(teammate).getBlockZ() - player.getLocation().getBlockZ();
-                    if (x < 128 && x > -128 && z < 128 && z > -128) {
-                        cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) 0, MapCursor.Type.BANNER_RED, true));
-                    }
-                }catch (Exception e){}
-            }
             }
             canvas.setCursors(cursor);
 

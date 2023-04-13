@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
 
@@ -119,7 +118,7 @@ public class Event implements Listener{
                     switch (Objects.requireNonNull(event.getMaterial())) {
                         case FIRE_CHARGE:
                             Fireball fireball = event.getPlayer().getWorld().spawn(event.getPlayer().getEyeLocation(), Fireball.class);
-                            fireball.setShooter(event.getPlayer());
+                            //fireball.setShooter(event.getPlayer());
                             fireball.setVelocity(event.getPlayer().getLocation().getDirection().normalize().multiply(1.5));
                             event.getPlayer().getInventory().getItemInMainHand().setAmount(event.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
 
@@ -345,7 +344,9 @@ public class Event implements Listener{
                 }else {
                     damager = (Player) ((Arrow)event.getDamager()).getShooter();
                 }
-                damager.setLevel((int) event.getDamage() + damager.getLevel());//ダメージを経験値に変換
+                if(v.gameround != 0) {
+                    damager.setLevel((int) event.getDamage() + damager.getLevel());//ダメージを経験値に変換
+                }
                 int i;
                 if(ui.damage.get(damager) == null){
                     i = 0;
@@ -414,39 +415,37 @@ public class Event implements Listener{
                     player.setHealth(40);
                     event.setCancelled(true);
                     player.getInventory().clear();
-                    damager.sendMessage(player.getName()+"をノックダウン!");
-                    damager.playSound(event.getDamager(),Sound.BLOCK_ANVIL_PLACE,100,0);
-                    if(!ui.knockDown.isEmpty()) {
-                        ui.knockDown.put(damager, ui.knockDown.get(damager)+1);
-                    }else {
-                        ui.knockDown.put(damager,1);
+                    damager.sendMessage(player.getName() + "をノックダウン!");
+                    damager.playSound(event.getDamager(), Sound.BLOCK_ANVIL_PLACE, 100, 0);
+                    if (!ui.knockDown.isEmpty()) {
+                        ui.knockDown.put(damager, ui.knockDown.get(damager) + 1);
+                    } else {
+                        ui.knockDown.put(damager, 1);
                     }
-                    ui.killed.put(player,damager);
-                    Team playerteam = player.getScoreboard().getPlayerTeam(player);
-                    String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                    playerteam.getEntries().toArray(tp);
-                    Player[] teamplayer = new Player[tp.length];
-                    int allDeath = 0;
-                    int allPlayers = 0;
-                    for (int i = 0; i < tp.length; i++) {
-                        if (Bukkit.getPlayer(tp[i]).isOnline()) {
-                            teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                            allPlayers++;
-                        }
-                        if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
-                            allDeath++;
-                        }
-                    }
-                    if (allDeath == teamplayer.length) {
-                        for (int i = 0; i < allPlayers; i++) {
-                            teamplayer[i].setHealth(0);
-                            ui.ranking.put(playerteam,((Player) event.getEntity()).getScoreboard().getObjective("teams").getScore("system").getScore());
-                        }
-                        }
+                    ui.killed.put(player, damager);
 
-
+                    //部隊全滅
+                    Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
+                    int livers = 0;
+                    for (String entry : playerTeam.getEntries()){
+                        if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))){
+                            Player teammate = Bukkit.getPlayer(entry);
+                            if(teammate.getGameMode().equals(GameMode.SURVIVAL)&& !teammate.hasPotionEffect(PotionEffectType.UNLUCK)){
+                                livers++;
+                            }
+                        }
                     }
+                    if(livers == 0){
+                        for(String entry : playerTeam.getEntries()){
+                            if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
+                                Bukkit.getPlayer(entry).setHealth(0);
+                            }
+                            Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
+                        }
+                    }
+
                 }
+            }
 
         }
     }
@@ -532,7 +531,13 @@ public class Event implements Listener{
         deathCart.getInventory().setItem(21,v.knockDownBU.get(event.getEntity())[40]);
         event.getEntity().getInventory().clear();
 
-        /*
+
+
+
+        event.getEntity().sendMessage("死んでしまった!!");
+        event.getEntity().sendMessage("数字ボタンを押すとほかの人のところにTPできるぞ!!");
+
+        //kill counter
         if(ui.killed.containsKey(event.getEntity())) {
             if (!ui.kill.containsKey(ui.killed.get(event.getEntity()))) {
                 ui.kill.put(ui.killed.get(event.getEntity()), ui.kill.get(ui.killed.get(event.getEntity())) + 1);
@@ -550,14 +555,6 @@ public class Event implements Listener{
                 }
             }
         }
-         */
-
-
-        event.getEntity().sendMessage("死んでしまった!!");
-        event.getEntity().sendMessage("数字ボタンを押すとほかの人のところにTPできるぞ!!");
-
-        //kill counter
-
 
 
     }
@@ -609,7 +606,7 @@ public class Event implements Listener{
                         ammo.setCritical(true);
                         ammo.setColor(Color.GRAY);
                         ammo.setPierceLevel(3);
-                        ammo.setDamage(0.2);
+                        ammo.setDamage(0.15);
                         ammo.setShooter(event.getPlayer());
                         new DistanceKiller(ammo, event.getPlayer().getLocation(), 40).runTaskTimer(BattleRoyaleCore.getPlugin(), 0L, 1L);
                         event.getPlayer().getWorld().playSound(event.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_BLAST, 5, 0);
@@ -625,6 +622,13 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerItemHeldEvent(PlayerItemHeldEvent event){
         v.useSniper.remove(event.getPlayer());
+    }
+    @EventHandler
+    public void PlayerLoginEvent(PlayerLoginEvent event){
+        if(v.gameround != 0 && !event.getPlayer().isOp()) {
+            event.setKickMessage("試合中であるため入室できません");
+            event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+        }
     }
 
 }

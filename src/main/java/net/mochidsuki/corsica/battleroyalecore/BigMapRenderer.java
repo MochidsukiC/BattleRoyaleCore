@@ -56,29 +56,33 @@ public class BigMapRenderer extends MapRenderer {
                 Iterator<String> iterator = playerteam.getEntries().iterator();
                 MapCursorCollection cursor = new MapCursorCollection();
                 while (iterator.hasNext()){
-                    Player teammate = player.getServer().getPlayer(iterator.next());
-                    if(teammate != null) {
-                        if (!(teammate == player)) {
-                            int x = (teammate.getLocation().getBlockX() - v.mcx) / mapZoom;
-                            if (x > 64) {
-                                x = 64;
-                            } else if (x < -64) {
-                                x = -64;
+                    try {
+                        Player teammate = player.getServer().getPlayer(iterator.next());
+                        if (teammate != null) {
+                            if (!(teammate == player)) {
+                                int x = (teammate.getLocation().getBlockX() - v.mcx) / mapZoom;
+                                if (x > 64) {
+                                    x = 64;
+                                } else if (x < -64) {
+                                    x = -64;
+                                }
+                                int z = (teammate.getLocation().getBlockZ() - v.mcz) / mapZoom;
+                                if (z > 64) {
+                                    z = 64;
+                                } else if (z < -64) {
+                                    z = -64;
+                                }
+                                cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
                             }
-                            int z = (teammate.getLocation().getBlockZ() - v.mcz) / mapZoom;
-                            if (z > 64) {
-                                z = 64;
-                            } else if (z < -64) {
-                                z = -64;
+                            if(v.pin.containsKey(teammate)) {
+                                cursor.addCursor(new MapCursor((byte) ((v.pin.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pin.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
                             }
-                            cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
+                            if(v.pinRed.containsKey(teammate)) {
+                                cursor.addCursor(new MapCursor((byte) ((v.pinRed.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pinRed.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_RED, true));
+                            }
                         }
-                        try {
-                            cursor.addCursor(new MapCursor((byte) ((v.pin.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pin.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_YELLOW, true));
-                        }catch (Exception e){}
-                        try {
-                            cursor.addCursor(new MapCursor((byte) ((v.pinRed.get(teammate).getBlockX() - v.mcx) / mapZoom * 2), (byte) ((v.pinRed.get(teammate).getBlockZ() - v.mcz) / mapZoom * 2), (byte) 0, MapCursor.Type.BANNER_RED, true));
-                        }catch (Exception e){}
+                    }catch (Exception e){
+
                     }
                 }
                 canvas.setCursors(cursor);

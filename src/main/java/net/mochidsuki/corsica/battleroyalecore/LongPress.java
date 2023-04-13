@@ -59,9 +59,10 @@ public class LongPress extends BukkitRunnable {
                     }
                 }
 
-
-                if(player.getLocation().add(0,2,0).getBlock().getType() == Material.AIR) {
-                    player.sendBlockChange(player.getLocation().add(0, 2, 0), Material.BARRIER.createBlockData());
+                if(!player.hasPotionEffect(PotionEffectType.LUCK)) {
+                    if (player.getLocation().add(0, 2, 0).getBlock().getType() == Material.AIR) {
+                        player.sendBlockChange(player.getLocation().add(0, 2, 0), Material.BARRIER.createBlockData());
+                    }
                 }
 
 

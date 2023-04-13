@@ -79,6 +79,7 @@ public final class BattleRoyaleCore extends JavaPlugin {
         MapMeta mapMetaB = (MapMeta)mapItemB.getItemMeta();
         getMap(v.bigmapdata).addRenderer(new OriginMapRender());
         mapMetaB.setMapId(v.bigmapdata);
+        getMap(v.bigmapdata).setTrackingPosition(true);
 
         mapItemB.setItemMeta(mapMetaB);
 

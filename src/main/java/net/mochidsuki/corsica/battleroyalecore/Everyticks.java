@@ -39,22 +39,22 @@ public class Everyticks extends BukkitRunnable {
         for (Player player : players) {//全プレイヤーに適応
 
 
-
-            if (player.hasPotionEffect(PotionEffectType.UNLUCK)) {
-                for(int i =0;i<=2;i++){
-                    for(int ii = 0;ii<=2;ii++){
-                        for(int iii = 0; iii <= 2; iii++) {
-                            player.sendBlockChange(player.getLocation().add(i - 1, iii, ii - 1), player.getLocation().add(i - 1, iii, ii - 1).getBlock().getBlockData());
+            try {
+                if (player.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                    for (int i = 0; i <= 2; i++) {
+                        for (int ii = 0; ii <= 2; ii++) {
+                            for (int iii = 0; iii <= 2; iii++) {
+                                player.sendBlockChange(player.getLocation().add(i - 1, iii, ii - 1), player.getLocation().add(i - 1, iii, ii - 1).getBlock().getBlockData());
+                            }
                         }
                     }
+
+
+                    if (player.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+                        player.sendBlockChange(player.getLocation().add(0, 1, 0), Material.BARRIER.createBlockData());
+                    }
                 }
-
-
-                if(player.getLocation().add(0,1,0).getBlock().getType() == Material.AIR) {
-                    player.sendBlockChange(player.getLocation().add(0, 1, 0), Material.BARRIER.createBlockData());
-                }
-            }
-
+            }catch (Exception e){e.printStackTrace();}
 
 
             //アクションバー
@@ -119,110 +119,88 @@ public class Everyticks extends BukkitRunnable {
                 openings = String.join("", Collections.nCopies((int) ((shieldUtil.getShieldMax() - shieldUtil.getShieldNow()) / 2), "-"));
                 component.setText(colorH + "[" + shieldUtil.getShieldColor() + shield + half + openings + colorB + "]");
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
-            }catch (Exception ignored){}
+            }catch (Exception e){e.printStackTrace();}
 
 
 
 
 
 
-
-            //エリトラのエフェクト
             ItemStack chestPlate = player.getInventory().getItem(22);
+            try {
+                //エリトラのエフェクト
 
 
-            if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                Location l = player.getLocation();
-                l.setY(player.getLocation().getBlockY() + 1);
-                if(player.getLocation().getPitch() > 0) {
-                    player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector));
-                    Vector v = player.getVelocity();
-                    v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector,0));
-                    player.setVelocity(v);
-                }else {
-                    player.getLocation().setPitch(-1f);
-                    player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector/4));
-                    Vector v = player.getVelocity();
-                    v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector,0));
-                    player.setVelocity(v);
+                if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
+                    Location l = player.getLocation();
+                    l.setY(player.getLocation().getBlockY() + 1);
+                    if (player.getLocation().getPitch() > 0) {
+                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector));
+                        Vector v = player.getVelocity();
+                        v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector, 0));
+                        player.setVelocity(v);
+                    } else {
+                        player.getLocation().setPitch(-1f);
+                        player.setVelocity(player.getLocation().getDirection().normalize().multiply(v.exVector / 4));
+                        Vector v = player.getVelocity();
+                        v.add(new Vector(0, net.mochidsuki.corsica.battleroyalecore.v.eyVector, 0));
+                        player.setVelocity(v);
+                    }
+                    player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, l, 50, 0.1, 0.1, 0.1, 0.2);
+                    player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l, 50, 0.2, 0.2, 0.2, 0);
+                    player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, l, 50, 0.2, 0.2, 0.2, 0);
+                    player.getWorld().spawnParticle(Particle.SMOKE_NORMAL, l, 50, 0.2, 0.2, 0.2, 0);
+
+                    chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
+
                 }
-                player.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL,l,50,0.1,0.1,0.1,0.2);
-                player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
-                player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
-                player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
+                if (player.hasPotionEffect(PotionEffectType.LEVITATION)) {
+                    Location l = player.getLocation();
+                    l.setY(player.getLocation().getBlockY() + 1);
+                    player.getWorld().spawnParticle(Particle.SPIT, l, 50, 0.1, 0.1, 0.1, 0.2);
+                    player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l, 50, 0.2, 0.2, 0.2, 0);
+                    player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, l, 50, 0.2, 0.2, 0.2, 0);
+                    player.getWorld().spawnParticle(Particle.SMOKE_NORMAL, l, 50, 0.2, 0.2, 0.2, 0);
 
-                chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
-
-            }
-            if(player.hasPotionEffect(PotionEffectType.LEVITATION)){
-                Location l = player.getLocation();
-                l.setY(player.getLocation().getBlockY() + 1);
-                player.getWorld().spawnParticle(Particle.SPIT,l,50,0.1,0.1,0.1,0.2);
-                player.getWorld().spawnParticle(Particle.FIREWORKS_SPARK,l,50,0.2,0.2,0.2,0);
-                player.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,l,50,0.2,0.2,0.2,0);
-                player.getWorld().spawnParticle(Particle.SMOKE_NORMAL,l,50,0.2,0.2,0.2,0);
-
-                chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
-            }
-            if(player.hasPotionEffect(PotionEffectType.LUCK)){chestPlate = new ItemStack(Material.ELYTRA);}//エリトラインベントリ同期の判定
-
+                    chestPlate = new ItemStack(Material.ELYTRA);//エリトラインベントリ同期の判定
+                }
+                if (player.hasPotionEffect(PotionEffectType.LUCK)) {
+                    chestPlate = new ItemStack(Material.ELYTRA);
+                }//エリトラインベントリ同期の判定
+            }catch (Exception e){e.printStackTrace();}
 
             //Pin
+            try {
 
-            Team playerteam = player.getScoreboard().getPlayerTeam(player);
-            if(playerteam != null) {
-                String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                playerteam.getEntries().toArray(tp);
-                Player[] teamplayer = new Player[tp.length + 3];
-                for (int i = 0; i < tp.length; i++) {
-                    teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                }
+                Protocol protocol = new Protocol();
+                Team team = player.getScoreboard().getEntryTeam(player.getName());
+                if(team != null){
+                    Location[] location = new Location[team.getEntries().size()];
+                    Location[] locationR = new Location[team.getEntries().size()];
+                    int i = 0;
+                    for(String playerName : team.getEntries()){
 
-                Protocol pin = new Protocol();
+                        if(Bukkit.getOfflinePlayer(playerName).isOnline()) {
 
-                Optional<Location>[] loc = new Optional[teamplayer.length];
+                            Player teammate = BattleRoyaleCore.getPlugin().getServer().getPlayer(playerName);
+                            location[i] = v.pin.get(teammate);
+                            locationR[i] = v.pinRed.get(teammate);
 
-                for (int i = 0; i < teamplayer.length;i++){
-                    loc[i] = Optional.ofNullable(v.pin.get(teamplayer[i]));
-                }
+                            protocol.setGlowing(teammate, player);
 
-                Location[] location = new Location[teamplayer.length];
-                boolean[] booleans = new boolean[teamplayer.length];
-
-                for (int i = 0; i < loc.length; i++) {
-                    location[i] = loc[i].orElse(new Location(player.getWorld(), player.getLocation().getX(), -80, player.getLocation().getZ()));
-                    booleans[i] = !(v.pin.get(teamplayer[i]) == null);
-                }
-
-
-
-                pin.pushPin(player, location, booleans, EntityType.DRAGON_FIREBALL,0);
-
-                Optional<Location>[] locR = new Optional[teamplayer.length];
-
-                for (int i = 0; i < teamplayer.length;i++){
-                    locR[i] = Optional.ofNullable(v.pinRed.get(teamplayer[i]));
-                }
-
-                Location[] locationR = new Location[teamplayer.length];
-                boolean[] booleansR = new boolean[teamplayer.length];
-
-                for (int i = 0; i < locR.length; i++) {
-                    locationR[i] = locR[i].orElse(new Location(player.getWorld(), player.getLocation().getX(), -80, player.getLocation().getZ()));
-                    booleansR[i] = !(v.pinRed.get(teamplayer[i]) == null);
-                }
-                pin.pushPin(player,locationR,booleansR,EntityType.FIREBALL, teamplayer.length);
-
-
-                for(int i = 0; i < tp.length;i++){
-                    if(teamplayer[i] != null && teamplayer[i] != player){
-                        pin.setGlowing(teamplayer[i],player);
+                            i++;
+                        }
                     }
+                    protocol.pushPin(player,location, EntityType.DRAGON_FIREBALL,0);
+                    protocol.pushPin(player,locationR,EntityType.FIREBALL,team.getEntries().size());
+                }else {
+
                 }
 
 
 
-
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
 

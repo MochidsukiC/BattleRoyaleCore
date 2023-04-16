@@ -31,31 +31,34 @@ public class CommandClass implements CommandExecutor {
 
                 Iterator<Player> it = (Iterator<Player>) sender.getServer().getOnlinePlayers().iterator();
                 while (it.hasNext()){
-                    it.next().sendMessage("試合終了!!|第" + ui.ranking.get(it.next()) +"位");
-                    it.next().sendMessage(ui.kill.get(it.next()) + "キル|"+ ui.assist.get(it.next()) + "アシスト|" + ui.damage.get(it.next()) + "ダメージ");
-                    int ranking = 0;
-                    switch (ui.ranking.get(it.next())){
-                        case 1:
-                            ranking = ranking + 15;
-                        case 2:
-                            ranking = ranking + 8;
-                        case 3:
-                            ranking = ranking + 6;
-                        case 4:
-                            ranking = ranking + 5;
-                        case 5:
-                            ranking = ranking + 4;
-                        case 6:
-                        case 7:
-                            ranking = ranking + 3;
-                        case 8:
-                        case 9:
-                            ranking = ranking + 2;
-                        break;
-                    }
+                    Player player = it.next();
+                    player.sendMessage("試合終了!!|第" + ui.ranking.get(player) +"位");
+                    player.sendMessage(ui.kill.get(player) + "キル|"+ ui.assist.get(player) + "アシスト|" + ui.damage.get(player) + "ダメージ");
+                    if(ui.ranking.containsKey(player)) {
+                        int ranking = 0;
+                        switch (ui.ranking.get(player)) {
+                            case 1:
+                                ranking = ranking + 15;
+                            case 2:
+                                ranking = ranking + 8;
+                            case 3:
+                                ranking = ranking + 6;
+                            case 4:
+                                ranking = ranking + 5;
+                            case 5:
+                                ranking = ranking + 4;
+                            case 6:
+                            case 7:
+                                ranking = ranking + 3;
+                            case 8:
+                            case 9:
+                                ranking = ranking + 2;
+                                break;
+                        }
 
-                    int xp = ranking + (ui.kill.get(it.next()) + ui.assist.get(it.next()))*ui.damage.get(it.next())/10;
-                    it.next().sendMessage("XP:" + xp + "!!");
+                        int xp = ranking + (ui.kill.get(player) + ui.assist.get(player)) * ui.damage.get(player) / 10;
+                        player.sendMessage("XP:" + xp + "!!");
+                    }
                     ui.kill.clear();
                     ui.killed.clear();
                     ui.damage.clear();

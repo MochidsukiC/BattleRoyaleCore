@@ -5,36 +5,38 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.UUID;
-
-public class Protocol{
-    public void pushPin(Player player, Location[] location,boolean[] b,EntityType entityType,int entityIdPlus) {
+public class Protocol {
+    public void pushPin(Player player, Location[] locations, EntityType entityType, int entityIdPlus) {
         int entityId = 10000 + entityIdPlus;
 
 
-        for(int i = 0;i <=2;i++) {
+        for(Location location : locations) {
 
             Location loc = new Location(player.getWorld(),0,0,0);
-            double x = location[i].getX() - player.getLocation().getX();
-            double y = location[i].getY() - player.getLocation().getY();
-            double z = location[i].getZ() - player.getLocation().getZ();
-            double d =Math.sqrt(Math.abs(y * y + (x * x + z * z)));
-            if (d > 160) {
-                loc.setX(player.getLocation().getX()+x*160/d);
-                loc.setY(player.getLocation().getY()+y*160/d);
-                loc.setZ(player.getLocation().getZ()+z*160/d);
-            }else {
-                loc = location[i];
+            if(location != null) {
+                double x = location.getX() - player.getLocation().getX();
+                double y = location.getY() - player.getLocation().getY();
+                double z = location.getZ() - player.getLocation().getZ();
+                double d = Math.sqrt(Math.abs(y * y + (x * x + z * z)));
+                if (d > 160) {
+                    loc.setX(player.getLocation().getX() + x * 160 / d);
+                    loc.setY(player.getLocation().getY() + y * 160 / d);
+                    loc.setZ(player.getLocation().getZ() + z * 160 / d);
+                } else {
+                    loc = location;
+                }
             }
 
 
 
             entityId++;
+
             PacketContainer packet0 = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
 
             packet0.getIntegers().write(0, entityId);
@@ -51,7 +53,7 @@ public class Protocol{
 
             byte bitmask = 0x00; // First bitmask, 0x00 by default
             bitmask |= 0x20; // is invisible
-            if(b[i]) {
+            if(location != null) {
                 bitmask |= 0x40; // is glowing
             }
 
@@ -63,8 +65,8 @@ public class Protocol{
 
 
             try {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet0);
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet0);
+                ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
             } catch (InvocationTargetException ignored) {
             }
         }

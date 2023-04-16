@@ -36,7 +36,7 @@ public class Event implements Listener{
     @EventHandler
     public void EntityDamageEvent(EntityDamageEvent event){
         EntityDamageEvent.DamageCause cause = event.getCause();
-        double damage = event.getDamage();
+        double damage = event.getFinalDamage();
         if(cause.equals(SUFFOCATION)){//ボーダー外ダメージ
             switch (v.gameround) {
                 case 1:
@@ -56,7 +56,23 @@ public class Event implements Listener{
                     break;
 
             }
+            if(event.getEntityType() == EntityType.PLAYER) {
+                if (((Player) event.getEntity()).hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
+                    int duration = ((Player) event.getEntity()).getPotionEffect(PotionEffectType.FIRE_RESISTANCE).getDuration();
+                    ((Player) event.getEntity()).removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+                    ((Player) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, (int) (duration - damage), 0));
+                    damage = 0;
+                    event.setCancelled(true);
+                    ((Player) event.getEntity()).sendTitle("", ChatColor.RED + "耐火の効果によりダメージ無効化中", 0, 2, 0);
+                } else {
+                    ((Player) event.getEntity()).sendTitle("", ChatColor.RED + "ボーダー外!!", 3, 4, 3);
+                }
+            }
         }
+
+
+
+
         if(event.getEntity().getType() == EntityType.PLAYER){
             Player player = (Player) event.getEntity();
             if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))){
@@ -75,25 +91,23 @@ public class Event implements Listener{
                         player.getInventory().clear();
                         player.updateInventory();
 
-                        Team playerteam = player.getScoreboard().getPlayerTeam(player);
-                        String[] tp = new String[Objects.requireNonNull(playerteam).getEntries().size()];
-                        playerteam.getEntries().toArray(tp);
-                        Player[] teamplayer = new Player[tp.length];
-                        int allPlayers = 0;
-                        int allDeath = 0;
-                        for (int i = 0; i < tp.length; i++) {
-                            if (Bukkit.getPlayer(tp[i]).isOnline()) {
-                                teamplayer[i] = Bukkit.getPlayer(tp[i]);
-                                allPlayers++;
-                            }
-                            if (teamplayer[i] != null && (teamplayer[i].hasPotionEffect(PotionEffectType.UNLUCK) || teamplayer[i].getGameMode() == GameMode.SPECTATOR)) {
-                                allDeath++;
+                        //部隊全滅
+                        Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
+                        int livers = 0;
+                        for (String entry : playerTeam.getEntries()){
+                            if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))){
+                                Player teammate = Bukkit.getPlayer(entry);
+                                if(teammate.getGameMode().equals(GameMode.SURVIVAL)&& !teammate.hasPotionEffect(PotionEffectType.UNLUCK)){
+                                    livers++;
+                                }
                             }
                         }
-                        if (allDeath == teamplayer.length) {
-                            for (int i = 0; i < allPlayers; i++) {
-                                ui.ranking.put(playerteam,((Player) event.getEntity()).getScoreboard().getObjective("teams").getScore("system").getScore());
-                                teamplayer[i].setHealth(0);
+                        if(livers == 0){
+                            for(String entry : playerTeam.getEntries()){
+                                if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
+                                    Bukkit.getPlayer(entry).setHealth(0);
+                                }
+                                Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                             }
                         }
                     }
@@ -345,7 +359,7 @@ public class Event implements Listener{
                     damager = (Player) ((Arrow)event.getDamager()).getShooter();
                 }
                 if(v.gameround != 0) {
-                    damager.setLevel((int) event.getDamage() + damager.getLevel());//ダメージを経験値に変換
+                    damager.setLevel((int) event.getFinalDamage() + damager.getLevel());//ダメージを経験値に変換
                 }
                 int i;
                 if(ui.damage.get(damager) == null){
@@ -355,7 +369,7 @@ public class Event implements Listener{
                 }
 
                 try {
-                ui.damage.put(damager,(int)(i + event.getDamage()));
+                ui.damage.put(damager,(int)(i + event.getFinalDamage()));
                 if(!ui.assisted.isEmpty()){
                         ui.assisted.get(player).add(damager);
                 }else {
@@ -370,7 +384,7 @@ public class Event implements Listener{
 
 
             //シールド
-            double damage = event.getDamage();
+            double damage = event.getFinalDamage();
             if(player.getInventory().getItem(22) != null) {
                 if (player.getInventory().getItem(22).getType() == Material.LEATHER_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.CHAINMAIL_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.IRON_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.GOLDEN_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.DIAMOND_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.NETHERITE_CHESTPLATE) {
                     int shieldNow;
@@ -380,8 +394,8 @@ public class Event implements Listener{
 
                     shieldNow = shieldUtil.getShieldNow();
                     if (shieldNow > 0) {
-                        damage = (int) (event.getDamage() - shieldNow);
-                        shieldNow = (int) (shieldNow - event.getDamage());
+                        damage = (int) (event.getFinalDamage() - shieldNow);
+                        shieldNow = (int) (shieldNow - event.getFinalDamage());
                         if (shieldNow <= 0) {
                             shieldNow = 0;
                             if (event.getDamager().getType() == EntityType.PLAYER) {
@@ -417,7 +431,7 @@ public class Event implements Listener{
                     player.getInventory().clear();
                     damager.sendMessage(player.getName() + "をノックダウン!");
                     damager.playSound(event.getDamager(), Sound.BLOCK_ANVIL_PLACE, 100, 0);
-                    if (!ui.knockDown.isEmpty()) {
+                    if (!ui.knockDown.containsKey(damager)) {
                         ui.knockDown.put(damager, ui.knockDown.get(damager) + 1);
                     } else {
                         ui.knockDown.put(damager, 1);
@@ -539,7 +553,7 @@ public class Event implements Listener{
 
         //kill counter
         if(ui.killed.containsKey(event.getEntity())) {
-            if (!ui.kill.containsKey(ui.killed.get(event.getEntity()))) {
+            if (ui.kill.containsKey(ui.killed.get(event.getEntity()))) {
                 ui.kill.put(ui.killed.get(event.getEntity()), ui.kill.get(ui.killed.get(event.getEntity())) + 1);
             } else {
                 ui.kill.put(ui.killed.get(event.getEntity()), 1);
@@ -547,11 +561,12 @@ public class Event implements Listener{
         }
         Iterator<Player> it = ui.assisted.get(event.getEntity()).iterator();
         while (it.hasNext()) {
-            if(it.next().getScoreboard().getPlayerTeam(it.next()) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && it.next() != ui.killed.get(event.getEntity())){
-                if(!ui.assist.containsKey(it.next())){
-                    ui.assist.put(it.next(),ui.assist.get(it.next()) + 1);
+            Player player = it.next();
+            if(player.getScoreboard().getPlayerTeam(player) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && player != ui.killed.get(event.getEntity())){
+                if(!ui.assist.containsKey(player)){
+                    ui.assist.put(player,ui.assist.get(player) + 1);
                 }else {
-                    ui.assist.put(it.next(),1);
+                    ui.assist.put(player,1);
                 }
             }
         }
@@ -625,6 +640,7 @@ public class Event implements Listener{
     }
     @EventHandler
     public void PlayerLoginEvent(PlayerLoginEvent event){
+        event.setResult(PlayerLoginEvent.Result.ALLOWED);
         if(v.gameround != 0 && !event.getPlayer().isOp()) {
             event.setKickMessage("試合中であるため入室できません");
             event.setResult(PlayerLoginEvent.Result.KICK_OTHER);

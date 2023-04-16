@@ -33,7 +33,6 @@ public class MiniMapRenderer extends MapRenderer {
         MapCursorCollection cursor = new MapCursorCollection();
             while (iterator.hasNext()){
                 try {
-
                     Player teammate = player.getServer().getPlayer(iterator.next());
                     if (teammate != null) {
                         if (!(teammate == player)) {

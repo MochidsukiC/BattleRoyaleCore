@@ -431,7 +431,7 @@ public class Event implements Listener{
                     player.getInventory().clear();
                     damager.sendMessage(player.getName() + "をノックダウン!");
                     damager.playSound(event.getDamager(), Sound.BLOCK_ANVIL_PLACE, 100, 0);
-                    if (!ui.knockDown.containsKey(damager)) {
+                    if (ui.knockDown.containsKey(damager)) {
                         ui.knockDown.put(damager, ui.knockDown.get(damager) + 1);
                     } else {
                         ui.knockDown.put(damager, 1);

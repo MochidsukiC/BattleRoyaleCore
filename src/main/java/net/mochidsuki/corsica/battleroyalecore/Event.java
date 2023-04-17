@@ -455,6 +455,7 @@ public class Event implements Listener{
                                 Bukkit.getPlayer(entry).setHealth(0);
                             }
                             Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
+                            ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
                         }
                     }
 
@@ -563,7 +564,7 @@ public class Event implements Listener{
         while (it.hasNext()) {
             Player player = it.next();
             if(player.getScoreboard().getPlayerTeam(player) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && player != ui.killed.get(event.getEntity())){
-                if(!ui.assist.containsKey(player)){
+                if(ui.assist.containsKey(player)){
                     ui.assist.put(player,ui.assist.get(player) + 1);
                 }else {
                     ui.assist.put(player,1);

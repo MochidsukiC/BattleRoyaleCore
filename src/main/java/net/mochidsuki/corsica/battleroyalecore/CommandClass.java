@@ -32,11 +32,27 @@ public class CommandClass implements CommandExecutor {
                 Iterator<Player> it = (Iterator<Player>) sender.getServer().getOnlinePlayers().iterator();
                 while (it.hasNext()){
                     Player player = it.next();
-                    player.sendMessage("試合終了!!|第" + ui.ranking.get(player) +"位");
-                    player.sendMessage(ui.kill.get(player) + "キル|"+ ui.assist.get(player) + "アシスト|" + ui.damage.get(player) + "ダメージ");
-                    if(ui.ranking.containsKey(player)) {
+                    int rank = 1;
+                    int kill = 0;
+                    int assist = 0;
+                    int damage = 0;
+                    if (ui.ranking.containsKey(player.getScoreboard().getPlayerTeam(player))){
+                        rank = ui.ranking.get(player.getScoreboard().getPlayerTeam(player));
+                    }
+                    if (ui.kill.containsKey(player)){
+                        kill = ui.kill.get(player);
+                    }
+                    if (ui.assist.containsKey(player)){
+                        assist = ui.assist.get(player);
+                    }
+                    if (ui.damage.containsKey(player)){
+                        damage = ui.damage.get(player);
+                    }
+                    player.sendMessage("試合終了!!|第" + rank +"位");
+                    player.sendMessage(kill + "キル|"+ assist + "アシスト|" + damage + "ダメージ");
                         int ranking = 0;
-                        switch (ui.ranking.get(player)) {
+                        switch (rank) {
+                            default:
                             case 1:
                                 ranking = ranking + 15;
                             case 2:
@@ -54,11 +70,11 @@ public class CommandClass implements CommandExecutor {
                             case 9:
                                 ranking = ranking + 2;
                                 break;
+
                         }
 
-                        int xp = ranking + (ui.kill.get(player) + ui.assist.get(player)) * ui.damage.get(player) / 10;
+                        int xp = ranking + (kill + assist) * damage / 10;
                         player.sendMessage("XP:" + xp + "!!");
-                    }
                     ui.kill.clear();
                     ui.killed.clear();
                     ui.damage.clear();

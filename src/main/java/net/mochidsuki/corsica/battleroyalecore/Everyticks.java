@@ -186,7 +186,9 @@ public class Everyticks extends BukkitRunnable {
                             location[i] = v.pin.get(teammate);
                             locationR[i] = v.pinRed.get(teammate);
 
+                            if(teammate != player){
                             protocol.setGlowing(teammate, player);
+                            }
 
                             i++;
                         }

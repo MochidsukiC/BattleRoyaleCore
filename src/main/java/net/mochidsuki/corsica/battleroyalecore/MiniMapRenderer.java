@@ -28,7 +28,7 @@ public class MiniMapRenderer extends MapRenderer {
             }catch (Exception ignored){}
         }
             //チームメイト表示
-            Team playerteam = player.getScoreboard().getPlayerTeam(player);
+        Team playerteam = player.getScoreboard().getPlayerTeam(player);
         Iterator<String> iterator = playerteam.getEntries().iterator();
         MapCursorCollection cursor = new MapCursorCollection();
             while (iterator.hasNext()){
@@ -127,6 +127,10 @@ public class MiniMapRenderer extends MapRenderer {
             if(distanceNow[1] >= -64 && distanceNow[1] <= 64 && distanceNow[2] >= -64 && distanceNow[2] <= 64 ) {
                 canvas.setPixelColor(distanceNow[1]+64, distanceNow[2]+64, Color.red);
             }
+        }
+        for (String entry : playerteam.getEntries()){
+            if(BattleRoyaleCore.getPlugin().getServer().getPlayer(entry).isOnline());
+            Player teammate = Bukkit.getPlayer(entry);
         }
     }
 }

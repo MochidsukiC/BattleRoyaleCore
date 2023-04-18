@@ -144,10 +144,13 @@ public class MiniMapRenderer extends MapRenderer {
                 for(int ii = 0;ii < 128;ii++){
                     if(teammate.hasPotionEffect(PotionEffectType.UNLUCK)) {
                         canvas.setPixelColor(ii, 128 - i * 10, Color.RED);
+                        canvas.setPixelColor(ii, 128 - i * 10 + 9, Color.RED);
                     }else if(teammate.getGameMode() == GameMode.SURVIVAL){
                         canvas.setPixelColor(ii, 128 - i * 10, Color.YELLOW);
+                        canvas.setPixelColor(ii, 128 - i * 10 + 9, Color.YELLOW);
                     }else {
                         canvas.setPixelColor(ii, 128 - i * 10, Color.GRAY);
+                        canvas.setPixelColor(ii, 128 - i * 10 + 9, Color.GRAY);
                     }
                 }
             }

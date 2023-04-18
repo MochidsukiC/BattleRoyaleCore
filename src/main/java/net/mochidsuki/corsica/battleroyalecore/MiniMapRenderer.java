@@ -1,8 +1,10 @@
 package net.mochidsuki.corsica.battleroyalecore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.map.*;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
@@ -128,9 +130,31 @@ public class MiniMapRenderer extends MapRenderer {
                 canvas.setPixelColor(distanceNow[1]+64, distanceNow[2]+64, Color.red);
             }
         }
+        int i = 0;
         for (String entry : playerteam.getEntries()){
-            if(BattleRoyaleCore.getPlugin().getServer().getPlayer(entry).isOnline());
-            Player teammate = Bukkit.getPlayer(entry);
+            if(BattleRoyaleCore.getPlugin().getServer().getPlayer(entry).isOnline()) {
+                Player teammate = Bukkit.getPlayer(entry);
+                i++;
+
+                for(int ii = 0;ii < 10;ii++){
+                    for(int iii = 0;iii < 128;iii++){
+                        canvas.setPixelColor(iii,128 - ii - i*10, Color.getHSBColor(214,191,151));
+                    }
+                }
+                for(int ii = 0;ii < 128;ii++){
+                    if(teammate.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                        canvas.setPixelColor(ii, 128 - i * 10, Color.RED);
+                    }else if(teammate.getGameMode() == GameMode.SURVIVAL){
+                        canvas.setPixelColor(ii, 128 - i * 10, Color.YELLOW);
+                    }else {
+                        canvas.setPixelColor(ii, 128 - i * 10, Color.GRAY);
+                    }
+                }
+            }
         }
+
+
+
+
     }
 }

@@ -339,6 +339,7 @@ public class Event implements Listener{
 
     @EventHandler
     public void EntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+
         Player damager = null;
 
         if(event.getDamager().getType().equals(EntityType.PLAYER)){
@@ -387,32 +388,33 @@ public class Event implements Listener{
             double damage = event.getFinalDamage();
             if(player.getInventory().getItem(22) != null) {
                 if (player.getInventory().getItem(22).getType() == Material.LEATHER_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.CHAINMAIL_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.IRON_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.GOLDEN_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.DIAMOND_CHESTPLATE || player.getInventory().getItem(22).getType() == Material.NETHERITE_CHESTPLATE) {
-                    int shieldNow;
-
-
                     ShieldUtil shieldUtil = new ShieldUtil(player.getInventory().getItem(22));
+                    if(shieldUtil.getShieldNow() > 0) {
+                        int shieldNow;
 
-                    shieldNow = shieldUtil.getShieldNow();
-                    if (shieldNow > 0) {
-                        damage = (int) (event.getFinalDamage() - shieldNow);
-                        shieldNow = (int) (shieldNow - event.getFinalDamage());
-                        if (shieldNow <= 0) {
-                            shieldNow = 0;
-                            if (event.getDamager().getType() == EntityType.PLAYER) {
-                                damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+
+
+                        shieldNow = shieldUtil.getShieldNow();
+                        if (shieldNow > 0) {
+                            damage = (int) (event.getFinalDamage() - shieldNow);
+                            shieldNow = (int) (shieldNow - event.getFinalDamage());
+                            if (shieldNow <= 0) {
+                                shieldNow = 0;
+                                if (event.getDamager().getType() == EntityType.PLAYER) {
+                                    damager.playSound(damager.getLocation(), Sound.BLOCK_GLASS_BREAK, 100, 0);
+                                }
                             }
                         }
-                    }
-                    if (damage <= 0) {
-                        damage = 0;
-                    }
-                    event.setDamage(damage);
-                    double da = (shieldUtil.getShieldMax() - shieldNow) / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability();
-                    Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
-                    damageable.setDamage((int) da);
-                    player.getInventory().getItem(22).setItemMeta(damageable);
+                        if (damage <= 0) {
+                            damage = 0;
+                        }
+                        event.setDamage(damage);
+                        double da = (shieldUtil.getShieldMax() - shieldNow) / shieldUtil.getShieldMax() * shieldUtil.getShieldMaxDurability();
+                        Damageable damageable = (Damageable) player.getInventory().getItem(22).getItemMeta();
+                        damageable.setDamage((int) da);
+                        player.getInventory().getItem(22).setItemMeta(damageable);
 
-
+                    }
                 }
             }
             if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {

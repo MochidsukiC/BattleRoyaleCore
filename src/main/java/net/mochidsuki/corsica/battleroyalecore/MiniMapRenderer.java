@@ -40,16 +40,16 @@ public class MiniMapRenderer extends MapRenderer {
                     if (teammate != null) {
                         if (!(teammate == player)) {
                             int x = teammate.getLocation().getBlockX() - player.getLocation().getBlockX();
-                            if (x > 64) {
-                                x = 64;
-                            } else if (x < -64) {
-                                x = -64;
+                            if (x > 128) {
+                                x = 127;
+                            } else if (x < -128) {
+                                x = -127;
                             }
                             int z = (teammate.getLocation().getBlockZ() - player.getLocation().getBlockZ());
-                            if (z > 64) {
-                                z = 64;
-                            } else if (z < -64) {
-                                z = -64;
+                            if (z > 128) {
+                                z = 127;
+                            } else if (z < -128) {
+                                z = -127;
                             }
 
                             cursor.addCursor(new MapCursor((byte) x, (byte) z, (byte) ((teammate.getLocation().getYaw() - teammate.getLocation().getYaw() % 45) / 45), MapCursor.Type.BLUE_POINTER, true));
@@ -207,38 +207,68 @@ public class MiniMapRenderer extends MapRenderer {
                     }
                 }
 
-                if(teammate.getInventory().getItem(22) != null) {
-                    ShieldUtil shieldUtil = new ShieldUtil(teammate.getInventory().getItem(22));
-                    for (int ii = 0; ii < shieldUtil.getShieldMax(); ii++) {
-                        if (ii < shieldUtil.getShieldNow()) {
-                            for(int iii = 0; iii < 3;iii++) {
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, shieldUtil.getShieldColor().asBungee().getColor().darker());
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, shieldUtil.getShieldColor().asBungee().getColor());
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, shieldUtil.getShieldColor().asBungee().getColor());
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, shieldUtil.getShieldColor().asBungee().getColor());
-                                if(ii == shieldUtil.getShieldMax() - 1) {
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 5, shieldUtil.getShieldColor().asBungee().getColor().darker());
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 6, shieldUtil.getShieldColor().asBungee().getColor().darker());
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 7, shieldUtil.getShieldColor().asBungee().getColor().darker());
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 8, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                if(!teammate.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                    if (teammate.getInventory().getItem(22) != null) {
+                        ShieldUtil shieldUtil = new ShieldUtil(teammate.getInventory().getItem(22));
+                        for (int ii = 0; ii < shieldUtil.getShieldMax(); ii++) {
+                            if (ii < shieldUtil.getShieldNow()) {
+                                try {
+                                    for (int iii = 0; iii < 3; iii++) {
+                                        canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                                        canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, shieldUtil.getShieldColor().asBungee().getColor());
+                                        canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, shieldUtil.getShieldColor().asBungee().getColor());
+                                        canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, shieldUtil.getShieldColor().asBungee().getColor());
+                                        if (ii == shieldUtil.getShieldMax() - 1) {
+                                            canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 5, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                                            canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 6, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                                            canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 7, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                                            canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 8, shieldUtil.getShieldColor().asBungee().getColor().darker());
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            }
-                        } else {
-                            for(int iii = 0; iii < 3;iii++) {
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, Color.DARK_GRAY);
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, Color.GRAY);
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, Color.GRAY);
-                                canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, Color.GRAY);
-                                if(ii == shieldUtil.getShieldMax() - 1) {
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 5, Color.DARK_GRAY);
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 6, Color.DARK_GRAY);
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 7, Color.DARK_GRAY);
-                                    canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 8, Color.DARK_GRAY);
+                            } else {
+                                for (int iii = 0; iii < 3; iii++) {
+                                    canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, Color.DARK_GRAY);
+                                    canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, Color.GRAY);
+                                    canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, Color.GRAY);
+                                    canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, Color.GRAY);
+                                    if (ii == shieldUtil.getShieldMax() - 1) {
+                                        canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 5, Color.DARK_GRAY);
+                                        canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 6, Color.DARK_GRAY);
+                                        canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 7, Color.DARK_GRAY);
+                                        canvas.setPixelColor(67 + ii * 3 + 2, 127 - i * 10 - 8, Color.DARK_GRAY);
+                                    }
                                 }
                             }
                         }
                     }
+                } else {
+                for(int ii = 0;ii < 20;ii++) {
+                    if (ii < health - 20) {
+                        for (int iii = 0; iii < 3; iii++) {
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, Color.LIGHT_GRAY);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, Color.WHITE);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, Color.WHITE);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, Color.WHITE);
+                        }
+                    }else {
+                        for(int iii = 0; iii < 3;iii++) {
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 5, Color.DARK_GRAY);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 6, Color.GRAY);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 7, Color.GRAY);
+                            canvas.setPixelColor(67 + ii * 3 + iii, 127 - i * 10 - 8, Color.GRAY);
+                            if(ii == health - 20) {
+                                canvas.setPixelColor(127, 127 - i * 10 - 5, Color.DARK_GRAY);
+                                canvas.setPixelColor(127, 127 - i * 10 - 6, Color.DARK_GRAY);
+                                canvas.setPixelColor(127, 127 - i * 10 - 7, Color.DARK_GRAY);
+                                canvas.setPixelColor(127, 127 - i * 10 - 8, Color.DARK_GRAY);
+                            }
+                        }
+                    }
                 }
+            }
 
                 i++;
             }

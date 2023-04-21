@@ -221,7 +221,11 @@ public class Everyticks extends BukkitRunnable {
                     //player.updateInventory();
                 } else {
                     player.getInventory().setItem(EquipmentSlot.HEAD, new ItemStack(Material.AIR));
-                    player.getInventory().setItem(EquipmentSlot.CHEST, new ItemStack(Material.AIR));
+                    if(chestPlate == null || chestPlate.getType() != Material.ELYTRA) {
+                        player.getInventory().setItem(EquipmentSlot.CHEST, new ItemStack(Material.AIR));
+                    }else {
+                        player.getInventory().setItem(EquipmentSlot.CHEST, chestPlate);
+                    }
                     player.getInventory().setItem(EquipmentSlot.FEET, new ItemStack(Material.AIR));
                     player.getInventory().setItem(EquipmentSlot.LEGS, new ItemStack(Material.AIR));
                     //player.updateInventory();

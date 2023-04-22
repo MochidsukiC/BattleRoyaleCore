@@ -50,7 +50,6 @@ public class Border extends BukkitRunnable {
             cancel();
         }
         if(stop){
-            stop = false;
             v.gameround = 0;
             cancel();
         }

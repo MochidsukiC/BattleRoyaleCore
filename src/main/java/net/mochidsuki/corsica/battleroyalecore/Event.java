@@ -562,9 +562,8 @@ public class Event implements Listener{
                 ui.kill.put(ui.killed.get(event.getEntity()), 1);
             }
         }
-        Iterator<Player> it = ui.assisted.get(event.getEntity()).iterator();
-        while (it.hasNext()) {
-            Player player = it.next();
+
+        for (Player player : ui.assisted.get(event.getEntity())) {
             if(player.getScoreboard().getPlayerTeam(player) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && player != ui.killed.get(event.getEntity())){
                 if(ui.assist.containsKey(player)){
                     ui.assist.put(player,ui.assist.get(player) + 1);

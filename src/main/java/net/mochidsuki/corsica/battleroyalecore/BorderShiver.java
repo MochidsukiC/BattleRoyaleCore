@@ -39,7 +39,6 @@ public class BorderShiver extends BukkitRunnable {
             }
         }
         if(stop){
-            stop = false;
             v.gameround = 0;
             cancel();
         }

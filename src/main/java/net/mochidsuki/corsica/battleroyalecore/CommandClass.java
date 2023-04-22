@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -20,61 +21,65 @@ public class CommandClass implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("gameround")){
-            if(args[0].equalsIgnoreCase("0")){
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("gameround")) {
+            if (args[0].equalsIgnoreCase("0")) {
                 return false;
             }
-            if(args[0].equalsIgnoreCase("stop")){
+
+            try {
+                v.gameround = Integer.parseInt(args[0]);
+            } catch (Exception e) {
+                v.gameround = 0;
+            }
+            if (args[0].equalsIgnoreCase("stop")) {
                 Border.stop = true;
                 BorderShiver.stop = true;
 
-                Iterator<Player> it = (Iterator<Player>) sender.getServer().getOnlinePlayers().iterator();
-                while (it.hasNext()){
-                    Player player = it.next();
+                for (Player player : sender.getServer().getOnlinePlayers()) {
                     int rank = 1;
                     int kill = 0;
                     int assist = 0;
                     int damage = 0;
-                    if (ui.ranking.containsKey(player.getScoreboard().getPlayerTeam(player))){
+                    if (ui.ranking.containsKey(player.getScoreboard().getPlayerTeam(player))) {
                         rank = ui.ranking.get(player.getScoreboard().getPlayerTeam(player));
                     }
-                    if (ui.kill.containsKey(player)){
+                    if (ui.kill.containsKey(player)) {
                         kill = ui.kill.get(player);
                     }
-                    if (ui.assist.containsKey(player)){
+                    if (ui.assist.containsKey(player)) {
                         assist = ui.assist.get(player);
                     }
-                    if (ui.damage.containsKey(player)){
+                    if (ui.damage.containsKey(player)) {
                         damage = ui.damage.get(player);
                     }
-                    player.sendMessage("試合終了!!|第" + rank +"位");
-                    player.sendMessage(kill + "キル|"+ assist + "アシスト|" + damage + "ダメージ");
-                        int ranking = 0;
-                        switch (rank) {
-                            default:
-                            case 1:
-                                ranking = ranking + 15;
-                            case 2:
-                                ranking = ranking + 8;
-                            case 3:
-                                ranking = ranking + 6;
-                            case 4:
-                                ranking = ranking + 5;
-                            case 5:
-                                ranking = ranking + 4;
-                            case 6:
-                            case 7:
-                                ranking = ranking + 3;
-                            case 8:
-                            case 9:
-                                ranking = ranking + 2;
-                                break;
+                    player.sendMessage("試合終了!!|第" + rank + "位");
+                    player.sendMessage(kill + "キル|" + assist + "アシスト|" + damage + "ダメージ");
+                    int ranking = 0;
+                    switch (rank) {
+                        default:
+                        case 1:
+                            ranking = ranking + 15;
+                        case 2:
+                            ranking = ranking + 8;
+                        case 3:
+                            ranking = ranking + 6;
+                        case 4:
+                            ranking = ranking + 5;
+                        case 5:
+                            ranking = ranking + 4;
+                        case 6:
+                        case 7:
+                            ranking = ranking + 3;
+                        case 8:
+                        case 9:
+                            ranking = ranking + 2;
+                            break;
 
-                        }
+                    }
 
-                        int xp = ranking + (kill + assist) * damage / 10;
-                        player.sendMessage("XP:" + xp + "!!");
+                    int xp = ranking + (kill + assist) * damage / 10;
+                    player.sendMessage("XP:" + xp + "!!");
                     ui.kill.clear();
                     ui.killed.clear();
                     ui.damage.clear();
@@ -83,34 +88,50 @@ public class CommandClass implements CommandExecutor {
                     ui.assisted.clear();
                     ui.knockDown.clear();
                 }
+                Bukkit.getScheduler().scheduleSyncDelayedTask(BattleRoyaleCore.getPlugin(), () -> {
+                    World world = sender.getServer().getWorld("cxm");
+                    try {
+                        Block b = (Block) sender;
+                        world = b.getWorld();
+                    } catch (Exception e) {
+                    }
+
+                    try {
+                        Player player = (Player) sender;
+                        world = player.getWorld();
+                    } catch (Exception e) {
+                    }
+                    world.getWorldBorder().setSize(10000000);
+                },2L);
 
 
                 return true;
-            }
-            try {
-                v.gameround = Integer.parseInt(args[0]);
-            }catch (Exception ignored){}
+            } else {
 
-            Roundsystemc r = new Roundsystemc();
-            World world = sender.getServer().getWorld("World");
-            if(args.length == 1) {
 
-                try {
-                    Block b = (Block) sender;
-                    world = b.getWorld();
-                } catch (Exception e) {
+                Border.stop = false;
+                BorderShiver.stop = false;
+
+
+                Roundsystemc r = new Roundsystemc();
+                World world = sender.getServer().getWorld("cxm");
+                if (args.length == 1) {
+                    try {
+                        Block b = (Block) sender;
+                        world = b.getWorld();
+                    } catch (Exception e) {
+                    }
+
+                    try {
+                        Player player = (Player) sender;
+                        world = player.getWorld();
+                    } catch (Exception e) {
+                    }
+                    r.Roundsystem(world);
+                } else {
+                    r.Roundsystem(sender.getServer().getWorld(args[1]));
                 }
-
-                try {
-                    Player player = (Player) sender;
-                    world = player.getWorld();
-                } catch (Exception e) {
-                }
-                r.Roundsystem(world);
-            }else {
-                r.Roundsystem(sender.getServer().getWorld(args[1]));
             }
-
             return true;
         }
         if(command.getName().equalsIgnoreCase("brc")){

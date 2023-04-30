@@ -53,6 +53,8 @@ public class Everyticks extends BukkitRunnable {
                     if (player.getLocation().add(0, 1, 0).getBlock().getType() == Material.AIR) {
                         player.sendBlockChange(player.getLocation().add(0, 1, 0), Material.BARRIER.createBlockData());
                     }
+
+                    player.setSwimming(true);
                 }
             }catch (Exception e){e.printStackTrace();}
 

@@ -107,6 +107,7 @@ public class Event implements Listener{
                                 if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
                                     Bukkit.getPlayer(entry).setHealth(0);
                                 }
+                                ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
                                 Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                             }
                         }
@@ -456,8 +457,8 @@ public class Event implements Listener{
                             if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
                                 Bukkit.getPlayer(entry).setHealth(0);
                             }
-                            Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                             ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
+                            Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                         }
                     }
 
@@ -563,12 +564,14 @@ public class Event implements Listener{
             }
         }
 
-        for (Player player : ui.assisted.get(event.getEntity())) {
-            if(player.getScoreboard().getPlayerTeam(player) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && player != ui.killed.get(event.getEntity())){
-                if(ui.assist.containsKey(player)){
-                    ui.assist.put(player,ui.assist.get(player) + 1);
-                }else {
-                    ui.assist.put(player,1);
+        if(ui.assisted.containsKey(event.getEntity())) {
+            for (Player player : ui.assisted.get(event.getEntity())) {
+                if (player.getScoreboard().getPlayerTeam(player) == event.getEntity().getScoreboard().getPlayerTeam(event.getEntity()) && player != ui.killed.get(event.getEntity())) {
+                    if (ui.assist.containsKey(player)) {
+                        ui.assist.put(player, ui.assist.get(player) + 1);
+                    } else {
+                        ui.assist.put(player, 1);
+                    }
                 }
             }
         }

@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -176,10 +178,12 @@ public class CommandClass implements CommandExecutor {
                     Player[] players = sender.getServer().getOnlinePlayers().toArray(new Player[0]);
                     for (Player player : players) {
                         player.setGliding(true);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,1000000,0,true,true));
                     }
                     return true;
                 case "@s":
                     ((Player)sender).setGliding(true);
+                    ((Player)sender).addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,1000000,0,true,true));
                     return true;
                 default:
                     ((Player)sender).setGliding(true);

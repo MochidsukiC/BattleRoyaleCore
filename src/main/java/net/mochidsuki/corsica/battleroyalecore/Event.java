@@ -60,7 +60,7 @@ public class Event implements Listener{
                 if (((Player) event.getEntity()).hasPotionEffect(PotionEffectType.FIRE_RESISTANCE)) {
                     int duration = ((Player) event.getEntity()).getPotionEffect(PotionEffectType.FIRE_RESISTANCE).getDuration();
                     ((Player) event.getEntity()).removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
-                    ((Player) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, (int) (duration - damage), 0));
+                    ((Player) event.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, (int) (duration - damage), 0,false,true,true));
                     damage = 0;
                     event.setCancelled(true);
                     ((Player) event.getEntity()).sendTitle("", ChatColor.RED + "耐火の効果によりダメージ無効化中", 0, 2, 0);
@@ -348,6 +348,7 @@ public class Event implements Listener{
                 event.setCancelled(true);
                 return;
             }
+            ((Player)event.getEntity()).removePotionEffect(PotionEffectType.INVISIBILITY);
         }
 
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
@@ -636,6 +637,15 @@ public class Event implements Listener{
                     }
                 }
             }
+        }
+    }
+    @EventHandler
+    public void PlayerItemConsumeEvent(PlayerItemConsumeEvent event){
+        if(event.getItem().getType().equals(Material.ENCHANTED_GOLDEN_APPLE)){
+            event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,6000,0,false,true,true));
+        }
+        if(event.getItem().getType().equals(Material.MILK_BUCKET)&&event.getPlayer().hasPotionEffect(PotionEffectType.LUCK)){
+            event.setCancelled(true);
         }
     }
 

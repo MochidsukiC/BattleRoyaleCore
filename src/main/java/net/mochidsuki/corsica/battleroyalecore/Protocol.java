@@ -49,7 +49,7 @@ public class Protocol {
                     .write(2, loc.getZ());
 
             PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
-            /*
+
             EasyMetadataPacket metadata = new EasyMetadataPacket(null); // Pass the NMS entity, or null as we're dealing with a client-side entity
 
             byte bitmask = 0x00; // First bitmask, 0x00 by default
@@ -64,13 +64,16 @@ public class Protocol {
             packet.getIntegers().write(0, entityId);
             packet.getWatchableCollectionModifier().write(0, metadata.export());
 
-             */
+
+            /*
             WrappedDataWatcher watcher = new WrappedDataWatcher();
             WrappedDataWatcher.Serializer serializer = WrappedDataWatcher.Registry.get(Byte.class);
             watcher.setEntity(player);
             watcher.setObject(0, serializer, (byte) (0x40));
             packet.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
 
+
+             */
 
 
 

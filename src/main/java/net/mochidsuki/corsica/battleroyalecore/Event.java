@@ -77,38 +77,40 @@ public class Event implements Listener{
             Player player = (Player) event.getEntity();
             if(!(player.hasPotionEffect(PotionEffectType.UNLUCK))){
                 if(!(cause.equals(ENTITY_ATTACK) || cause.equals(ENTITY_SWEEP_ATTACK) || cause.equals(SONIC_BOOM))){
-                    if((player.getHealth() < damage)){
-                        ItemStack[] itemStacks = new ItemStack[41];
-                        for(int i = 0;i < itemStacks.length;i++){
-                            itemStacks[i] = player.getInventory().getItem(i);
-                        }
-                        v.knockDownBU.put(player,itemStacks);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK,999999999,0,true,true));
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,999999999,4,true,true));
-                        player.setHealth(40);
-                        player.setFoodLevel(0);
-                        event.setCancelled(true);
-                        player.getInventory().clear();
-                        player.updateInventory();
+                    if((player.getHealth() < damage)) {
+                        if (((Player) event.getEntity()).getInventory().getItemInMainHand().getType() != Material.TOTEM_OF_UNDYING && ((Player) event.getEntity()).getInventory().getItemInOffHand().getType() != Material.TOTEM_OF_UNDYING) {
+                            ItemStack[] itemStacks = new ItemStack[41];
+                            for (int i = 0; i < itemStacks.length; i++) {
+                                itemStacks[i] = player.getInventory().getItem(i);
+                            }
+                            v.knockDownBU.put(player, itemStacks);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
+                            player.setHealth(40);
+                            player.setFoodLevel(0);
+                            event.setCancelled(true);
+                            player.getInventory().clear();
+                            player.updateInventory();
 
-                        //部隊全滅
-                        Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
-                        int livers = 0;
-                        for (String entry : playerTeam.getEntries()){
-                            if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))){
-                                Player teammate = Bukkit.getPlayer(entry);
-                                if(teammate.getGameMode().equals(GameMode.SURVIVAL)&& !teammate.hasPotionEffect(PotionEffectType.UNLUCK)){
-                                    livers++;
+                            //部隊全滅
+                            Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
+                            int livers = 0;
+                            for (String entry : playerTeam.getEntries()) {
+                                if (player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))) {
+                                    Player teammate = Bukkit.getPlayer(entry);
+                                    if (teammate.getGameMode().equals(GameMode.SURVIVAL) && !teammate.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                                        livers++;
+                                    }
                                 }
                             }
-                        }
-                        if(livers == 0){
-                            for(String entry : playerTeam.getEntries()){
-                                if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
-                                    Bukkit.getPlayer(entry).setHealth(0);
+                            if (livers == 0) {
+                                for (String entry : playerTeam.getEntries()) {
+                                    if (player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
+                                        Bukkit.getPlayer(entry).setHealth(0);
+                                    }
+                                    ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
+                                    Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅", "", 20, 40, 10);
                                 }
-                                ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
-                                Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                             }
                         }
                     }
@@ -348,7 +350,9 @@ public class Event implements Listener{
                 event.setCancelled(true);
                 return;
             }
-            ((Player)event.getEntity()).removePotionEffect(PotionEffectType.INVISIBILITY);
+            try {
+                ((Player) event.getEntity()).removePotionEffect(PotionEffectType.INVISIBILITY);
+            }catch (Exception e){}
         }
 
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
@@ -421,45 +425,48 @@ public class Event implements Listener{
             }
             if (!(player.hasPotionEffect(PotionEffectType.UNLUCK))) {
                 if ((player.getHealth() < damage)) {
-                    ItemStack[] itemStacks = new ItemStack[41];
-                    for (int i = 0; i < itemStacks.length; i++) {
-                        itemStacks[i] = player.getInventory().getItem(i);
-                    }
-                    v.knockDownBU.put(player, itemStacks);
-                    player.updateInventory();
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
-                    player.setFoodLevel(0);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
-                    player.setHealth(40);
-                    event.setCancelled(true);
-                    player.getInventory().clear();
-                    damager.sendMessage(player.getName() + "をノックダウン!");
-                    damager.playSound(event.getDamager(), Sound.BLOCK_ANVIL_PLACE, 100, 0);
-                    if (ui.knockDown.containsKey(damager)) {
-                        ui.knockDown.put(damager, ui.knockDown.get(damager) + 1);
-                    } else {
-                        ui.knockDown.put(damager, 1);
-                    }
-                    ui.killed.put(player, damager);
+                    if (((Player) event.getEntity()).getInventory().getItemInMainHand().getType() != Material.TOTEM_OF_UNDYING && ((Player) event.getEntity()).getInventory().getItemInOffHand().getType() != Material.TOTEM_OF_UNDYING) {
+                        //ノックダウン
+                        ItemStack[] itemStacks = new ItemStack[41];
+                        for (int i = 0; i < itemStacks.length; i++) {
+                            itemStacks[i] = player.getInventory().getItem(i);
+                        }
+                        v.knockDownBU.put(player, itemStacks);
+                        player.updateInventory();
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 999999999, 0, true, true));
+                        player.setFoodLevel(0);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 999999999, 4, true, true));
+                        player.setHealth(40);
+                        event.setCancelled(true);
+                        player.getInventory().clear();
+                        damager.sendMessage(player.getName() + "をノックダウン!");
+                        damager.playSound(event.getDamager(), Sound.BLOCK_ANVIL_PLACE, 100, 0);
+                        if (ui.knockDown.containsKey(damager)) {
+                            ui.knockDown.put(damager, ui.knockDown.get(damager) + 1);
+                        } else {
+                            ui.knockDown.put(damager, 1);
+                        }
+                        ui.killed.put(player, damager);
 
-                    //部隊全滅
-                    Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
-                    int livers = 0;
-                    for (String entry : playerTeam.getEntries()){
-                        if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))){
-                            Player teammate = Bukkit.getPlayer(entry);
-                            if(teammate.getGameMode().equals(GameMode.SURVIVAL)&& !teammate.hasPotionEffect(PotionEffectType.UNLUCK)){
-                                livers++;
+                        //部隊全滅
+                        Team playerTeam = player.getScoreboard().getEntryTeam(player.getName());
+                        int livers = 0;
+                        for (String entry : playerTeam.getEntries()) {
+                            if (player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry))) {
+                                Player teammate = Bukkit.getPlayer(entry);
+                                if (teammate.getGameMode().equals(GameMode.SURVIVAL) && !teammate.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                                    livers++;
+                                }
                             }
                         }
-                    }
-                    if(livers == 0){
-                        for(String entry : playerTeam.getEntries()){
-                            if(player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
-                                Bukkit.getPlayer(entry).setHealth(0);
+                        if (livers == 0) {
+                            for (String entry : playerTeam.getEntries()) {
+                                if (player.getServer().getOnlinePlayers().contains(Bukkit.getPlayer(entry)) && Bukkit.getPlayer(entry).getGameMode().equals(GameMode.SURVIVAL)) {
+                                    Bukkit.getPlayer(entry).setHealth(0);
+                                }
+                                ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
+                                Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅", "", 20, 40, 10);
                             }
-                            ui.ranking.put(playerTeam, player.getScoreboard().getObjective("teams").getScore("system").getScore());
-                            Bukkit.getPlayer(entry).sendTitle(ChatColor.RED + "部隊全滅","",20,40,10);
                         }
                     }
 
@@ -642,7 +649,20 @@ public class Event implements Listener{
     @EventHandler
     public void PlayerItemConsumeEvent(PlayerItemConsumeEvent event){
         if(event.getItem().getType().equals(Material.ENCHANTED_GOLDEN_APPLE)){
-            event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,6000,0,false,true,true));
+            event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,1200,0,false,true,true));
+            Bukkit.getScheduler().scheduleSyncDelayedTask(BattleRoyaleCore.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    event.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+                    event.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
+                    event.getPlayer().removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                    event.getPlayer().removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,1200,1));
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,1200,3));
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,1200,0));
+                    event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,1200,0));
+                }
+        });
         }
         if(event.getItem().getType().equals(Material.MILK_BUCKET)&&event.getPlayer().hasPotionEffect(PotionEffectType.LUCK)){
             event.setCancelled(true);
